@@ -1,9 +1,8 @@
 # https://lbs.amap.com/api/webservice/guide/api/staticmaps/
 import requests
-import time
 filename = 'fuckdu'
 size = 600
-# traffic = 1  # 是否要实况图
+
 for i in range(2):
     data = requests.get('https://restapi.amap.com/v3/staticmap?&'
                         'zoom=15&size=' + str(size) + '*' + str(size) +
