@@ -25,6 +25,7 @@ def get_line(frame):
 
 
 def find_point(res, g, y, r, dr):
+    # point -> List: OpenCv 的点坐标是反着的 (y, x)
     dst = cv2.cornerHarris(g, 7, 9, 0.04)
     dst = cv2.dilate(dst, None)
     g[dst < 0.01 * dst.max()] = 0
