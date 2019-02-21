@@ -1,7 +1,7 @@
 # https://lbs.amap.com/api/webservice/guide/api/staticmaps/
 import requests
 
-filename = 'jiaot'
+filename = 'data/jiaot'
 size = 600
 # traffic = 1  # 是否要实况图
 for i in range(2):
