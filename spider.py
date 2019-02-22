@@ -1,7 +1,12 @@
 # https://lbs.amap.com/api/webservice/guide/api/staticmaps/
+import json
+
 import requests
 import time
 from redis import StrictRedis,ConnectionPool
+
+from get_line import find_point
+
 pool = ConnectionPool(host='123.56.19.49',password='wscjxky123', port=6379, db=0)
 redis = StrictRedis(connection_pool=pool)
 
@@ -21,15 +26,16 @@ while True:
     data = requests.get(url)
     with open(filename , 'wb') as file:
         file.write(data.content)
+    find_points=find_point(filename)
+    redis.hset(hsetname,'points',json.dumps(find_points))
 
     redis.hset(hsetname,'url',url)
     redis.hset(hsetname,'image_name',filename)
     redis.hset(hsetname, 'time', now)
     count += 1
-    time.sleep(120)
+    print(find_points)
     print(url)
-
-
+    time.sleep(120)
 
 
 
