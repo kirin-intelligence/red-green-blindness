@@ -28,7 +28,6 @@ while True:
         file.write(data.content)
     find_points=find_point(filename)
     redis.hset(hsetname,'points',json.dumps(find_points))
-
     redis.hset(hsetname,'url',url)
     redis.hset(hsetname,'image_name',filename)
     redis.hset(hsetname, 'time', now)
