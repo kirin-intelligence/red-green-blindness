@@ -63,7 +63,7 @@ def find_point(filename):
     for p in point:
         cv2.circle(res, tuple(p), 5, (255, 255, 255), 1)
     cv2.imwrite(filename, res)
-
+    return point
     # cv2.imshow('Result1', res)
     # cv2.imshow('Result2', g)
 

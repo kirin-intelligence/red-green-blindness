@@ -9,6 +9,6 @@ x_count = 0.1 // x_step
 y_step = 0.009 * 1.8
 y_count = 0.1 // y_step
 size = 1200
-x_count = 20
+x_count = 3
 
 UNIT_SIZE = 2048

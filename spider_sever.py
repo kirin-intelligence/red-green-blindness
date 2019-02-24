@@ -53,6 +53,7 @@ while True:
 
     filename = con_to_pic()
     redis.hset(hsetname, 'pri_pic', filename)
+    print(points)
     redis.hset(hsetname, 'points',json.dumps(points))
 
     count += 1
