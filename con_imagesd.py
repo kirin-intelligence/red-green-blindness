@@ -5,8 +5,10 @@ import numpy as np
 
 import os
 
+
 UNIT_SIZE = 2048
-TARGET_WIDTH = UNIT_SIZE * 3
+x_count=3
+TARGET_WIDTH = UNIT_SIZE * x_count
 
 
 def con_to_pic():
@@ -22,8 +24,9 @@ def con_to_pic():
     print(image.size)
     target.paste(image, (0, 0, UNIT_SIZE,TARGET_WIDTH ))
     for i in os.listdir(dirn)[1:]:
+        print(i)
+
         image = Image.open(dirn + i)
-        print( left, 0, right, UNIT_SIZE)
         target.paste(image, (left, 0, right, TARGET_WIDTH))
 
         left += x  # left是左上角的横坐标，依次递增
@@ -34,7 +37,7 @@ def con_to_pic():
 # 左、上、右和下
 # 1095
 def con_y():
-    for i in range(3):
+    for i in range(x_count):
         dirn = 'images/full/%d/'%i
         y = 2048-75
         top = y
@@ -43,8 +46,8 @@ def con_y():
         image = Image.open(dirn + os.listdir(dirn)[0])
         target.paste(image, (0, 0, UNIT_SIZE, UNIT_SIZE))
         for index, value in enumerate(os.listdir(dirn)[1:]):
+            print(value)
             image = Image.open(dirn + value)
-            print((0, top, UNIT_SIZE, bottom))
             target.paste(image, (0, top, UNIT_SIZE, bottom))  # 将image复制到target的指定位置中
             top += y  # left是左上角的横坐标，依次递增
             bottom = top + UNIT_SIZE  # right是右下的横坐标，依次递增
