@@ -18,15 +18,13 @@ def con_to_pic():
     left = x
     right = left+ UNIT_SIZE
     target = Image.new('RGB', (TARGET_WIDTH, TARGET_WIDTH))
-    image = Image.open(dirn + os.listdir(dirn)[0])
+    image = Image.open(dirn + "0.png")
     print(image.size)
     target.paste(image, (0, 0, UNIT_SIZE,TARGET_WIDTH ))
-    for i in os.listdir(dirn)[1:]:
+    for i in range(1,x_count):
         print(i)
-
-        image = Image.open(dirn + i)
+        image = Image.open(dirn + i + '.png')
         target.paste(image, (left, 0, right, TARGET_WIDTH))
-
         left += x  # left是左上角的横坐标，依次递增
         right = left + UNIT_SIZE  # right是右下的横坐标，依次递增
     target.save('images/x/'+now+'.png', quality=1)
@@ -42,10 +40,11 @@ def con_y():
         bottom = y + UNIT_SIZE
         target = Image.new('RGB', (UNIT_SIZE, TARGET_WIDTH))
         image = Image.open(dirn + os.listdir(dirn)[0])
+
         target.paste(image, (0, 0, UNIT_SIZE, UNIT_SIZE))
-        for index, value in enumerate(os.listdir(dirn)[1:]):
-            print(value)
-            image = Image.open(dirn + value)
+        for i in range(1, x_count):
+            print(i)
+            image = Image.open(dirn + i+'.png')
             target.paste(image, (0, top, UNIT_SIZE, bottom))  # 将image复制到target的指定位置中
             top += y  # left是左上角的横坐标，依次递增
             bottom = top + UNIT_SIZE  # right是右下的横坐标，依次递增
