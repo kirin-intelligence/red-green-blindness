@@ -9,7 +9,7 @@ from con_imagesd import con_to_pic
 from get_line import find_point
 from config import *
 
-pool = ConnectionPool(host='localhost', password='wscjxky123', port=6379, db=1)
+pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=1)
 redis = StrictRedis(connection_pool=pool)
 
 count = 0
