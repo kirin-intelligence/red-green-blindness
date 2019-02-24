@@ -2,12 +2,10 @@ import time
 from PIL import Image
 import matplotlib.pyplot as plt
 import numpy as np
+from config import *
 
 import os
 
-
-UNIT_SIZE = 2048
-x_count=3
 TARGET_WIDTH = UNIT_SIZE * x_count
 
 
