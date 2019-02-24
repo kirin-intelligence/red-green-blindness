@@ -60,17 +60,17 @@ def find_point(filename):
             if status >= 2:
                 point.append([int(step * (j + 0.5)), int(step * (i + 0.5))])
 
-    # for p in point:
-    #     cv2.circle(res, tuple(p), 5, (255, 255, 255), 1)
-
+    for p in point:
+        cv2.circle(res, tuple(p), 5, (255, 255, 255), 1)
+    cv2.imwrite(filename, res)
 
     # cv2.imshow('Result1', res)
     # cv2.imshow('Result2', g)
-    #
+
     # cv2.waitKey(0)
     # if cv2.waitKey(0) & 0xff == 27:
     #     cv2.destroyAllWindows()
     # print(point)
-    return point
+    # return point
 
 # find_point('images/jiaot_2019-02-22-10_54_51.png')

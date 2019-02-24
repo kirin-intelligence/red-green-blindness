@@ -8,7 +8,7 @@ from redis import StrictRedis, ConnectionPool
 from con_imagesd import con_to_pic
 from get_line import find_point
 
-pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=1)
+pool = ConnectionPool(host='localhost', password='wscjxky123', port=6379, db=1)
 redis = StrictRedis(connection_pool=pool)
 
 left_point = [116.204495, 39.994064]
