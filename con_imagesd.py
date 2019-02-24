@@ -25,6 +25,7 @@ def con_to_pic():
         target.paste(image, (left, 0, right, TARGET_WIDTH))
         left += x  # left是左上角的横坐标，依次递增
         right = left + UNIT_SIZE  # right是右下的横坐标，依次递增
+        image.close()
     target.save('images/x/'+now+'.png', quality=1)
     return 'images/x/'+now+'.png'
 

@@ -57,7 +57,6 @@ while True:
     redis.hset(hsetname, 'points',json.dumps(points))
 
     count += 1
-    break
     time.sleep(120)
 
 
