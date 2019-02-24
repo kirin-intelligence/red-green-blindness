@@ -18,7 +18,7 @@ y_list = [str(y1 - i * y_step) for i in range(x_count)]
 while True:
     hsetname = 'jiaot:' + str(count)
     now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
-    redis.hset(hsetname, 'time'.now)
+    redis.hset(hsetname, 'time',now)
 
     for xi, xv in enumerate(x_list):
         sum = 0
@@ -40,7 +40,7 @@ while True:
             print(url)
             sum += 1
             find_points = find_point(filename)
-            redis.hset(hsetname, filename, json.dumps(find_points))
+            redis.hset(hsetname, str(xv) + ',' + str(yv), json.dumps(find_points))
 
 
 
