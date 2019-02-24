@@ -21,7 +21,6 @@ def con_to_pic():
     print(image.size)
     target.paste(image, (0, 0, UNIT_SIZE,TARGET_WIDTH ))
     for i in range(1,x_count):
-        print(i)
         image = Image.open(dirn + str(i) + '.png')
         target.paste(image, (left, 0, right, TARGET_WIDTH))
         left += x  # left是左上角的横坐标，依次递增
@@ -42,7 +41,6 @@ def con_y():
 
         target.paste(image, (0, 0, UNIT_SIZE, UNIT_SIZE))
         for j in range(1, x_count):
-            print(j)
             image = Image.open(dirn + str(j)+'.png')
             target.paste(image, (0, top, UNIT_SIZE, bottom))  # 将image复制到target的指定位置中
             top += y  # left是左上角的横坐标，依次递增
