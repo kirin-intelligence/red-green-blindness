@@ -23,7 +23,7 @@ while True:
             if not os.path.isdir(dirname):
                 os.mkdir(dirname)
             now = time.strftime("%Y-%m-%d-%H_%M_%S", time.localtime(time.time()))
-            filename = dirname + '/jiaot_' + str(sum) + '.png'
+            filename = dirname + '/' + str(sum) + '.png'
             url = ('https://restapi.amap.com/v3/staticmap?&'
                    'zoom=15&size=' + str(size) + '*' + str(size) +
                    '&location=' + str(xv) + ',' + str(yv) + '&'
