@@ -9,7 +9,7 @@ from con_imagesd import con_to_pic
 from get_line import find_point
 from config import *
 
-pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=1)
+pool = ConnectionPool(host='localhost', password='wscjxky123', port=6379, db=1)
 redis = StrictRedis(connection_pool=pool)
 
 count = 0
@@ -45,18 +45,18 @@ while True:
 
     points=[]
     for i in range(x_count):
-        for f in os.listdir('images/full/%d' % i):
-            filename = 'images/full/%d/%s' % (i, f)
+        for f in os.listdir(x_count):
+            filename = 'images/full/%d/%s.png' % (i, f)
             find_points = find_point(filename)
             points.append(find_points)
             redis.hset(hsetname, filename, json.dumps(find_points))
 
     filename = con_to_pic()
     redis.hset(hsetname, 'pri_pic', filename)
+    print(points)
     redis.hset(hsetname, 'points',json.dumps(points))
 
     count += 1
-    break
     time.sleep(120)
 
 
