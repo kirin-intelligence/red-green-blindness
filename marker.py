@@ -161,8 +161,11 @@ if __name__ == '__main__':
             redis.hset(hsetname, 'points', json.dumps(markers))
             redis.hset(hsetname, 'time', gra.time)
         except Exception as e:
-            print(e)
-            print(gra.filename)
+            with open('error', 'a')as f:
+                f.write(gra.filename)
+                f.write(str(e))
+                print(e)
+                print(gra.filename)
         time.sleep(10)
 
         # keys = redis.keys('gaode:*')
