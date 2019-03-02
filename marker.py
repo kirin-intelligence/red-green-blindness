@@ -107,9 +107,9 @@ class GaoDegraph(object):
         xi, yi = self.location
         dirname = 'images/'
         self._filename = dirname + str(xi) + str(yi) + '.png'
-        # data = requests.get(self.url)
-        # with open(self._filename, 'wb') as file:
-        #     file.write(data.content)
+        data = requests.get(self.url)
+        with open(self._filename, 'wb') as file:
+            file.write(data.content)
         print(self.url)
 
     @property
