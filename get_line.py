@@ -3,13 +3,20 @@ import cv2
 
 filename = 'data/data2.png'
 
-
-
 color_dic = {'RED_l': np.array([0, 0, 220]), 'RED_h': np.array([0, 0, 222]),
              'YELLO_l': np.array([0, 202, 253]), 'YELLO_h': np.array([0, 204, 255]),
              'GREEN_l': np.array([0, 175, 49]), 'GREEN_h': np.array([0, 177, 51]),
-             'DEEPRED_l': np.array([13, 13, 138]), 'DEEPRED_h': np.array([13, 13, 140]), }
+             'DEEPRED_l': np.array([13, 13, 138]), 'DEEPRED_h': np.array([13, 13, 140]),}
 
+px = 0.0124 / (1200 - 44)
+py = 0.009 / (1200 - 104)
+
+def la_le_point(plst, center):
+    zero_point = [center[0] - 600 * px, center[1] - 600 * py]
+    la_le_p = []
+    for point in plst:
+        la_le_p.append([zero_point[0] + px * point[0], zero_point[1] + py * (1200 - point[1]), point[2]])
+    return la_le_p
 
 def get_line(frame):
     # get mask
@@ -19,14 +26,13 @@ def get_line(frame):
     dr = cv2.inRange(frame, color_dic['DEEPRED_l'], color_dic['DEEPRED_h'])
     mask = r + y + g + dr
     # mask = g
-
     res = cv2.bitwise_and(frame, frame, mask=mask)
     return res, g, y, r, dr
 
 
-def find_point(filename,GPS_Center):
+def find_point(filename, GPS_Center):
     img = cv2.imread(filename)
-    res, g, y, r, dr,=get_line(img)
+    res, g, y, r, dr = get_line(img)
     # point -> List: OpenCv 的点坐标是反着的 (y, x)
     dst = cv2.cornerHarris(g, 7, 9, 0.04)
     dst = cv2.dilate(dst, None)
@@ -74,13 +80,13 @@ def find_point(filename,GPS_Center):
     # 0为黄色点， 1为红色点， 2为深红色点
 
 
-    for p in point:
-        if p[2] == 0:
-            cv2.circle(res, tuple(p[0: 2]), 5, (0, 202, 253), 1)
-        if p[2] == 1:
-            cv2.circle(res, tuple(p[0: 2]), 5, (0, 0, 220), 1)
-        if p[2] == 2:
-            cv2.circle(res, tuple(p[0: 2]), 5, (13, 13, 138), 1)
+    # for p in point:
+    #     if p[2] == 0:
+    #         cv2.circle(res, tuple(p[0: 2]), 5, (0, 202, 253), 1)
+    #     if p[2] == 1:
+    #         cv2.circle(res, tuple(p[0: 2]), 5, (0, 0, 220), 1)
+    #     if p[2] == 2:
+    #         cv2.circle(res, tuple(p[0: 2]), 5, (13, 13, 138), 1)
 
     # cv2.imwrite(filename+'.png',res)
     # cv2.imshow('Result1', res)
@@ -90,19 +96,8 @@ def find_point(filename,GPS_Center):
     # if cv2.waitKey(0) & 0xff == 27:
     #     cv2.destroyAllWindows()
 
-    def la_le_point(plst, center):
-        px = 0.0124/(1200 - 44)
-        py = 0.009/(1200 - 104)
-        # 44, 104
-        zero_point = [center[0] - 600*px, center[1] - 600*py]
-        la_le_p = []
-        for point in plst:
-            la_le_p.append([zero_point[0] + px*point[0], zero_point[1] + py*(1200 - point[1]), point[2]])
-        return la_le_p
-
     point = la_le_point(point, GPS_Center)
     return point
-
 
 # line_graph, g_graph, y_graph, r_graph, dr_graph = get_line(img)
 # point_in_img = find_point(line_graph, g_graph, y_graph, r_graph, dr_graph, None)

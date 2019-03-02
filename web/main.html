@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>CircleMarker</title>
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        #map {
+            margin-top: 5%;
+            height: 100%;
+        }
+    </style>
+
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type="text/javascript" src='https://a.amap.com/jsapi_demos/static/resource/capitals.js'></script>
+    <script type="text/javascript" src='https://webapi.amap.com/maps?v=1.4.13&key=2be4c36d53e74e0c585326d62d6fe6e3'></script>
+    <link rel="stylesheet" href="jquery.range.css">
+    <script src="jquery.range.js"></script>
+</head>
+<body>
+<div style="margin-top:2%;margin-left:5%;text-align: center">
+    <input type="hidden" class="single-slider" />
+
+</div>
+
+<div class="row">
+</div>
+<div id="map"></div>
+
+<script>
+    var markers = [];
+    var positions = [[]];
+    var map=null;
+    $(document).ready(function () {
+        init();
+         map = new AMap.Map('map', {
+            zoom: 15,
+            center: [116.19843444636678, 39.998092028933094]
+        });
+    });
+
+    function init() {
+        $.get('init.php', function (result) {
+            console.log(result);
+            $('.single-slider').jRange({
+                from: 0,
+                to: result.length-1,
+                step: 1,
+                scale: result,
+                format: '%s',
+                width:1900,
+                showLabels: true,
+                snap: true,
+                onstatechange:function (e) {
+                    update_markers(result[e])
+                }
+            });
+//            $.each(result, function (i, val) {
+//                var time = (val);
+//                $('.row').append('  <div class="col-md-1" ><button onclick="update_markers(this)" class="btn btn-success">' + time + '</button></div>')
+//
+//            });
+
+        }, 'json');
+    }
+
+    function update_markers(time) {
+//            var time = $(obj).text();
+            $.get('update.php',
+                    {
+                        time: time
+                    }
+                    , function (result) {
+                        positions= eval((result));
+                        removeMarkers();
+                        add_markers();
+                    });
+
+    }
+    function removeMarkers(){
+        map.remove(markers);
+    }
+    function add_markers() {
+        for (var i = 0; i < positions.length; i++) {
+            var center = positions[i].slice(0,-1);
+            var type = positions[i].slice(-1);
+            var color = '#FFCC00';
+            if (type==0) {
+                color = '#FFCC00';
+            }
+            else if (type==1){
+                color = '#FF3333';
+            }
+            else{
+                color='#000000'
+            }
+            var circleMarker = new AMap.CircleMarker({
+                map:map,
+                center:center,
+                radius:15,//3D视图下，CircleMarker半径不要超过64px
+                strokeColor:color,
+                strokeWeight:1,
+                strokeOpacity:1,
+                fillColor:color,
+                fillOpacity:1,
+                zIndex:10,
+                cursor:'pointer',
+                clickable: true
+            });
+            markers.push(circleMarker);
+        }
+    }
+
+
+
+
+</script>
+</body>
+</html>
