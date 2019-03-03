@@ -13,7 +13,7 @@
         }
 
         #map {
-            margin-top: 5%;
+            margin-top: 2%;
             height: 100%;
         }
     </style>
@@ -31,9 +31,11 @@
 
 </div>
 
-<div class="row">
+<div style="padding-top:2%;text-align: center" class="row">
+    <h2>时间:</h2>
 </div>
 <div id="map"></div>
+
 
 <script>
     var markers = [];
@@ -50,11 +52,16 @@
     function init() {
         $.get('init.php', function (result) {
             console.log(result);
+            var scale =[];
+            $.each(result, function (i, val) {
+                scale.push(i)
+            });
+
             $('.single-slider').jRange({
                 from: 0,
                 to: result.length-1,
                 step: 1,
-                scale: result,
+                scale: scale,
                 format: '%s',
                 width:1900,
                 showLabels: true,
@@ -74,6 +81,7 @@
 
     function update_markers(time) {
 //            var time = $(obj).text();
+        $('h2').text("时间:"+time);
             $.get('update.php',
                     {
                         time: time
