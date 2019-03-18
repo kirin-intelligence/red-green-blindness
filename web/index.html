@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>交通拥堵点</title>
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        .map {
+            margin-left: 5%;
+            margin-top: 1%;
+            height: 100%;
+            width: 90%;
+            float: left;
+        }
+    </style>
+
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <script type="text/javascript" src='https://a.amap.com/jsapi_demos/static/resource/capitals.js'></script>
+    <script type="text/javascript" src='https://webapi.amap.com/maps?v=1.4.13&key=2be4c36d53e74e0c585326d62d6fe6e3'></script>
+    <link rel="stylesheet" href="jquery.range.css">
+    <script src="jquery.range.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id='main' style="margin-top:1%;margin-left:2%;text-align: center">
+        <div class="row" style="margin-left: 10%">
+            <div class="col-xs-6 col-sm-2">
+            </div>
+
+            <div class="col-xs-6 col-sm-2">
+                <label>日期（号）</label>
+                <select class="form-control" id="select_day">
+                </select>
+            </div>
+            <div class="col-xs-6 col-sm-2">
+                <label>早晚高峰</label>
+                <select class="form-control" id="select_moring">
+                </select>
+            </div>
+
+            <div style="margin-top: 1.5%;" class="col-xs-6 col-sm-2">
+                <button class="btn btn-info" onclick="submit()">确定</button></div>
+        </div>
+
+
+    </div>
+    <div style="text-align: center" class="row">
+        <h3>当前时间: </h3>
+    </div>
+    <div id="map" class="map"></div>
+
+    <script>
+        var page = 0;
+        var markers = [];
+        var positions = [
+            []
+        ];
+        var time_out = 0;
+
+        var map = null;
+        $(document).ready(function () {
+            map = new AMap.Map('map', {
+                resizeEnable: true,
+                zoom: 14,
+                center: [116.310015, 39.931717]
+            });
+
+            add_btn()
+        });
+
+        function submit() {
+            var cur_date = new Date();
+            var date = $('#select_day').val();
+            var day = $('#select_moring').val();
+            cur_date.setDate(date);
+            cur_date.setMinutes(0);
+            cur_date.setSeconds(0)
+            var step_time = 5
+            if (day == "day") {
+                cur_date.setHours(0);
+                var end_data = 23;
+            } else if (day == "moring") {
+                cur_date.setHours(7);
+                var end_data = 9;
+
+            } else if (day == "evening") {
+                cur_date.setHours(17);
+                var end_data = 19;
+
+
+            }
+            var start = (time_out - 100) > 0 ? time_out - 100 : 0;
+            for (var i = start; i <= time_out; i++) {
+                clearTimeout(i);
+            }
+            var filename = 'data/' + date + '_' + day + '.txt'
+            console.log(filename);
+            $.get(filename, {}, function (result) {
+                result = eval(result)
+                // result.length
+                for (let i = 0, len = result.length; i < len; i++) {
+                    time_out = setTimeout(function () {
+                        if (cur_date.getHours() == end_data) {
+                            return
+                        }
+                        positions = (result[i]);
+                        // console.log(positions)
+                        removeMarkers();
+                        add_markers();
+                        var min = cur_date.getMinutes();
+                        cur_date.setMinutes(min + 5);
+                        console.log(cur_date.toLocaleString());
+                        $('h3').text("当前时间：" + cur_date.toLocaleString());
+
+                    }, (i * 800));
+                }
+
+                // console.log(result[0][0]);
+            });
+
+        }
+
+        function add_btn() {
+            for (var i = 4; i < 12; i++) {
+                $('#select_day').append('<option value="' + i + '">' + i + '号</option>')
+            }
+
+            $('#select_moring').append('<option value="moring">早高峰</option>')
+            $('#select_moring').append('<option value="evening">晚高峰</option>')
+            $('#select_moring').append('<option value="day">全天</option>')
+
+        }
+
+        function pred() {
+            var page = parseInt($('#page').val()) - 1;
+
+            getData(page);
+
+        }
+
+        function next() {
+            var page = parseInt($('#page').val()) + 1;
+
+            getData(page);
+
+
+        }
+
+        function getData(page) {
+            $.get('init.php', {
+                page: page
+            }, function (result) {
+                console.log(result);
+
+                var page = result.shift();
+                $('#page').val(page);
+                console.log(page);
+
+
+            }, 'json');
+        }
+
+
+        function update_markers(time) {
+            //            var time = $(obj).text();
+            $('h3').text("时间:" + time);
+            $.get('update.php', {
+                time: time
+            }, function (result) {
+                positions = eval((result));
+                removeMarkers();
+                add_markers();
+            });
+
+        }
+
+        function removeMarkers() {
+            map.remove(markers);
+        }
+
+        function add_markers() {
+            for (var i = 0; i < positions.length; i++) {
+                var center = positions[i].slice(0, -1);
+                var type = positions[i].slice(-1);
+                var color = '#FFCC00';
+                if (type == 0) {
+                    color = '#FFCC00';
+                } else if (type == 1) {
+                    color = '#FF3333';
+                } else {
+                    color = '#000000'
+                }
+
+                var circleMarker = new AMap.CircleMarker({
+                    map: map,
+                    center: center,
+                    radius: 10, //3D视图下，CircleMarker半径不要超过64px
+                    strokeColor: color,
+                    strokeWeight: 1,
+                    strokeOpacity: 1,
+                    fillColor: color,
+                    fillOpacity: 1,
+                    zIndex: 10,
+                    cursor: 'pointer',
+                    clickable: true
+                });
+                markers.push(circleMarker);
+            }
+        }
+    </script>
+</body>
+
+</html>
