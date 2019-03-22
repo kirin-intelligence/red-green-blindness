@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <title>位置经纬度 + 驾车规划路线</title>
+    <title></title>
     <style type="text/css">
         html,
         body,
@@ -54,15 +54,9 @@
     var map = new AMap.Map("container", {
         resizeEnable: true,
         center: [116.313254, 39.964328],//地图中心点
-        zoom: 13 //地图显示的缩放级别
+        zoom: 14 //地图显示的缩放级别
     });
     //构造路线导航类
-
-    //引入SimpleMarker，loadUI的路径参数为模块名中 'ui/' 之后的部分
-    AMapUI.loadUI(['overlay/SimpleMarker'], function (SimpleMarker) {
-        //启动页面
-        initPage(SimpleMarker);
-    });
 
     var page = 0;
     var markers = [];
@@ -260,10 +254,14 @@
             strokeDasharray: [10, 5] //补充线样式
         });
         var mouseHandler = function (e) {
+            if (color == 'red')
+                var type="红色（4.5至7小时）";
+            else
+                var type="橙色（3.5至4.5小时）";
 
             new AMap.InfoWindow({
-                content: '<h3>拥堵时间：'+100+'小时</h3>' +
-                    '<h3>拥堵长度：'+length+'米</h3>',
+                content: '<h3>长度：'+length+'米</h3>' +
+                    '<h3>拥堵程度：'+type+'</h3>',
                 showShadow:true
             }).open(map, e.lnglat);
 
