@@ -1,0 +1,10 @@
+<script src="https://assets.crowd.aws/crowd-html-elements.js"></script>
+<!-- For the full list of available Crowd HTML Elements and their input/output documentation,      please refer to https://docs.aws.amazon.com/sagemaker/latest/dg/sms-ui-template-reference.html -->
+<!-- You must include crowd-form so that your task submits answers to MTurk -->
+<crowd-form answer-format="flatten-objects"><p><strong>Instructions: </strong></p>
+    <p> recognize the captcha that Only one character,give an answer of the figure, it contains [0-9] or [A-Z],If you
+        can't see clearly, please skip directly or write : No. </p>
+    <!-- Your image file URLs will be substituted for the "image_url" variable below           when you publish a batch with a CSV input file containing multiple image file URLs.          To preview the element with an example image, try setting the src attribute to          "https://s3.amazonaws.com/cv-demo-images/basketball-outdoor.jpg" -->
+    <p><img src="${image_url}" style="max-width: 100%; max-height: 250px" /></p>
+    <crowd-input label="answer" max-length="2" name="answer" required></crowd-input>
+</crowd-form>
