@@ -140,7 +140,7 @@ if __name__ == '__main__':
     while True:
         graph_list = []
         x_list = [x1 + i * x_step for i in range(x_count)]
-        y_list = [y1 - i * y_step for i in range(x_count)]
+        y_list = [y1 - i * y_step for i in range(y_count)]
         now_time = get_time()
         for xi, xv in enumerate(x_list):
             for yi, yv in enumerate(y_list):

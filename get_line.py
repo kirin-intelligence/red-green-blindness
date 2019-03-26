@@ -69,11 +69,26 @@ def find_point(filename, GPS_Center):
                 dr[step * i:step * (i + 1), step * j:step * (j + 1)])
             if status >= 2:
                 if have(dr[step * i:step * (i + 1), step * j:step * (j + 1)]):
-                    point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), 2])
+                    if have(r[step * i:step * (i + 1), step * j:step * (j + 1)]):
+                        point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), "dr-r"])
+                    elif have(y[step * i:step * (i + 1), step * j:step * (j + 1)]):
+                        point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), "dr-y"])
+                    elif have(g[step * i:step * (i + 1), step * j:step * (j + 1)]):
+                        point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), "dr-g"])
+                    else:
+                        pass
                 elif have(r[step * i:step * (i + 1), step * j:step * (j + 1)]):
-                    point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), 1])
+                    if have(y[step * i:step * (i + 1), step * j:step * (j + 1)]):
+                        point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), "r-y"])
+                    elif have(g[step * i:step * (i + 1), step * j:step * (j + 1)]):
+                        point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), "r-g"])
+                    else:
+                        pass
                 elif have(y[step * i:step * (i + 1), step * j:step * (j + 1)]):
-                    point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), 0])
+                    if have(g[step * i:step * (i + 1), step * j:step * (j + 1)]):
+                        point.append([int(step * (j + 0.5)), int(step * (i + 0.5)), "y-g"])
+                    else:
+                        pass
                 else:
                     pass
     # type:
@@ -100,4 +115,5 @@ def find_point(filename, GPS_Center):
     return point
 
 # line_graph, g_graph, y_graph, r_graph, dr_graph = get_line(img)
-# point_in_img = find_point(line_graph, g_graph, y_graph, r_graph, dr_graph, None)
+# point_in_img = find_point('data/data2.png', None)
+# print(point_in_img)
