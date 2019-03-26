@@ -108,10 +108,8 @@
             } else if (day == "evening") {
                 cur_date.setHours(17);
                 var end_data = 19;
-
-
             }
-            var start = (time_out - 100) > 0 ? time_out - 100 : 0;
+            var start = (time_out - 1000) > 0 ? time_out - 1000 : 0;
             for (var i = start; i <= time_out; i++) {
                 clearTimeout(i);
             }
