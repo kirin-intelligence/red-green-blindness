@@ -71,24 +71,6 @@
 <div id="container" class="map"></div>
 <div id="panel"></div>
 <script type="text/javascript">
-    String.prototype.format = function (opts) {//use 'my name is ${name}'.format({name:'lake'})
-        var data = Array.prototype.slice.call(arguments, 0),
-            toString = Object.prototype.toString;
-        if (data.length) {
-            data = data.length == 1 ?
-                (opts !== null && (/\[object Array\]|\[object Object\]/.test(toString.call(opts))) ? opts : data) : data;
-            return this.replace(/\$\{(.+?)\}/g, function (match, key) {
-                var replacer = data[key];
-                // chrome 下 typeof /a/ == 'function'
-
-                if ('[object Function]' == toString.call(replacer)) {
-                    replacer = replacer(key);
-                }
-                return ('undefined' == typeof replacer ? '' : replacer);
-            });
-        }
-        return this;
-    }
 
     //基本地图加载
     var map = new AMap.Map("container", {
@@ -164,36 +146,48 @@
         marker.setMap(map);
 
     }
+    $.ajaxSettings.async = false;
 
+    function get_info(point) {
+        var url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6e3&location=' + point[0] + ',' + point[1] + '&poitype=&ra' +
+            'dius=1000&extensions=base&batch=false&roadlevel=0';
+        $.get(url, function (result) {
+                console.log(result['regeocode']['formatted_address'])
+                return result['regeocode']['formatted_address'];
 
+            },
+            'json');
+    }
+    function  get_distance(start,end) {
+        var url="https://restapi.amap.com/v3/direction/driving?origin="+start+"&destination="+end+"&key=2be4c36d53e74e0c585326d62d6fe6e3";
+          $.get(url, function (result) {
+                var distance = result['route']['paths'][0]['distance'];
+            },
+            'json');
+    }
     function driving_line() {
         positions1.forEach(function (value, line_index) {
-            var start = positions1[line_index];
-            var end = positions2[line_index];
-            var start_point = start['point'];
-            var start_place = start['desc'];
-            var end_place = end['desc'];
-            var end_point = end['point'];
-            var length = start['length'];
-            console.log(length)
-            var type = start['type'];
-
+            var start_point = positions1[line_index]['point'];
+            var end_point = positions2[line_index]['point'];
+            var type = positions1[line_index]['type'];
             new AMap.Driving({
                 autoFitView: false,
                 outlineColor: 'red',
                 showTraffic: false
-            }).search(start['point'], end['point'], function (status, result) {
+            }).search(start_point, end_point, function (status, result) {
                 if (status === 'complete') {
                     var steps = eval(result['routes'][0]['steps']);
+                    var start_place = get_info(start_point);
+                    var end_place = get_info(end_point);
+                    var distance = get_distance(start_point,end_point);
                     var paths = [];
-
+                    console.log(start_place,end_place,distance);
                     steps.forEach(function (value, index) {
                         value['path'].forEach(function (locate, index) {
                             paths.push([locate['R'], locate['P']]);
                         });
                     });
-
-                    draw_poly(paths, type, length);
+                    draw_poly(paths, type, distance);
                     draw_mark(start_point, 0, start_place);
                     draw_mark(end_point, 1, end_place);
                 } else {

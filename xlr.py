@@ -19,17 +19,14 @@ for i in range(0, nrows):
     lat = float(start.split(',')[1])
     lng1 = float(end.split(',')[0])
     lat1 = float(end.split(',')[1])
-    url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6e3&location=%s,%s' \
-          '&poitype=&radius=1000&extensions=base&batch=false&roadlevel=0' % (lng, lat)
+    url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6e3&location=%s,%s&poitype=&radius=1000&extensions=base&batch=false&roadlevel=0' % (lng, lat)
     data = json.loads(requests.get(url).text)
     start_place = (data['regeocode']['formatted_address'])
     url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6e3&location=%s,%s' \
           '&poitype=&radius=1000&extensions=base&batch=false&roadlevel=0' % (lng1, lat1)
     data = json.loads(requests.get(url).text)
     end_place = (data['regeocode']['formatted_address'])
-
-    url = "https://restapi.amap.com/v3/direction/driving?origin=%s,%s&destination=%s,%s" \
-          "&key=2be4c36d53e74e0c585326d62d6fe6e3"%(lng,lat,lng1,lat1)
+    url = "https://restapi.amap.com/v3/direction/driving?origin=%s,%s&destination=%s,%s&key=2be4c36d53e74e0c585326d62d6fe6e3"%(lng,lat,lng1,lat1)
     data = json.loads(requests.get(url).text)
     dis=(data['route']['paths'][0]['distance'])
     print(end_place)
