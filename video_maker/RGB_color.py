@@ -2,13 +2,30 @@ import os
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
+
 alpha=0.15
 belta=0.11
 day='morning'
 path = '/home/kirin/Python_Code/red-green-blindness/video_maker/final/'+day+'/'
+
 Out_path = '/home/kirin/Python_Code/red-green-blindness/video_maker/output_video/OutPut_aft.mp4'
 filelist = os.listdir(path)
 
+input_dir='/run/media/kirin/新加卷1/images/'
+path=input_dir
+filelist = []
+with open(input_dir+day+'.txt','r')as f:
+    ls=f.readlines()
+    for l in ls:
+        l=l.strip('\n')
+        # if l[len('2019-03-21-15_04_11_'):-len('.png')] =='116.394362_39.93587599999999':
+        filelist.append(input_dir+day+'/'+l)
+
+print(filelist)
+a=Image.open(filelist[0])
+a.show()
+exit()
 color_dic = {'RED_l': np.array([0, 0, 220]), 'RED_h': np.array([0, 0, 222]),
              'YELLO_l': np.array([0, 202, 253]), 'YELLO_h': np.array([0, 204, 255]),
              'GREEN_l': np.array([0, 175, 49]), 'GREEN_h': np.array([0, 177, 51]),
@@ -36,13 +53,15 @@ for index, item in enumerate(filelist):
     try:
         if item.endswith('.png'):
             name_str = item.split('.')[0]
-            item = path + item
+            # item = path + item
             img = cv2.imread(item)
+
             aft_img, g, y, r, dr = get_line(img)
             hot_map += 0 * np.sign(g) + 0 * np.sign(y) + 2 * np.sign(r) + 2 * np.sign(dr)
             count += 1
             print(item)
-    except:
+    except Exception as e:
+        print(e)
         print('erro!')
         pass
 

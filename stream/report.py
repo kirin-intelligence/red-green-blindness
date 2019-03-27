@@ -1,12 +1,37 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-
-img = cv2.imread("/home/kirin/Python_Code/red-green-blindness/report_statement/morning_final.png")
 color_dic = {'RED_l': np.array([0, 0, 220]), 'RED_h': np.array([0, 0, 222]),
              'YELLO_l': np.array([0, 202, 253]), 'YELLO_h': np.array([0, 204, 255]),
              'GREEN_l': np.array([0, 175, 49]), 'GREEN_h': np.array([0, 177, 51]),
              'DEEPRED_l': np.array([13, 13, 138]), 'DEEPRED_h': np.array([13, 13, 140]), }
+def report(img,gps_centor):
+    # img = cv2.imread(img_path)
+    res_map, yellow, red = get_line(img)
+    ans = solve(red)
+    ans_y = solve(yellow)
+    result=[]
+    for i,j in zip(ans,ans_y):
+        red = la_le_point(i, 0,gps_centor)
+
+        yellow = la_le_point(i, 1,gps_centor)
+        result.append(red)
+        result.append(yellow)
+    print(result)
+
+    #
+    # for i in ans:
+    #     cv2.circle(res_map, i[0], 5, color=(255, 255, 255))
+    #     cv2.circle(res_map, i[1], 5, color=(255, 255, 255))
+    #
+    # for i in ans_y:
+    #     cv2.circle(res_map, i[0], 5, color=(255, 0, 255))
+    #     cv2.circle(res_map, i[1], 5, color=(255, 0, 255))
+
+    res_map = cv2.resize(res_map, (1200, 1200))
+
+    cv2.imwrite("out_put.png", res_map)
+
 
 
 def get_line(frame):
@@ -71,33 +96,4 @@ def solve(input_map):
             count += 1
     return point_paer
 
-
-res_map, yellow, red = get_line(img)
-
-ans = solve(red)
-ans_y = solve(yellow)
-GPS_Center=[116.394362,39.93587599999999]
-result=[]
-for i,j in zip(ans,ans_y):
-    red = la_le_point(i, 0,GPS_Center)
-
-    yellow = la_le_point(i, 1,GPS_Center)
-    result.append(red)
-    result.append(yellow)
-
-
-print(result)
-
-#
-# for i in ans:
-#     cv2.circle(res_map, i[0], 5, color=(255, 255, 255))
-#     cv2.circle(res_map, i[1], 5, color=(255, 255, 255))
-#
-# for i in ans_y:
-#     cv2.circle(res_map, i[0], 5, color=(255, 0, 255))
-#     cv2.circle(res_map, i[1], 5, color=(255, 0, 255))
-
-res_map = cv2.resize(res_map, (1200, 1200))
-
-cv2.imwrite("out_put.png", res_map)
 
