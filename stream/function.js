@@ -15,15 +15,24 @@ function init() {
 
   $.get('php/get_streams.php',
     {
-      'day': 'evening'
+      'day': 'morning'
     }
     , function (result) {
       var res = eval(result);
-      res.forEach(function (points, line_index) {
-        points = eval(points);
-        addMarker(points);
-        //driver_match(points);
-        driver_direct(points);
+      res.forEach(function (item, line_index) {
+        // console.log(item);
+        var points = eval([eval(item['start_point']), eval(item['end_point'])]);
+        var paths = item['paths'];
+
+        var type = (item['type']);
+        var no = (item['no']);
+        var distance = (item['distance']);
+        var day = (item['day']);
+        console.log(paths);
+        // console.log(points, type, no,paths);
+        addMarker(points, type, no);
+        driver_match(points,type, no, distance, day);
+        // draw_poly(paths, type, no, distance, day);
         // markers.push([marker,marker_end]);
         map.on('click', get_point);
 
@@ -32,14 +41,17 @@ function init() {
 
 }
 
-function addMarker(points) {
+function addMarker(points, type, no) {
   var marker = new AMap.Marker({
     icon: "http://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png",
     position: points[0],
     offset: new AMap.Pixel(-13, -30),
     draggable: true,
-    angle: 1
-
+    extData: {
+      "no": no,
+      'type': type,
+      'is_start': true
+    }
   });
 
   marker.setMap(map);
@@ -48,18 +60,20 @@ function addMarker(points) {
     position: points[1],
     offset: new AMap.Pixel(-13, -30),
     draggable: true,
-    angle: 0
+    extData: {
+      "no": no,
+      'type': type,
+      'is_start': false
+    }
   });
   markers_start.push(points[0]);
   markers_end.push(points[1]);
   MARKERS.push(marker);
   MARKERS.push(marker_end);
-
   marker.on('dragstart', startDrag);
   marker.on('dragend', endDrag);
   marker_end.on('dragstart', startDrag);
   marker_end.on('dragend', endDrag);
-
   marker_end.setMap(map);
 
 
@@ -84,22 +98,22 @@ function endDrag(e) {
       'new_point2': point[1]
     }
     , function (result) {
-      if((result)) {
+      if ((result)) {
         // draw_poly([point,old_point],0,0);
         alert(result);
       }
     }, 'json');
 
 }
-function driver_direct(points) {
-  draw_poly([points[1], points[0]], points[0][2], 0);
+function driver_direct(paths, type, no, distance) {
+  draw_poly(paths, type, no, distance);
 
 }
 
-function driver_match(points) {
+function driver_match(points, type, no, distance, day) {
   var steps;
-  var distance;
-  new AMap.Driving({
+  var driving_1=new AMap.Driving({
+    policy:AMap.DrivingPolicy.LEAST_DISTANCE,
     autoFitView: false,
     outlineColor: 'red',
     showTraffic: false
@@ -108,7 +122,8 @@ function driver_match(points) {
       var one_steps = eval(result['routes'][0]['steps']);
       var one_distance = result['routes'][0]['distance'];
       var paths = [];
-      new AMap.Driving({
+      var driving_2=new AMap.Driving({
+        policy:AMap.DrivingPolicy.LEAST_DISTANCE,
         autoFitView: false,
         outlineColor: 'red',
         showTraffic: false
@@ -124,16 +139,18 @@ function driver_match(points) {
             distance = one_distance;
             steps = one_steps;
           }
-
+          if (parseInt(distance)>1800){
+            draw_poly();
+            draw_poly(points, type, no, distance, day);
+            return;
+          }
           steps.forEach(function (value, index) {
+            console.log(steps);
             value['path'].forEach(function (locate, index) {
               paths.push([locate['R'], locate['P']]);
             });
           });
-
-
-          draw_poly(paths, points[0][2], distance);
-
+          draw_poly(paths, type, no, distance,day);
         }
       });
     }
@@ -141,32 +158,45 @@ function driver_match(points) {
 }
 
 
-function draw_poly(paths, type, length) {
-  var color;
-  console.log(type);
-  if (type === 0)
-    color = "red";
-  else
-    color = "DarkSalmon";
-
+function draw_poly(paths, type, no, distance, day) {
+  var desc;
+  if (day) {
+    if (type == "red") {
+      desc = '红色（1.5小时至3小时）';
+    }
+    else
+      desc = '黄色（1小时6分钟至1.5小时';
+  }
+  else {
+    if (type == "red") {
+      desc = '红色（3至6小时）';
+    }
+    else
+      desc = '黄色（2小时12分钟至3小时';
+  }
 
   var mouseHandler = function (e) {
-
     new AMap.InfoWindow({
-      content: '<h3>长度：' + length + '米</h3>' +
-      '<h3>拥堵程度：' + type + '</h3>',
+      content: '<h3>长度：' + distance + '米</h3>' +
+      '<h3>拥堵程度：' + desc + '</h3>',
       showShadow: true
     }).open(map, e.lnglat);
 
   };
-
   var polyline = new AMap.Polyline({
     path: paths, //设置线覆盖物路径
-    strokeColor: color, //线颜色
+    strokeColor: type, //线颜色
     strokeOpacity: 1, //线透明度
     strokeWeight: 8, //线宽
-    strokeStyle: "solid", //线样式
-    strokeDasharray: [10, 5] //补充线样式
+    strokeStyle: "solid",
+    strokeDasharray: [10, 5],
+    extData: {
+      "no": no,
+      'type': type,
+      "paths": paths,
+      "distance": distance,
+      "day": day
+    }
   });
 
   polyline.on('mouseover', mouseHandler);

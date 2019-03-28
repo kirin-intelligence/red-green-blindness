@@ -54,8 +54,8 @@
 <div class="input-card">
     <label style="color:grey">点标记操作</label>
     <div class="input-item">
-        <input id="addMarker" type="button" class="btn" onclick="open_lineedit()" value="编辑线段">
-                <input id="addMarker" type="button" class="btn" onclick="close_lineedit()" value="取消编辑">
+        <input  type="button" class="btn" onclick="open_lineedit()" value="编辑线段">
+                <input  type="button" class="btn" onclick="close_lineedit()" value="取消编辑">
 
     </div>
 </div>
@@ -63,9 +63,10 @@
 
 <script type="text/javascript"
         src="https://webapi.amap.com/maps?v=1.4.13&key=2be4c36d53e74e0c585326d62d6fe6e3"></script>
-<script type="text/javascript"
-        src='https://webapi.amap.com/maps?v=1.4.13&key=c536f4eae991666b64267ca01f855153&plugin=AMap.Driving'></script>
-<script src="https://webapi.amap.com/maps?v=1.4.13&key=c536f4eae991666b64267ca01f855153&plugin=AMap.PolyEditor"></script>
+
+<script src="https://webapi.amap.com/maps?v=1.4.13&key=c536f4eae991666b64267ca01f855153&
+plugin=AMap.PolyEditor,AMap.Driving,Amap.DrivingPolicy,AMap.Walking,AMap.Riding"></script>
+
 <script src="function.js"></script>
 </body>
 </html>

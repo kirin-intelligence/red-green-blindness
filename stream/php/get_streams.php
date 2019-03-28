@@ -11,10 +11,9 @@ $keys = $redis->keys($day.':*');
 $arr = array();
 $arr_p=array();
 foreach ($keys as $key => $value) {
-    $points=$redis->lRange($value,0,-1);
-    foreach ($points as $k => $point) {
-        array_push($arr, ($point));
-    }
+    $hset=$redis->hGetAll($value);
+    array_push($arr, ($hset));
+
 //    exit(json_encode($arr));
 
 }
