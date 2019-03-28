@@ -15,13 +15,13 @@ def report(img,gps_centor):
     for i in ans:
         cv2.circle(res_map, i[0], 5, color=(255, 255, 255))
         cv2.circle(res_map, i[1], 5, color=(255, 255, 255))
-        red = la_le_point(i, 0, gps_centor)
+        red = la_le_point(i, 'red', gps_centor)
         result.append(red)
 
     for i in ans_y:
         cv2.circle(res_map, i[0], 5, color=(255, 0, 255))
         cv2.circle(res_map, i[1], 5, color=(255, 0, 255))
-        yellow = la_le_point(i, 1, gps_centor)
+        yellow = la_le_point(i, 'yellow', gps_centor)
         result.append(yellow)
 
     print(len(ans))
@@ -78,15 +78,11 @@ def la_le_point(points,type, center):
     return (lat_points)
 def solve(input_map):
     _, labels = cv2.connectedComponents(input_map, connectivity=8)
-
     labels_lst = np.reshape(labels, [-1])
     labels_lst = list(set(labels_lst))
     labels_lst.remove(0)
-
     count = 0
-
     point_paer = []
-
     for i in labels_lst:
         single_connect = (labels == i)
         if np.sum(single_connect) > 0:
