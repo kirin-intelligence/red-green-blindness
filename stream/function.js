@@ -134,7 +134,6 @@ function driver_match(points, type, no, distance, day) {
           if (parseInt(two_distance) < parseInt(one_distance)) {
             distance = two_distance;
             steps = two_steps;
-
           } else {
             distance = one_distance;
             steps = one_steps;

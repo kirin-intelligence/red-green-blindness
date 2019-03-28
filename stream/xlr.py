@@ -16,24 +16,22 @@ def get_place(point):
     place = (data['regeocode']['formatted_address'])
     return place
 
-
 def get_distance(start_point, end_point):
-    url = "https://restapi.amap.com/v3/direction/driving?strategy=2&origin=%s,%s&destina" \
+    url = "https://restapi.amap.com/v3/direction/walking?origin=%s,%s&destina" \
           "tion=%s,%s&key=2be4c36d53e74e0c585326d62d6fe6e3" % (
               start_point[0], start_point[1], end_point[0], end_point[1])
     data = json.loads(requests.get(url).text)
     dis = (data['route']['paths'][0]['distance'])
     paths= data['route']['paths'][0]['steps'][0]['polyline']
     paths=paths.split(';')
-
     new_paths=[]
     for point in paths:
         point=point.split(',')
         new_point=[]
         for p in point:
-            print(p,float(p))
             new_point.append(float(p))
         new_paths.append(new_point)
+
     return dis,new_paths
 
 
