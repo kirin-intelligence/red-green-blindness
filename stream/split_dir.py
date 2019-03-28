@@ -13,13 +13,13 @@ def main():
         for file in f:
             if file.endswith('png'):
                 t=(string_to_time(file[:-4]))
-                if 7 <= t.hour <= 9:
-                    shutil.copy("../input_img/"+file,'morning')
-                    shutil.copy("../input_img/"+file,'day')
+                if 7 <= t.hour < 9:
+                    shutil.copy("../input_img/"+file,'/morning')
+                    shutil.copy("../input_img/"+file,'/day')
 
-                elif 17 <= t.hour <= 19:
-                    shutil.copy("../input_img/"+file,'evening')
-                    shutil.copy("../input_img/"+file,'day')
+                elif 17 <= t.hour < 19:
+                    shutil.copy("../input_img/"+file,'/evening')
+                    shutil.copy("../input_img/"+file,'/day')
 
 def spilt_file(dir_name,target_dir):
     with open(dir_name+'filenames.txt','r')as f:
@@ -33,17 +33,17 @@ def spilt_file(dir_name,target_dir):
                     print(time_str)
                     if file.endswith('png'):
                         t=(string_to_time(time_str))
-                        if 7 <= t.hour <= 9:
+                        if 7 <= t.hour < 9:
                             if os.path.exists(dir_name+file):
                                 continue
                             shutil.copy(dir_name+'images/'+file,target_dir+'morning')
-                            f_m.write(target_dir+'morning'+file+'\n')
+                            f_m.write(target_dir+'morning/'+file+'\n')
                             # shutil.copy("total_img/"+file,'day')
-                        elif 17 <= t.hour <= 19:
+                        elif 17 <= t.hour < 19:
                             if os.path.exists(dir_name+file):
                                 continue
                             shutil.copy(dir_name+'images/'+file,target_dir+'evening')
-                            f_e.write(target_dir+'evening'+file+'\n')
+                            f_e.write(target_dir+'evening/'+file+'\n')
 
                             # shutil.copy("total_img/"+file,'day')
 

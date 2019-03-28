@@ -4,8 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-alpha=0.15
-belta=0.11
+# alpha=0.15
+# belta=0.11
+alpha=0.5
+belta=0.3
 
 color_dic = {'RED_l': np.array([0, 0, 220]), 'RED_h': np.array([0, 0, 222]),
              'YELLO_l': np.array([0, 202, 253]), 'YELLO_h': np.array([0, 204, 255]),
@@ -31,10 +33,11 @@ def run_rgb(path,day,gps_center):
         ls=f.readlines()
         for l in ls:
             l=l.strip('\n')
+            print(l)
             if l[len('/run/media/kirin/新加卷1/images/evening/2019-03-25-19_20_19_'):-len('.png')] =='%s_%s'%(gps_center[0],gps_center[1]):
                 filelist.append(l)
 
-
+    print(filelist)
     filelist.sort()
     hot_map = 0
     count = 0
