@@ -4,8 +4,10 @@ import requests
 import xlrd
 from xlutils.copy import copy
 from redis import StrictRedis, ConnectionPool
-pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=5,decode_responses=True)
+
+pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=5, decode_responses=True)
 redis = StrictRedis(connection_pool=pool)
+
 
 def get_place(point):
     url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6' \
@@ -43,8 +45,9 @@ def write_excel(points, day, start=0, gps_center=0):
         start_place = get_place(start_point)
         end_place = get_place(end_point)
         distance = get_distance(start_point, end_point)
+        no = start_count + index
         type = point[0][2]
-        worksheet.write(index, 0, label="%s" % (start_count + index))
+        worksheet.write(index, 0, label="%s" % no)
         worksheet.write(index, 1, label="%s" % start_place)
         worksheet.write(index, 2, label="%s,%s" % (start_point[0], start_point[1]))
         worksheet.write(index, 3, label="%s" % end_place)
@@ -52,20 +55,36 @@ def write_excel(points, day, start=0, gps_center=0):
         worksheet.write(index, 5, label="%s" % distance)
         worksheet.write(index, 6, label="%s" % "红色" if type == 'red' else "黄色")
         # worksheet.write(index, 7, label=point)
-        hset_name="%s:%s,%s"
-        redis.hset(hset_name,"start_point",)
-        redis.hset(hset_name,"end_point",)
-        redis.hset(hset_name,"type",)
-
+        hset_name = "%s:%s" % (day, no)
+        redis.hset(hset_name, "no", no)
+        redis.hset(hset_name, "start_point", json.dumps(start_point))
+        redis.hset(hset_name, "end_point", json.dumps(end_point))
+        redis.hset(hset_name, "type", type)
+        redis.hset(hset_name, "distance", distance)
+        redis.hset(hset_name, "start_place", start_place)
+        redis.hset(hset_name, "end_place", end_place)
 
         print(point)
         workbook.save('data.xls')
 
 
-points = [[[116.35424435294117, 39.97429023357663, 'red'], [116.35452324567473, 39.97006943065693, 'red']], [[116.35105853979238, 39.97647454014598, 'red'], [116.35333258823528, 39.97647454014598, 'red']], [[116.35266753633216, 39.968041145985396, 'red'], [116.35298933564012, 39.9686816569343, 'red']], [[116.35497376470586, 39.96859132846715, 'red'], [116.35587480276814, 39.968238226277364, 'red']], [[116.36193535640136, 39.967819430656924, 'red'], [116.36358725951555, 39.967819430656924, 'red']], [[116.3562073287197, 39.967778372262764, 'red'], [116.35878172318337, 39.967778372262764, 'red']], [[116.35895334948096, 39.96781121897809, 'red'], [116.361677916955, 39.96781121897809, 'red']], [[116.35346130795845, 39.967778372262764, 'red'], [116.3561858754325, 39.967778372262764, 'red']], [[116.35072601384081, 39.9677619489051, 'red'], [116.35343985467127, 39.9677619489051, 'red']], [[116.3562073287197, 39.96767162043795, 'red'], [116.3585457370242, 39.96767162043795, 'red']], [[116.35433016608995, 39.976581291970795, 'yellow'], [116.35539210380621, 39.976581291970795, 'yellow']], [[116.35362220761245, 39.97656486861313, 'yellow'], [116.35411563321797, 39.97656486861313, 'yellow']], [[116.35346130795845, 39.967663408759115, 'yellow'], [116.35599279584774, 39.967663408759115, 'yellow']], [[116.36021909342558, 39.96767983211678, 'yellow'], [116.361677916955, 39.96767983211678, 'yellow']]]
+points = [[[116.35424435294117, 39.97429023357663, 'red'], [116.35452324567473, 39.97006943065693, 'red']],
+          [[116.35105853979238, 39.97647454014598, 'red'], [116.35333258823528, 39.97647454014598, 'red']],
+          [[116.35266753633216, 39.968041145985396, 'red'], [116.35298933564012, 39.9686816569343, 'red']],
+          [[116.35497376470586, 39.96859132846715, 'red'], [116.35587480276814, 39.968238226277364, 'red']],
+          [[116.36193535640136, 39.967819430656924, 'red'], [116.36358725951555, 39.967819430656924, 'red']],
+          [[116.3562073287197, 39.967778372262764, 'red'], [116.35878172318337, 39.967778372262764, 'red']],
+          [[116.35895334948096, 39.96781121897809, 'red'], [116.361677916955, 39.96781121897809, 'red']],
+          [[116.35346130795845, 39.967778372262764, 'red'], [116.3561858754325, 39.967778372262764, 'red']],
+          [[116.35072601384081, 39.9677619489051, 'red'], [116.35343985467127, 39.9677619489051, 'red']],
+          [[116.3562073287197, 39.96767162043795, 'red'], [116.3585457370242, 39.96767162043795, 'red']],
+          [[116.35433016608995, 39.976581291970795, 'yellow'], [116.35539210380621, 39.976581291970795, 'yellow']],
+          [[116.35362220761245, 39.97656486861313, 'yellow'], [116.35411563321797, 39.97656486861313, 'yellow']],
+          [[116.35346130795845, 39.967663408759115, 'yellow'], [116.35599279584774, 39.967663408759115, 'yellow']],
+          [[116.36021909342558, 39.96767983211678, 'yellow'], [116.361677916955, 39.96767983211678, 'yellow']]]
 
 day = 'morning'
-# write_excel(points, day)
+write_excel(points, day)
 
 #
 # readbook = xlrd.open_workbook(r'/home/kaiyuan_xu/Downloads/'+day+'.xlsx')
