@@ -38,7 +38,7 @@ function addMarker(points) {
     position: points[0],
     offset: new AMap.Pixel(-13, -30),
     draggable: true,
-    angle:1
+    angle: 1
 
   });
 
@@ -48,7 +48,7 @@ function addMarker(points) {
     position: points[1],
     offset: new AMap.Pixel(-13, -30),
     draggable: true,
-    angle:0
+    angle: 0
   });
   markers_start.push(points[0]);
   markers_end.push(points[1]);
@@ -64,16 +64,31 @@ function addMarker(points) {
 
 
 }
+var old_point;
 function startDrag(e) {
-  var point = [e['lnglat']['lng']];
-  var index = markers_start.indexOf(point);
+  old_point = [e['target']['D']['position']['R'], e['target']['D']['position']['P']];
+  console.log(old_point);
 
-  console.log(index);
+  // var index = markers_start.indexOf(point);
 }
 function endDrag(e) {
-  var point = [e['lng'], e['lat']];
-
-  console.log(point);
+  console.log(e);
+  var point = [e['lnglat']['R'], e['lnglat']['P']];
+  console.log(point, old_point);
+  $.get('php/update.php',
+    {
+      'day': 'evening',
+      'old_point1': old_point[0],
+      'old_point2': old_point[1],
+      'new_point1': point[0],
+      'new_point2': point[1]
+    }
+    , function (result) {
+      if((result)) {
+        // draw_poly([point,old_point],0,0);
+        alert(result);
+      }
+    }, 'json');
 
 }
 function driver_direct(points) {
