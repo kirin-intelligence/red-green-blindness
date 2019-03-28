@@ -1,7 +1,7 @@
 <?php
 $redis = new Redis();
 
-$redis->connect('123.56.19.49', 6379,); //连接Redis
+$redis->connect('123.56.19.49', 6379); //连接Redis
 $redis->auth('wscjxky123'); //密码验证
 
 $day=$_GET['day'];
@@ -9,13 +9,16 @@ $day=$_GET['day'];
 $redis->select(5);
 $keys = $redis->keys($day.':*');
 $arr = array();
-
+$arr_p=array();
 foreach ($keys as $key => $value) {
-    $points=$redis->sGetMembers($value);
-    exit(json_encode($points));
+    $points=$redis->lRange($value,0,-1);
+    foreach ($points as $k => $point) {
+        array_push($arr, ($point));
+    }
+//    exit(json_encode($arr));
 
-    array_push($arr,json_decode($points));
 }
+header("Content-type: application/json");
 exit(json_encode($arr));
 
 

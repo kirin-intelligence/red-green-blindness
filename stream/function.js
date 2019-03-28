@@ -20,7 +20,7 @@ function init() {
     , function (result) {
       var res = eval(result);
       res.forEach(function (points, line_index) {
-        console.log(points);
+        points = eval(points);
         addMarker(points);
         //driver_match(points);
         driver_direct(points);
@@ -37,7 +37,9 @@ function addMarker(points) {
     icon: "http://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png",
     position: points[0],
     offset: new AMap.Pixel(-13, -30),
-    draggable: true
+    draggable: true,
+    angle:1
+
   });
 
   marker.setMap(map);
@@ -45,24 +47,35 @@ function addMarker(points) {
     icon: "http://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png",
     position: points[1],
     offset: new AMap.Pixel(-13, -30),
-    draggable: true
+    draggable: true,
+    angle:0
   });
   markers_start.push(points[0]);
   markers_end.push(points[1]);
   MARKERS.push(marker);
   MARKERS.push(marker_end);
 
-  // marker_end.on('dragging', updateMarker);
-  // marker.on('dragstart', startDrag);
-  // marker.on('dragend', endDrag);
-  // marker_end.on('dragstart', startDrag);
-  // marker_end.on('dragend', endDrag);
+  marker.on('dragstart', startDrag);
+  marker.on('dragend', endDrag);
+  marker_end.on('dragstart', startDrag);
+  marker_end.on('dragend', endDrag);
 
   marker_end.setMap(map);
 
 
 }
+function startDrag(e) {
+  var point = [e['lnglat']['lng']];
+  var index = markers_start.indexOf(point);
 
+  console.log(index);
+}
+function endDrag(e) {
+  var point = [e['lng'], e['lat']];
+
+  console.log(point);
+
+}
 function driver_direct(points) {
   draw_poly([points[1], points[0]], points[0][2], 0);
 
