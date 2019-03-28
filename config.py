@@ -11,6 +11,7 @@ x_count = -int(((x1-right_point[0]) // x_step) -1)
 y_step = 0.009
 y_count = int((y1-right_point[1]) // x_step)+1
 size = 1200
+
 UNIT_SIZE = 1200
 from redis import StrictRedis, ConnectionPool
 pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=2, decode_responses=True)
