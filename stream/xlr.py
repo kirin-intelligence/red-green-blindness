@@ -16,14 +16,23 @@ def get_place(point):
     place = (data['regeocode']['formatted_address'])
     return place
 
-
 def get_distance(start_point, end_point):
-    url = "https://restapi.amap.com/v3/direction/driving?origin=%s,%s&destina" \
+    url = "https://restapi.amap.com/v3/direction/walking?origin=%s,%s&destina" \
           "tion=%s,%s&key=2be4c36d53e74e0c585326d62d6fe6e3" % (
               start_point[0], start_point[1], end_point[0], end_point[1])
     data = json.loads(requests.get(url).text)
     dis = (data['route']['paths'][0]['distance'])
-    return dis
+    paths= data['route']['paths'][0]['steps'][0]['polyline']
+    paths=paths.split(';')
+    new_paths=[]
+    for point in paths:
+        point=point.split(',')
+        new_point=[]
+        for p in point:
+            new_point.append(float(p))
+        new_paths.append(new_point)
+
+    return dis,new_paths
 
 
 def write_excel(points, day, start=0, gps_center=0):
@@ -44,7 +53,7 @@ def write_excel(points, day, start=0, gps_center=0):
         end_point = point[1]
         start_place = get_place(start_point)
         end_place = get_place(end_point)
-        distance = get_distance(start_point, end_point)
+        distance,paths = get_distance(start_point, end_point)
         no = start_count + index
         type = point[0][2]
         worksheet.write(index, 0, label="%s" % no)
@@ -57,12 +66,15 @@ def write_excel(points, day, start=0, gps_center=0):
         # worksheet.write(index, 7, label=point)
         hset_name = "%s:%s" % (day, no)
         redis.hset(hset_name, "no", no)
-        redis.hset(hset_name, "start_point", json.dumps(start_point))
-        redis.hset(hset_name, "end_point", json.dumps(end_point))
+        redis.hset(hset_name, "start_point", json.dumps(start_point[:-1]))
+        redis.hset(hset_name, "end_point", json.dumps(end_point[:-1]))
         redis.hset(hset_name, "type", type)
         redis.hset(hset_name, "distance", distance)
         redis.hset(hset_name, "start_place", start_place)
         redis.hset(hset_name, "end_place", end_place)
+        redis.hset(hset_name, "paths", json.dumps(paths))
+        redis.hset(hset_name, "day", day)
+        redis.hset(hset_name, "gps_center", json.dumps(gps_center))
 
         print(point)
         workbook.save('data.xls')
@@ -82,9 +94,10 @@ points = [[[116.35424435294117, 39.97429023357663, 'red'], [116.35452324567473, 
           [[116.35362220761245, 39.97656486861313, 'yellow'], [116.35411563321797, 39.97656486861313, 'yellow']],
           [[116.35346130795845, 39.967663408759115, 'yellow'], [116.35599279584774, 39.967663408759115, 'yellow']],
           [[116.36021909342558, 39.96767983211678, 'yellow'], [116.361677916955, 39.96767983211678, 'yellow']]]
+gps_center = [116.30756199999999, 39.944875999999994]
 
 day = 'morning'
-write_excel(points, day)
+write_excel(points, day,gps_center)
 
 #
 # readbook = xlrd.open_workbook(r'/home/kaiyuan_xu/Downloads/'+day+'.xlsx')
@@ -132,5 +145,3 @@ write_excel(points, day)
 # print(len(arr))
 # print(len(arr1))
 #
-# var positions1=[{'point': [116.309898, 39.934405], 'type': 'DarkSalmon ', 'desc': '北京市海淀区八里庄街道西三环北路辅路中国外文大厦'}, {'point': [116.31008, 39.93545], 'type': 'Crimson', 'desc': '北京市海淀区八里庄街道西三环北路'}, {'point': [116.31002, 39.939224], 'type': 'Crimson', 'desc': '北京市海淀区八里庄街道西三环北路金龙潭大饭店'}, {'point': [116.309374, 39.951084], 'type': 'DarkSalmon ', 'desc': '北京市海淀区紫竹院街道西三环北路辅路中国青年政治学院'}, {'point': [116.308317, 39.960205], 'type': 'DarkSalmon ', 'desc': '北京市海淀区紫竹院街道西三环北路西三环北路1号院办公楼'}]
-# var positions2=[{'point': [116.309909, 39.932796], 'desc': '北京市海淀区八里庄街道西三环北路辅路西三环北路101号院'}, {'point': [116.310086, 39.934948], 'desc': '北京市海淀区八里庄街道西三环北路辅路中国外文大厦'}, {'point': [116.310015, 39.938442], 'desc': '北京市海淀区八里庄街道西三环北路辅路中化石油首石缘加油站'}, {'point': [116.309556, 39.94842], 'desc': '北京市海淀区紫竹院街道西三环北路辅路北科大厦'}, {'point': [116.30873, 39.958359], 'desc': '北京市海淀区紫竹院街道西三环北路中元国际工程大厦'}]
