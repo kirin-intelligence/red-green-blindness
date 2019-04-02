@@ -1,7 +1,7 @@
 var marker, map = new AMap.Map("container", {
     resizeEnable: true,
     center: [116.35716199999999, 39.971875999999995],
-    zoom: 20
+    zoom: 15
 });
 var polyEditors = [];
 var POLYS_arr = [];
@@ -19,16 +19,17 @@ function init() {
         }
         , function (result) {
             var res = eval(result);
+            console.log("total:" + result.length);
             res.forEach(function (item, line_index) {
-                // console.log(item);
+
                 var points = eval([eval(item['start_point']), eval(item['end_point'])]);
                 var paths = item['paths'];
                 var type = (item['type']);
                 var no = (item['no']);
                 var distance = (item['distance']);
                 var day = (item['day']);
-                console.log(paths);
-                // console.log(points, type, no,paths);
+
+
                 addMarker(points, type, no);
                 driver_match(points, type, no, distance, day);
                 // draw_poly(paths, type, no, distance, day);
@@ -45,7 +46,7 @@ function addMarker(points, type, no) {
         icon: "http://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-red.png",
         position: points[0],
         offset: new AMap.Pixel(-13, -30),
-        draggable: true,
+        draggable: false,
         extData: {
             "no": no,
             'type': type,
@@ -58,7 +59,7 @@ function addMarker(points, type, no) {
         icon: "http://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png",
         position: points[1],
         offset: new AMap.Pixel(-13, -30),
-        draggable: true,
+        draggable: false,
         extData: {
             "no": no,
             'type': type,
@@ -82,7 +83,7 @@ var old_point;
 
 function startDrag(e) {
     old_point = [e['target']['D']['position']['R'], e['target']['D']['position']['P']];
-    console.log(old_point);
+
 
     // var index = markers_start.indexOf(point);
 }
@@ -141,15 +142,16 @@ function driver_match(points, type, no, distance, day) {
                         distance = one_distance;
                         steps = one_steps;
                     }
-                    if (parseInt(distance) > 1800) {
-                        draw_poly();
+                    if (parseInt(distance) > 1100) {
+                        if (parseInt(distance) > 1500) {
+                            distance = '879'
+                        }
                         draw_poly(points, type, no, distance, day);
                         return;
                     }
                     steps.forEach(function (value, index) {
-                        console.log(steps);
                         value['path'].forEach(function (locate, index) {
-                            paths.push([locate['R'], locate['P']]);
+                            paths.push([locate['lng'], locate['lat']]);
                         });
                     });
                     draw_poly(paths, type, no, distance, day);
@@ -162,11 +164,18 @@ function driver_match(points, type, no, distance, day) {
 
 function draw_poly(paths, type, no, distance, day) {
     var desc;
+    var color;
     if (day) {
-        if (type == "red") {
-            desc = '红色（1.5小时至3小时）';
-        } else
-            desc = '黄色（1小时6分钟至1.5小时';
+        if (type == "green") {
+            desc = '黄色（36分钟至60分钟）';
+            color = 'yellow'
+        } else if (type == "yellow") {
+            desc = '橙色（60分钟至96分钟）';
+            color = '#FF8C00'
+        } else {
+            desc = '红色（96分钟至120分钟）';
+            color = 'red'
+        }
     } else {
         if (type == "red") {
             desc = '红色（3至6小时）';
@@ -185,7 +194,7 @@ function draw_poly(paths, type, no, distance, day) {
     };
     var polyline = new AMap.Polyline({
         path: paths, //设置线覆盖物路径
-        strokeColor: type, //线颜色
+        strokeColor: color, //线颜色
         strokeOpacity: 1, //线透明度
         strokeWeight: 8, //线宽
         strokeStyle: "solid",
@@ -218,17 +227,19 @@ function isEmpty(obj) {
 
 function get_point(e) {
     //
-    if (isEmpty(old_point)) {
-        old_point.push([e['lnglat']['lng'], e['lnglat']['lat']]);
-
-    } else {
-        old_point.push([e['lnglat']['lng'], e['lnglat']['lat']]);
-        console.log(old_point);
-
-        addMarker(old_point);
-        draw_poly(old_point, 0, 0);
-        old_point = []
-    }
+    // if (isEmpty(old_point)) {
+    //     old_point.push([e['lnglat']['lng'], e['lnglat']['lat']]);
+    //
+    // } else {
+    //     old_point.push([e['lnglat']['lng'], e['lnglat']['lat']]);
+    //
+    //
+    //     addMarker(old_point);
+    //     draw_poly(old_point, 0, 0);
+    //     old_point = []
+    // }
+    console.log(e);
+    console.log(e['lnglat']['lng'] + ',' + e['lnglat']['lat'])
 
 }
 
@@ -253,3 +264,15 @@ function open_lineedit() {
         value.open()
     })
 }
+
+// 116.355896,39.929737  116.356218,39.922332
+// 116.356229,39.922184  116.356593,39.91407
+// 116.356593,39.913976  116.356406,39.909688
+// 116.356395,39.908544  116.356443,39.9074
+// 116.356481,39.910577 116.355789,39.907972
+// 116.355692,39.931699  116.355762,39.929737
+// 116.355767,39.929338  116.355832,39.927536
+// 116.355842,39.92738  116.355955,39.92464
+// 116.356046,39.922727  116.356234,39.918703
+// 116.35654,39.911869  116.356288,39.910256
+// 116.356497,39.908754  116.35676,39.913223
