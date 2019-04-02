@@ -2,7 +2,7 @@ import datetime
 import re
 import threading
 
-from config import *
+from web.backup.config import *
 
 keys = redis.keys('gaode:*')
 times_arr = []

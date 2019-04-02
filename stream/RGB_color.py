@@ -4,8 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-alpha=0.15
-belta=0.11
+alpha = 0.3
+belta = 0.20
+# alpha = 0.15
+# belta = 0.11
+# alpha=0.5
+# belta=0.3
 
 color_dic = {'RED_l': np.array([0, 0, 220]), 'RED_h': np.array([0, 0, 222]),
              'YELLO_l': np.array([0, 202, 253]), 'YELLO_h': np.array([0, 204, 255]),
@@ -25,16 +29,22 @@ def get_line(frame):
     return mask, g, y, r, dr
     # return res
 
-def run_rgb(path,day,gps_center):
+
+def run_rgb(path, day, gps_center):
     filelist = []
-    with open(path+day+'.txt','r')as f:
-        ls=f.readlines()
+    with open(path + day + '.txt', 'r')as f:
+        ls = f.readlines()
         for l in ls:
-            l=l.strip('\n')
-            if l[len('/run/media/kirin/新加卷1/images/evening/2019-03-25-19_20_19_'):-len('.png')] =='%s_%s'%(gps_center[0],gps_center[1]):
+            l = l.strip('\n')
+            l = path + day + '/' + l
+            if l[len('/run/media/kirin/新加卷/images/evening/2019-03-25-19_20_19_')
+            :-len('.png')] == '%s_%s' % (gps_center[0], gps_center[1]):
+                # day = l[len('/run/media/kirin/新加卷/images/evening/2019-03-')
+                #         :len('/run/media/kirin/新加卷/images/evening/2019-03-') + 2]
+                # if (d == '27' or  d=='28'  ):
                 filelist.append(l)
-
-
+    print(gps_center)
+    print(filelist)
     filelist.sort()
     hot_map = 0
     count = 0
@@ -44,14 +54,12 @@ def run_rgb(path,day,gps_center):
                 name_str = item.split('.')[0]
                 # item = path + item
                 img = cv2.imread(item)
-
                 aft_img, g, y, r, dr = get_line(img)
                 hot_map += 0 * np.sign(g) + 0 * np.sign(y) + 2 * np.sign(r) + 2 * np.sign(dr)
                 count += 1
-                print(item)
         except Exception as e:
             print(e)
-            print('erro!')
+            print('error!')
             pass
 
     hot_map += 1 * np.sign(g) + 1 * np.sign(y) + 1 * np.sign(r) + 1 * np.sign(dr)
@@ -60,7 +68,6 @@ def run_rgb(path,day,gps_center):
 
     map = hot_map / total_time
 
-
     # np.save("data.npy", map)
 
     print(count)
@@ -68,7 +75,6 @@ def run_rgb(path,day,gps_center):
     # map = np.load("data.npy")
 
     print(np.max(map))
-
 
     red = map > alpha
     yellow = (map > belta) & (map <= alpha)
@@ -87,8 +93,7 @@ def run_rgb(path,day,gps_center):
     green = green * color_dic['GREEN_l']
 
     final = red + yellow + green
-    cv2.imwrite(day+"_final.png", final)
-    final=cv2.imread(day+"_final.png")
+    cv2.imwrite(day + "_final.png", final)
+    final = cv2.imread(day + "_final.png")
 
     return final
-

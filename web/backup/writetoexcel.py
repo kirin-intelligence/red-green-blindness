@@ -1,11 +1,8 @@
 import xlwt
-import xlrd
-import xlutils.copy
-import xlwt
-import xlsxwriter
+
 workbook = xlwt.Workbook()
 worksheet=workbook.add_sheet('0')
-from config import *
+from web.backup.config import *
 
 keys = redis.keys('gaode:*')
 for k in keys:
