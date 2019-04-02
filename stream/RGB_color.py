@@ -4,8 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-alpha = 0.15
-belta = 0.11
+alpha = 0.3
+belta = 0.20
+# alpha = 0.15
+# belta = 0.11
 # alpha=0.5
 # belta=0.3
 
@@ -34,17 +36,15 @@ def run_rgb(path, day, gps_center):
         ls = f.readlines()
         for l in ls:
             l = l.strip('\n')
-            if l[len('/run/media/kirin/新加卷1/images/evening/2019-03-25-19_20_19_'):-len('.png')] == '%s_%s' % (
-            gps_center[0], gps_center[1]):
-                d = l[len('/run/media/kirin/新加卷1/images/evening/2019-03-')
-                      :len('/run/media/kirin/新加卷1/images/evening/2019-03-') + 2]
+            l = path + day + '/' + l
+            if l[len('/run/media/kirin/新加卷/images/evening/2019-03-25-19_20_19_')
+            :-len('.png')] == '%s_%s' % (gps_center[0], gps_center[1]):
+                # day = l[len('/run/media/kirin/新加卷/images/evening/2019-03-')
+                #         :len('/run/media/kirin/新加卷/images/evening/2019-03-') + 2]
                 # if (d == '27' or  d=='28'  ):
                 filelist.append(l)
-
-                continue
-                # filelist.append(l)
-
-
+    print(gps_center)
+    print(filelist)
     filelist.sort()
     hot_map = 0
     count = 0
@@ -57,10 +57,9 @@ def run_rgb(path, day, gps_center):
                 aft_img, g, y, r, dr = get_line(img)
                 hot_map += 0 * np.sign(g) + 0 * np.sign(y) + 2 * np.sign(r) + 2 * np.sign(dr)
                 count += 1
-                print(item)
         except Exception as e:
             print(e)
-            print('erro!')
+            print('error!')
             pass
 
     hot_map += 1 * np.sign(g) + 1 * np.sign(y) + 1 * np.sign(r) + 1 * np.sign(dr)

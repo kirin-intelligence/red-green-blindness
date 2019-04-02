@@ -1,13 +1,12 @@
 # https://lbs.amap.com/api/webservice/guide/api/staticmaps/
 import json
-import os
 import re
 import threading
 
 import requests
 import time
-from get_line import find_point
-from config import *
+from web.backup.get_line import find_point
+from web.backup.config import *
 
 
 def get_time():
