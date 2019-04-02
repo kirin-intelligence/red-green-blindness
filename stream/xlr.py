@@ -5,7 +5,7 @@ import xlrd
 from xlutils.copy import copy
 from redis import StrictRedis, ConnectionPool
 
-pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=5, decode_responses=True)
+pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=6, decode_responses=True)
 redis = StrictRedis(connection_pool=pool)
 
 
@@ -77,7 +77,7 @@ def write_excel(points, day, start=0, gps_center=0):
         redis.hset(hset_name, "gps_center", json.dumps(gps_center))
         print(point)
     workbook.save('data.xls')
-    return len(points)
+    return start+len(points)
 
 
 points = [[[116.35424435294117, 39.97429023357663, 'red'], [116.35452324567473, 39.97006943065693, 'red']],
