@@ -5,10 +5,16 @@ import xlrd
 from xlutils.copy import copy
 from redis import StrictRedis, ConnectionPool
 
-pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=5, decode_responses=True)
+pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=7, decode_responses=True)
 redis = StrictRedis(connection_pool=pool)
 
-
+def move_erhuan():
+    pool1 = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=7, decode_responses=True)
+    redis1 = StrictRedis(connection_pool=pool1)
+    for i in range(1136,1147):
+        data=redis.hgetall('morning:'+str(i))
+        print(data)
+        redis1.hmset('morning:'+str((i-1136)+(534)),data)
 def get_place(point):
     url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6' \
           'e3&location=%s,%s&poitype=&radius=1000&extensions=base&batch=false&roadlevel=0' % (point[0], point[1])
@@ -80,20 +86,6 @@ def write_excel(points, day, start=0, gps_center=0):
     return len(points)
 
 
-points = [[[116.35424435294117, 39.97429023357663, 'red'], [116.35452324567473, 39.97006943065693, 'red']],
-          [[116.35105853979238, 39.97647454014598, 'red'], [116.35333258823528, 39.97647454014598, 'red']],
-          [[116.35266753633216, 39.968041145985396, 'red'], [116.35298933564012, 39.9686816569343, 'red']],
-          [[116.35497376470586, 39.96859132846715, 'red'], [116.35587480276814, 39.968238226277364, 'red']],
-          [[116.36193535640136, 39.967819430656924, 'red'], [116.36358725951555, 39.967819430656924, 'red']],
-          [[116.3562073287197, 39.967778372262764, 'red'], [116.35878172318337, 39.967778372262764, 'red']],
-          [[116.35895334948096, 39.96781121897809, 'red'], [116.361677916955, 39.96781121897809, 'red']],
-          [[116.35346130795845, 39.967778372262764, 'red'], [116.3561858754325, 39.967778372262764, 'red']],
-          [[116.35072601384081, 39.9677619489051, 'red'], [116.35343985467127, 39.9677619489051, 'red']],
-          [[116.3562073287197, 39.96767162043795, 'red'], [116.3585457370242, 39.96767162043795, 'red']],
-          [[116.35433016608995, 39.976581291970795, 'yellow'], [116.35539210380621, 39.976581291970795, 'yellow']],
-          [[116.35362220761245, 39.97656486861313, 'yellow'], [116.35411563321797, 39.97656486861313, 'yellow']],
-          [[116.35346130795845, 39.967663408759115, 'yellow'], [116.35599279584774, 39.967663408759115, 'yellow']],
-          [[116.36021909342558, 39.96767983211678, 'yellow'], [116.361677916955, 39.96767983211678, 'yellow']]]
 gps_center = [116.30756199999999, 39.944875999999994]
 
 day = 'morning'
