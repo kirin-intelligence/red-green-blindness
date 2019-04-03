@@ -1,3 +1,6 @@
+$(function () {
+    $(':input').labelauty();
+});
 var marker, map = new AMap.Map("container", {
     resizeEnable: true,
     center: [116.35716199999999, 39.971875999999995],
@@ -16,10 +19,6 @@ var red_data = [];
 var green_data = [];
 init();
 
-function get_all_data() {
-
-
-}
 
 function init() {
 
@@ -37,6 +36,9 @@ function init() {
 }
 
 function choose_type(checkbox) {
+    clearMarker();
+    $('button').text('正在加载'); // 按钮灰掉，但仍可点击。
+    $('button').prop('disabled', true);
     $.get('php/get_streams.php',
         {
             'day': 'morning'
@@ -47,7 +49,7 @@ function choose_type(checkbox) {
             res.forEach(function (item, line_index) {
                 var points = eval([eval(item['start_point']), eval(item['end_point'])]);
                 if (item['type'] == checkbox) {
-                                    console.log(points)
+                    console.log(points);
 
                     var paths = item['paths'];
                     var type = (item['type']);
@@ -56,8 +58,13 @@ function choose_type(checkbox) {
                     var day = (item['day']);
                     addMarker(points, type, no);
                     driver_match(points, type, no, distance, day);
+
                 }
             });
+            $('button').text('确定');
+            $('button').prop('disabled', false);
+
+
         }, 'json');
 
 
@@ -269,10 +276,7 @@ function get_point(e) {
 
 // 清除 marker
 function clearMarker() {
-    if (marker) {
-        marker.setMap(null);
-        marker = null;
-    }
+    map.clearMap();
 }
 
 function close_lineedit() {

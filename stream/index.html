@@ -8,6 +8,15 @@
     <meta content="width=device-width" name="viewport">
 
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+    <script type="text/javascript"
+            src="https://webapi.amap.com/maps?v=1.4.13&key=2be4c36d53e74e0c585326d62d6fe6e3"></script>
+
+    <script src="https://webapi.amap.com/maps?v=1.4.13&key=c536f4eae991666b64267ca01f855153&
+plugin=AMap.PolyEditor,AMap.Driving,Amap.DrivingPolicy,AMap.Walking,AMap.Riding"></script>
+    <link rel="stylesheet" href="jquery-labelauty.css">
+
     <style>
         html,
         body,
@@ -50,20 +59,43 @@
         }
 
         .btn {
-            font-size: 2rem;
+            margin-left: 40px;
+            width: 200px;
+        }
+
+        input.labelauty + label {
+            font: 12px "Microsoft Yahei";
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        li {
+            display: inline-block;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        ul {
+            margin: 0;
         }
     </style>
 </head>
 <body>
 <div id='main' style="margin-top:1%;margin-left:1%;text-align: center">
+    <ul class="dowebok">
+        <li><input type="checkbox" name="checkbox" value="red" data-labelauty="红色"></li>
+        <li><input type="checkbox" name="checkbox" value="yellow" data-labelauty="橙黄"></li>
+        <li><input type="checkbox" name="checkbox" value="green" data-labelauty="黄色"></li>
 
-        红色<input type="checkbox" name="vehicle" value="red"><br>
-        橙黄<input type="checkbox" name="vehicle" value="yellow"><br>
-        黄色<input type="checkbox" name="vehicle" value="green"><br>
-        <input type="submit" id="submit">
-
+    </ul>
+    <button class="btn btn-info" type="submit" id="submit" value="确定">确定</button>
 </div>
-<div id="container"></div>
+<div id="container" class="map"></div>
+
 <div class="input-card">
     <!--<label style="color:grey">点标记操作</label>-->
     <!--<div class="input-item">-->
@@ -72,13 +104,7 @@
 
     <!--</div>-->
 </div>
-<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-
-<script type="text/javascript"
-        src="https://webapi.amap.com/maps?v=1.4.13&key=2be4c36d53e74e0c585326d62d6fe6e3"></script>
-
-<script src="https://webapi.amap.com/maps?v=1.4.13&key=c536f4eae991666b64267ca01f855153&
-plugin=AMap.PolyEditor,AMap.Driving,Amap.DrivingPolicy,AMap.Walking,AMap.Riding"></script>
+<script src="jquery-labelauty.js"></script>
 
 <script src="function.js"></script>
 
