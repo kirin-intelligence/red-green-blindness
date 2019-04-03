@@ -42,7 +42,7 @@ if __name__ == '__main__':
             final, red, yellow, green = run_rgb(hmap, c)
             ans, point_map = report(final, GPS_float)
             print(ans)
-            start += write_excel(ans, 'morning', start)
+            # start += write_excel(ans, 'morning', start)
             # cv2.imshow(" ", point_map)
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()

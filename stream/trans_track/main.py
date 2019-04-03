@@ -1,8 +1,9 @@
 import os
 from util import *
+import matplotlib.pyplot as plt
 import cv2
-from web.backup.config import *
-from web.backup.xlr import write_excel
+from config import *
+from xlr import write_excel
 
 time_lst = ['07', '08']
 # [116.356362, 39.92162, 'red'], [116.356013, 39.929951, 'red']
@@ -41,8 +42,8 @@ if __name__ == '__main__':
             final, red, yellow, green = run_rgb(hmap, c)
             ans, point_map = report(final, GPS_float)
             print(ans)
-            start += write_excel(ans, 'morning', start)
+            # start += write_excel(ans, 'morning', start)
+            # cv2.imshow(" ", point_map)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
 
-            cv2.imshow(" ", point_map)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()

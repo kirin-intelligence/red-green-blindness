@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
 <head>
@@ -6,6 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>默认点标记</title>
+    <meta content="width=device-width" name="viewport">
+
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
     <style>
         html,
@@ -47,15 +48,27 @@
         .input-card .btn:last-child {
             margin-right: 0;
         }
+
+        .btn {
+            font-size: 2rem;
+        }
     </style>
 </head>
 <body>
+<div id='main' style="margin-top:1%;margin-left:1%;text-align: center">
+
+        红色<input type="checkbox" name="vehicle" value="red"><br>
+        橙黄<input type="checkbox" name="vehicle" value="yellow"><br>
+        黄色<input type="checkbox" name="vehicle" value="green"><br>
+        <input type="submit" id="submit">
+
+</div>
 <div id="container"></div>
 <div class="input-card">
     <!--<label style="color:grey">点标记操作</label>-->
     <!--<div class="input-item">-->
-        <!--<input  type="button" class="btn" onclick="open_lineedit()" value="编辑线段">-->
-                <!--<input  type="button" class="btn" onclick="close_lineedit()" value="取消编辑">-->
+    <!--<input  type="button" class="btn" onclick="open_lineedit()" value="编辑线段">-->
+    <!--<input  type="button" class="btn" onclick="close_lineedit()" value="取消编辑">-->
 
     <!--</div>-->
 </div>
@@ -68,5 +81,6 @@
 plugin=AMap.PolyEditor,AMap.Driving,Amap.DrivingPolicy,AMap.Walking,AMap.Riding"></script>
 
 <script src="function.js"></script>
+
 </body>
 </html>

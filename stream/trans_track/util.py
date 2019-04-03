@@ -1,8 +1,9 @@
 import numpy as np
 import cv2
 
-alpha = 0.3
-belta = 0.2
+alpha = 0.8
+belta = 0.5
+gama = 0.3
 
 color_dic = {'RED_l': np.array([0, 0, 220]), 'RED_h': np.array([0, 0, 222]),
              'YELLO_l': np.array([0, 202, 253]), 'YELLO_h': np.array([0, 204, 255]),
@@ -26,7 +27,7 @@ def run_rgb(hmap, count):
     print(np.max(hmap))
     red_ori = hmap > alpha
     yellow_ori = (hmap > belta) & (hmap <= alpha)
-    green_ori = (hmap <= belta) & (hmap > 0)
+    green_ori = (hmap <= belta) & (hmap > gama)
 
     red = red_ori[:, :, np.newaxis]
     yellow = yellow_ori[:, :, np.newaxis]
@@ -118,10 +119,16 @@ def la_le_point(points, type, center):
 
 
 def report(img, gps_centor):
-    res_map, _, yellow, red, _ = get_line(img)
+    res_map, green, yellow, red, _ = get_line(img)
     ans = solve(red)
     ans_y = solve(yellow)
+    ans_g = solve(green)
     result = []
+    for i in ans_g:
+        cv2.circle(res_map, i[0], 5, color=(255, 255, 255))
+        cv2.circle(res_map, i[1], 5, color=(255, 255, 255))
+        ans_g = la_le_point(i, 'green', gps_centor)
+        result.append(ans_g)
     for i in ans:
         cv2.circle(res_map, i[0], 5, color=(255, 255, 255))
         cv2.circle(res_map, i[1], 5, color=(255, 255, 255))

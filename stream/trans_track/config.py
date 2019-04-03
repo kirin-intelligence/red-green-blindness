@@ -13,6 +13,3 @@ y_count = int(((y1-right_point[1]) // y_step)+1)
 size = 1200
 
 UNIT_SIZE = 1200
-from redis import StrictRedis, ConnectionPool
-pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=6, decode_responses=True)
-redis = StrictRedis(connection_pool=pool)

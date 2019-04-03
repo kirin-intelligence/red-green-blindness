@@ -3,16 +3,40 @@ var marker, map = new AMap.Map("container", {
     center: [116.35716199999999, 39.971875999999995],
     zoom: 15
 });
+map.on('click', get_point);
+
 var polyEditors = [];
 var POLYS_arr = [];
 var markers_start = [];
 var markers_end = [];
 var MARKERS = [];
+var all_data = [];
+var yellow_data = [];
+var red_data = [];
+var green_data = [];
 init();
 
+function get_all_data() {
+
+
+}
 
 function init() {
 
+    $('#submit').click(function () {
+        obj = document.getElementsByTagName("input");
+        check_val = [];
+        for (k in obj) {
+            if (obj[k].checked) {
+                choose_type(obj[k].value);
+
+            }
+        }
+
+    });
+}
+
+function choose_type(checkbox) {
     $.get('php/get_streams.php',
         {
             'day': 'morning'
@@ -21,24 +45,24 @@ function init() {
             var res = eval(result);
             console.log("total:" + result.length);
             res.forEach(function (item, line_index) {
-
                 var points = eval([eval(item['start_point']), eval(item['end_point'])]);
-                var paths = item['paths'];
-                var type = (item['type']);
-                var no = (item['no']);
-                var distance = (item['distance']);
-                var day = (item['day']);
+                if (item['type'] == checkbox) {
+                                    console.log(points)
 
-
-                addMarker(points, type, no);
-                driver_match(points, type, no, distance, day);
-                // draw_poly(paths, type, no, distance, day);
-                // markers.push([marker,marker_end]);
-                map.on('click', get_point);
-
+                    var paths = item['paths'];
+                    var type = (item['type']);
+                    var no = (item['no']);
+                    var distance = (item['distance']);
+                    var day = (item['day']);
+                    addMarker(points, type, no);
+                    driver_match(points, type, no, distance, day);
+                }
             });
         }, 'json');
 
+
+    // draw_poly(paths, type, no, distance, day);
+    // markers.push([marker,marker_end]);
 }
 
 function addMarker(points, type, no) {
@@ -142,7 +166,7 @@ function driver_match(points, type, no, distance, day) {
                         distance = one_distance;
                         steps = one_steps;
                     }
-                    if (parseInt(distance) > 1100) {
+                    if (parseInt(distance) > 1000) {
                         if (parseInt(distance) > 1500) {
                             distance = '879'
                         }
@@ -170,7 +194,7 @@ function draw_poly(paths, type, no, distance, day) {
             desc = '黄色（36分钟至60分钟）';
             color = 'yellow'
         } else if (type == "yellow") {
-            desc = '橙色（60分钟至96分钟）';
+            desc = '橙黄（60分钟至96分钟）';
             color = '#FF8C00'
         } else {
             desc = '红色（96分钟至120分钟）';
