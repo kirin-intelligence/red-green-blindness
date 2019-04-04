@@ -198,13 +198,13 @@ function draw_poly(paths, type, no, distance, day) {
     var color;
     if (day) {
         if (type == "green") {
-            desc = '黄色（36分钟至60分钟）';
+            desc = '黄色（3小时到5小时）';
             color = 'yellow'
         } else if (type == "yellow") {
-            desc = '橙黄（60分钟至96分钟）';
+            desc = '橙黄（5小时到8小时）';
             color = '#FF8C00'
         } else {
-            desc = '红色（96分钟至120分钟）';
+            desc = '红色（8小时到10小时）';
             color = 'red'
         }
     } else {
