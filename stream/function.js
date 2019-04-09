@@ -41,7 +41,7 @@ function choose_type(checkbox) {
     $('button').prop('disabled', true);
     $.get('php/get_streams.php',
         {
-            'day': 'morning'
+            'day': 'evening'
         }
         , function (result) {
             var res = eval(result);
@@ -49,7 +49,6 @@ function choose_type(checkbox) {
             res.forEach(function (item, line_index) {
                 var points = eval([eval(item['start_point']), eval(item['end_point'])]);
                 if (item['type'] == checkbox) {
-                    console.log(points);
 
                     var paths = item['paths'];
                     var type = (item['type']);

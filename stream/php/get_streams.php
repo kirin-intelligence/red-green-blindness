@@ -6,7 +6,7 @@ $redis->auth('wscjxky123'); //密码验证
 
 $day=$_GET['day'];
 
-$redis->select(5);
+$redis->select(8);
 $keys = $redis->keys($day.':*');
 $arr = array();
 $arr_p=array();

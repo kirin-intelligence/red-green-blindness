@@ -5,16 +5,10 @@ import xlrd
 from xlutils.copy import copy
 from redis import StrictRedis, ConnectionPool
 
-pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=7, decode_responses=True)
+pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=5, decode_responses=True)
 redis = StrictRedis(connection_pool=pool)
 
-def move_erhuan():
-    pool1 = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=7, decode_responses=True)
-    redis1 = StrictRedis(connection_pool=pool1)
-    for i in range(1136,1147):
-        data=redis.hgetall('morning:'+str(i))
-        print(data)
-        redis1.hmset('morning:'+str((i-1136)+(534)),data)
+
 def get_place(point):
     url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6' \
           'e3&location=%s,%s&poitype=&radius=1000&extensions=base&batch=false&roadlevel=0' % (point[0], point[1])
@@ -22,27 +16,27 @@ def get_place(point):
     place = (data['regeocode']['formatted_address'])
     return place
 
-
 def get_distance(start_point, end_point):
     url = "https://restapi.amap.com/v3/direction/walking?origin=%s,%s&destina" \
           "tion=%s,%s&key=2be4c36d53e74e0c585326d62d6fe6e3" % (
               start_point[0], start_point[1], end_point[0], end_point[1])
     data = json.loads(requests.get(url).text)
     dis = (data['route']['paths'][0]['distance'])
-    paths = data['route']['paths'][0]['steps'][0]['polyline']
-    paths = paths.split(';')
-    new_paths = []
+    paths= data['route']['paths'][0]['steps'][0]['polyline']
+    paths=paths.split(';')
+    new_paths=[]
     for point in paths:
-        point = point.split(',')
-        new_point = []
+        point=point.split(',')
+        new_point=[]
         for p in point:
             new_point.append(float(p))
         new_paths.append(new_point)
 
-    return dis, new_paths
+    return dis,new_paths
 
 
 def write_excel(points, day, start=0, gps_center=0):
+    start_count = 0
     workbook = xlrd.open_workbook('data.xls')
     workbook = copy(workbook)
     worksheet = workbook.get_sheet(0)
@@ -59,16 +53,16 @@ def write_excel(points, day, start=0, gps_center=0):
         end_point = point[1]
         start_place = get_place(start_point)
         end_place = get_place(end_point)
-        distance, paths = get_distance(start_point, end_point)
-        no = start + index
+        distance,paths = get_distance(start_point, end_point)
+        no = start_count + index
         type = point[0][2]
-        worksheet.write(index+start, 0, label="%s" % no)
-        worksheet.write(index+start, 1, label="%s" % start_place)
-        worksheet.write(index+start, 2, label="%s,%s" % (start_point[0], start_point[1]))
-        worksheet.write(index+start, 3, label="%s" % end_place)
-        worksheet.write(index+start, 4, label="%s,%s" % (end_point[0], end_point[1]))
-        worksheet.write(index+start, 5, label="%s" % distance)
-        worksheet.write(index+start, 6, label="%s" % "红色" if type == 'red' else "黄色")
+        worksheet.write(index, 0, label="%s" % no)
+        worksheet.write(index, 1, label="%s" % start_place)
+        worksheet.write(index, 2, label="%s,%s" % (start_point[0], start_point[1]))
+        worksheet.write(index, 3, label="%s" % end_place)
+        worksheet.write(index, 4, label="%s,%s" % (end_point[0], end_point[1]))
+        worksheet.write(index, 5, label="%s" % distance)
+        worksheet.write(index, 6, label="%s" % "红色" if type == 'red' else "黄色")
         # worksheet.write(index, 7, label=point)
         hset_name = "%s:%s" % (day, no)
         redis.hset(hset_name, "no", no)
@@ -81,15 +75,29 @@ def write_excel(points, day, start=0, gps_center=0):
         redis.hset(hset_name, "paths", json.dumps(paths))
         redis.hset(hset_name, "day", day)
         redis.hset(hset_name, "gps_center", json.dumps(gps_center))
+
         print(point)
-    workbook.save('data.xls')
-    return len(points)
+        workbook.save('data.xls')
 
 
+points = [[[116.35424435294117, 39.97429023357663, 'red'], [116.35452324567473, 39.97006943065693, 'red']],
+          [[116.35105853979238, 39.97647454014598, 'red'], [116.35333258823528, 39.97647454014598, 'red']],
+          [[116.35266753633216, 39.968041145985396, 'red'], [116.35298933564012, 39.9686816569343, 'red']],
+          [[116.35497376470586, 39.96859132846715, 'red'], [116.35587480276814, 39.968238226277364, 'red']],
+          [[116.36193535640136, 39.967819430656924, 'red'], [116.36358725951555, 39.967819430656924, 'red']],
+          [[116.3562073287197, 39.967778372262764, 'red'], [116.35878172318337, 39.967778372262764, 'red']],
+          [[116.35895334948096, 39.96781121897809, 'red'], [116.361677916955, 39.96781121897809, 'red']],
+          [[116.35346130795845, 39.967778372262764, 'red'], [116.3561858754325, 39.967778372262764, 'red']],
+          [[116.35072601384081, 39.9677619489051, 'red'], [116.35343985467127, 39.9677619489051, 'red']],
+          [[116.3562073287197, 39.96767162043795, 'red'], [116.3585457370242, 39.96767162043795, 'red']],
+          [[116.35433016608995, 39.976581291970795, 'yellow'], [116.35539210380621, 39.976581291970795, 'yellow']],
+          [[116.35362220761245, 39.97656486861313, 'yellow'], [116.35411563321797, 39.97656486861313, 'yellow']],
+          [[116.35346130795845, 39.967663408759115, 'yellow'], [116.35599279584774, 39.967663408759115, 'yellow']],
+          [[116.36021909342558, 39.96767983211678, 'yellow'], [116.361677916955, 39.96767983211678, 'yellow']]]
 gps_center = [116.30756199999999, 39.944875999999994]
 
 day = 'morning'
-# write_excel(points, day,gps_center)
+write_excel(points, day,gps_center)
 
 #
 # readbook = xlrd.open_workbook(r'/home/kaiyuan_xu/Downloads/'+day+'.xlsx')
