@@ -15,7 +15,7 @@ $new_point2 = floatval($_GET['new_point2']);
 $old_point = [$old_point1, $old_point2];
 $new_point = [$new_point1, $new_point2];
 
-$redis->select(5);
+$redis->select(8);
 $keys = $redis->keys($day . ':*');
 $arr = array();
 $arr_p = array();
