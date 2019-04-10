@@ -37,14 +37,14 @@ function init() {
     }
     for (k in obj) {
       if (obj[k].checked) {
-        choose_type(obj[k].value,day)
+        choose_type(obj[k].value, day)
       }
     }
 
   })
 }
 
-function choose_type(checkbox,day) {
+function choose_type(checkbox, day) {
   clearMarker()
   $('button').text('正在加载') // 按钮灰掉，但仍可点击。
   $('button').prop('disabled', true)

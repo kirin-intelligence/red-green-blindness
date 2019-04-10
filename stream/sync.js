@@ -1,4 +1,3 @@
-
 var marker, map = new AMap.Map("container", {
   resizeEnable: true,
   center: [116.35716199999999, 39.971875999999995],
@@ -15,24 +14,23 @@ init('morning');
 init('evening');
 
 
-
 function init(day) {
   $.get('php/get_streams.php',
     {
-      day:day
+      day: day
     }
     , function (result) {
       var res = eval(result);
       console.log("total:" + result.length);
       res.forEach(function (item, line_index) {
         var points = eval([eval(item['start_point']), eval(item['end_point'])]);
-          var paths = eval(item['paths']);
-          var type = (item['type']);
-          var no = (item['no']);
-          var distance = (item['distance']);
-          var day = item['day'];
-          var jam_time = item['jam_time'];
-          driver_match(points, type, no, distance, day,jam_time)
+        var paths = eval(item['paths']);
+        var type = (item['type']);
+        var no = (item['no']);
+        var distance = (item['distance']);
+        var day = item['day'];
+        var jam_time = item['jam_time'];
+        driver_match(points, type, no, distance, day, jam_time)
       })
     }, 'json');
 
@@ -117,17 +115,17 @@ function driver_direct(paths, type, no, distance) {
 function update_data(points, paths, type, no, distance, day) {
   $.get('php/upload_path.php',
     {
-      points:JSON.stringify(points),
-      paths:JSON.stringify(paths),
-      type:type,
-      no:no,
-      distance:distance,
-      day:day
-    },function (result) {
-    },'json');
+      points: JSON.stringify(points),
+      paths: JSON.stringify(paths),
+      type: type,
+      no: no,
+      distance: distance,
+      day: day
+    }, function (result) {
+    }, 'json');
 }
 
-function driver_match(points, type, no, distance, day,jam_time) {
+function driver_match(points, type, no, distance, day, jam_time) {
   var steps;
   var driving_1 = new AMap.Driving({
     policy: AMap.DrivingPolicy.LEAST_DISTANCE,
@@ -156,9 +154,9 @@ function driver_match(points, type, no, distance, day,jam_time) {
             steps = one_steps;
           }
           if (parseInt(distance) > 1000) {
-            distance=Math.round(points[0],points[1]);
-            update_data(points,points,type,no,distance,day);
-            draw_poly(points, type, no, distance, day,jam_time);
+            distance = Math.round(points[0], points[1]);
+            update_data(points, points, type, no, distance, day);
+            draw_poly(points, type, no, distance, day, jam_time);
             return
           }
           steps.forEach(function (value, index) {
@@ -166,8 +164,8 @@ function driver_match(points, type, no, distance, day,jam_time) {
               paths.push([locate['lng'], locate['lat']])
             })
           });
-          update_data(points,paths,type,no,distance,day);
-          draw_poly(paths, type, no, distance, day,jam_time);
+          update_data(points, paths, type, no, distance, day);
+          draw_poly(paths, type, no, distance, day, jam_time);
         }
       })
     }
@@ -175,7 +173,7 @@ function driver_match(points, type, no, distance, day,jam_time) {
 }
 
 
-function draw_poly(paths, type, no, distance, day,jam_time) {
+function draw_poly(paths, type, no, distance, day, jam_time) {
   var desc
   var color
   if (day) {
@@ -199,9 +197,9 @@ function draw_poly(paths, type, no, distance, day,jam_time) {
   var mouseHandler = function (e) {
     new AMap.InfoWindow({
       content: '<h3>序号：' + no + '</h3>' +
-        '<h3>长度：' + distance + '米</h3>' +
-        '<h3>拥堵程度：' + desc + '</h3>'+
-      '<h3>拥堵时间：'+jam_time+'分钟</h3>',
+      '<h3>长度：' + distance + '米</h3>' +
+      '<h3>拥堵程度：' + desc + '</h3>' +
+      '<h3>拥堵时间：' + jam_time + '分钟</h3>',
       showShadow: true
     }).open(map, e.lnglat)
   };
