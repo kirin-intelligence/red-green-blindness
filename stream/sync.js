@@ -32,8 +32,6 @@ function init(day) {
           var distance = (item['distance']);
           var day = item['day'];
           var jam_time = item['jam_time'];
-
-          console.log(day);
           driver_match(points, type, no, distance, day,jam_time)
       })
     }, 'json');
@@ -126,7 +124,6 @@ function update_data(points, paths, type, no, distance, day) {
       distance:distance,
       day:day
     },function (result) {
-      console.log(result);
     },'json');
 }
 
@@ -149,11 +146,8 @@ function driver_match(points, type, no, distance, day,jam_time) {
         showTraffic: false
       }).search(points[1], points[0], function (status, result) {
         if (status === 'complete') {
-          console.log(result['routes']);
           var two_steps = eval(result['routes'][0]['steps']);
           var two_distance = result['routes'][0]['distance'];
-          console.log(two_distance);
-
           if (parseInt(two_distance) < parseInt(one_distance)) {
             distance = two_distance;
             steps = two_steps;

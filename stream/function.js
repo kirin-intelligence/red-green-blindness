@@ -58,14 +58,13 @@ function choose_type(checkbox,day) {
       res.forEach(function (item, line_index) {
         var points = eval([eval(item['start_point']), eval(item['end_point'])])
         if (item['type'] == checkbox) {
-
           var paths = eval(item['paths']);
           var type = (item['type'])
           var no = (item['no'])
           var distance = (item['distance'])
           var day = item['day']
+          console.log(paths, type, no, distance, day);
           addMarker(points, type, no)
-          console.log(day);
           // driver_match(points, type, no, distance, day)
           draw_poly(paths, type, no, distance, day);
 
@@ -223,8 +222,8 @@ function driver_match(points, type, no, distance, day) {
 
 
 function draw_poly(paths, type, no, distance, day) {
-  var desc
-  var color
+  var desc;
+  var color;
   if (day) {
     if (type == "green") {
       desc = '黄色（3小时到5小时）'
