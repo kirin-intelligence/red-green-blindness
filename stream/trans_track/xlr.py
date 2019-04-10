@@ -2,6 +2,7 @@ import json
 
 import requests
 import xlrd
+import xlwt
 from xlutils.copy import copy
 from redis import StrictRedis, ConnectionPool
 
@@ -118,6 +119,9 @@ def add_redis(points, start=0, day='evening'):
 
 
 def write_to_excel(day='evening'):
+    workbook = xlwt.Workbook()
+    workbook.add_sheet('0')
+    workbook.save('data%s.xls' % day)
     workbook = xlrd.open_workbook('data%s.xls' % day)
     workbook = copy(workbook)
     worksheet = workbook.get_sheet(0)
@@ -130,8 +134,8 @@ def write_to_excel(day='evening'):
     worksheet.write(0, 6, label='拥堵情况（颜色）')
     worksheet.write(0, 7, label='拥堵时间（分钟）')
 
-    for hset_name in redis.keys(day + ':*'):
-        print(hset_name)
+    for index, hset_name in enumerate(redis.keys(day + ':*')):
+        print(index)
         start_point = json.loads(redis.hget(hset_name, "start_point"))
         end_point = json.loads(redis.hget(hset_name, "end_point"))
         start_place = redis.hget(hset_name, "start_place")
@@ -140,7 +144,8 @@ def write_to_excel(day='evening'):
         distance = redis.hget(hset_name, "distance")
         no = int(redis.hget(hset_name, "no"))
         type = redis.hget(hset_name, "type")
-        worksheet.write(no, 0, label="%s" % no)
+        worksheet.write(no - 1, 0, label="%s" % no)
+        no = no - 1
         worksheet.write(no, 1, label="%s" % start_place)
         worksheet.write(no, 2, label="%s,%s" % (start_point[0], start_point[1]))
         worksheet.write(no, 3, label="%s" % end_place)
@@ -174,56 +179,8 @@ def move_erhuan():
 
 
 if __name__ == '__main__':
+    # write_to_excel('morning')
     write_to_excel()
-    pass
-    #  pass wo hai yong de ne haoba vegetable
-    # move_erhuan()
-#
-# write_excel(points, day,gps_center)
 
-#
-# readbook = xlrd.open_workbook(r'/home/kaiyuan_xu/Downloads/'+day+'.xlsx')
-# sheet = readbook.sheet_by_index(0)
-# nrows = sheet.nrows
-# ncols = sheet.ncols
-# arr = []
-# import requests
-#
-# arr1 = []
-# for i in range(0, nrows):
-#     start = sheet.cell_value(i, 0)
-#     end = sheet.cell_value(i, 1)
-#     type = sheet.cell_value(i, 2)
-#     lng = float(start.split(',')[0])
-#     lat = float(start.split(',')[1])
-#     lng1 = float(end.split(',')[0])
-#     lat1 = float(end.split(',')[1])
-#     url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6e3&location=%s,%s&poitype=&radius=1000&extensions=base&batch=false&roadlevel=0' % (lng, lat)
-#     data = json.loads(requests.get(url).text)
-#     start_place = (data['regeocode']['formatted_address'])
-#     url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6e3&location=%s,%s' \
-#           '&poitype=&radius=1000&extensions=base&batch=false&roadlevel=0' % (lng1, lat1)
-#     data = json.loads(requests.get(url).text)
-#     end_place = (data['regeocode']['formatted_address'])
-#     url = "https://restapi.amap.com/v3/direction/driving?origin=%s,%s&destination=%s,%s&key=2be4c36d53e74e0c585326d62d6fe6e3"%(lng,lat,lng1,lat1)
-#     data = json.loads(requests.get(url).text)
-#     dis=(data['route']['paths'][0]['distance'])
-#     print(end_place)
-#     # print(dis)
-#
-#     arr.append({
-#         'point': [lng, lat],
-#         'type': 'DarkSalmon ' if type == "黄色" else 'Crimson',
-#         'desc': start_place
-#     })
-#     arr1.append({
-#         'point': [lng1, lat1],
-#         'desc': end_place
-#     })
-# # for i in arr:
-# #     print(i)
-# print("var positions1=" + str(arr))
-# print("var positions2=" + str(arr1))
-# print(len(arr))
-# print(len(arr1))
-#
+    pass
+
