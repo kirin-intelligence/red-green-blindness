@@ -51,7 +51,7 @@ def head_end(tuzi_map):
         return (p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2
 
     gray = np.uint8(tuzi_map)
-    ls = cv2.HoughLinesP(gray, 1, np.pi/180, threshold=60, minLineLength=60, maxLineGap=5)
+    ls = cv2.HoughLinesP(gray, 1, np.pi / 180, threshold=60, minLineLength=60, maxLineGap=5)
     head_max, end_max = None, None
     if ls is None:
         return head_max, end_max
@@ -84,7 +84,7 @@ def no_eages(img):
     return img_without_eage
 
 
-def solve(input_map):
+def solve(input_map, origin_data):
     count = 0
     point_paer = []
     input_map = no_eages(input_map)
@@ -100,29 +100,36 @@ def solve(input_map):
             if np.sum(single_connect) > 50:
                 point = head_end(single_connect)
                 if point != (None, None):
-                    point_paer.append(list(point))
+                    time_conunt = origin_data * single_connect
+                    avg_time = np.sum(time_conunt) / np.sum(np.sign(time_conunt))
+                    datapack = list(point)
+                    datapack.append(avg_time)
+                    point_paer.append(datapack)
+                    # print(np.max(time_conunt), np.min(time_conunt))
                 count += 1
     except:
         pass
     return point_paer
 
 
-def la_le_point(points, type, center):
+def la_le_point(data_pack, type, center):
+    points = data_pack[0:2]
     px = 0.0124 / (1200 - 44)
     py = 0.009 / (1200 - 104)
     zero_point = [center[0] - 600 * px, center[1] - 600 * py]
-    lat_points = []
+    lat_points_pack = []
     for point in points:
         lat_point = [zero_point[0] + px * point[0], zero_point[1] + py * (1200 - point[1]), type]
-        lat_points.append(list(lat_point))
-    return (lat_points)
+        lat_points_pack.append(list(lat_point))
+    lat_points_pack.append(data_pack[-1])
+    return lat_points_pack
 
 
-def report(img, gps_centor):
+def report(img, gps_centor, ori_data):
     res_map, green, yellow, red, _ = get_line(img)
-    ans = solve(red)
-    ans_y = solve(yellow)
-    ans_g = solve(green)
+    ans = solve(red, ori_data)
+    ans_y = solve(yellow, ori_data)
+    ans_g = solve(green, ori_data)
     result = []
     for i in ans_g:
         cv2.circle(res_map, i[0], 5, color=(255, 255, 255))

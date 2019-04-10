@@ -5,11 +5,15 @@ import xlrd
 from xlutils.copy import copy
 from redis import StrictRedis, ConnectionPool
 
-pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=7, decode_responses=True)
+pool = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=8, decode_responses=True)
 redis = StrictRedis(connection_pool=pool)
-
+g = [[[116.355888, 39.933548, 'red'], [116.35562, 39.939498, 'red']],
+     [[116.355571, 39.936919, 'red'], [116.355754, 39.933608], 'red']]
 pool1 = ConnectionPool(host='123.56.19.49', password='wscjxky123', port=6379, db=6, decode_responses=True)
 redis1 = StrictRedis(connection_pool=pool1)
+
+
+# write_excel()
 
 
 def get_place(point):
@@ -41,8 +45,7 @@ def get_distance(start_point, end_point):
 
 def write_excel(points, day, start=0, gps_center=0):
     print(points)
-
-    workbook = xlrd.open_workbook('data.xls')
+    workbook = xlrd.open_workbook('data%s.xls' % day)
     workbook = copy(workbook)
     worksheet = workbook.get_sheet(0)
     worksheet.write(0, 0, label='序号')
@@ -68,11 +71,11 @@ def write_excel(points, day, start=0, gps_center=0):
         worksheet.write(index + start, 4, label="%s,%s" % (end_point[0], end_point[1]))
         worksheet.write(index + start, 5, label="%s" % distance)
         if type == 'red':
-            color = "红色"
+            color = '红色'
         elif type == 'yellow':
-            color = "橙黄"
+            color = '橙黄'
         else:
-            color = "黄色"
+            color = '黄色'
         worksheet.write(index + start, 6, label="%s" % color)
         # worksheet.write(index, 7, label=point)
         # hset_name = "%s:%s" % (day, no)
@@ -81,49 +84,45 @@ def write_excel(points, day, start=0, gps_center=0):
         # redis.hset(hset_name, "end_point", json.dumps(end_point[:-1]))
         # redis.hset(hset_name, "type", type)
         # redis.hset(hset_name, "distance", distance)
+
         # redis.hset(hset_name, "start_place", start_place)
         # redis.hset(hset_name, "end_place", end_place)
         # redis.hset(hset_name, "paths", json.dumps(paths))
         # redis.hset(hset_name, "day", day)
         # redis.hset(hset_name, "gps_center", json.dumps(gps_center))
         print(point)
-    workbook.save('data.xls')
+    workbook.save('data%s.xls' % day)
     return len(points)
 
 
-gps_center = [116.30756199999999, 39.944875999999994]
-
-day = 'morning'
-
-
-def rewrite_xls():
-    for index, i in enumerate(range(0, 600)):
-        data = redis.hgetall('morning:' + str(i))
-        print(data)
-        a = list(json.loads(data['start_point']))
-        a.append(data['type'])
-        b = json.loads(data['end_point'])
-        b.append(data['type'])
-        print([[a, b]])
-        write_excel(points=[[a, b]], day='morning', start=index)
-
-
-rewrite_xls()
+def add_redis(points, day='evening'):
+    for index, point in enumerate(points):
+        index += 2
+        start_point = point[0]
+        end_point = point[1]
+        start_place = get_place(start_point)
+        end_place = get_place(end_point)
+        jam_time = point[2]
+        no = index
+        type = point[0][2]
+        hset_name = "%s:%s" % (day, no)
+        redis.hset(hset_name, "no", no)
+        redis.hset(hset_name, "start_point", json.dumps(start_point[:-1]))
+        redis.hset(hset_name, "end_point", json.dumps(end_point[:-1]))
+        redis.hset(hset_name, "type", type)
+        redis.hset(hset_name, "start_place", start_place)
+        redis.hset(hset_name, "end_place", end_place)
+        redis.hset(hset_name, "day", day)
+        redis.hset(hset_name, "jam_time", 120*jam_time)
 
 
 def move_erhuan():
     offset = 568
-    g = [[[116.355639, 39.939498, 'red'], [116.355757, 39.936767, 'red']],
-         [[116.355778, 39.935837, 'red'], [116.356046, 39.929017, 'red']]]
-    start = 1136
-    write_excel(g, 'morning', start)
-    for index, i in enumerate(range(1136, 1146)):
+    for index, i in enumerate(range(1136, 1147)):
         data = redis1.hgetall('morning:' + str(i))
         data['no'] = str((i - 1136) + (offset))
         redis.hmset('morning:' + str((i - 1136) + (offset)), data)
         start = (i - 1136) + (offset)
-        print(start)
-        print(data)
         a = list(json.loads(data['start_point']))
         a.append(data['type'])
         b = json.loads(data['end_point'])
@@ -133,9 +132,10 @@ def move_erhuan():
 
 
 if __name__ == '__main__':
-    # move_erhuan()
     pass
-
+    #  pass wo hai yong de ne haoba vegetable
+    # move_erhuan()
+#
 # write_excel(points, day,gps_center)
 
 #

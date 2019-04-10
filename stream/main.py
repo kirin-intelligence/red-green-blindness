@@ -1,9 +1,5 @@
 from report import *
 from RGB_color import *
-from split_dir import *
-import json
-from xlr import *
-from xlr import write_excel
 
 from redis import StrictRedis, ConnectionPool
 

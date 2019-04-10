@@ -3,9 +3,10 @@ from util import *
 import matplotlib.pyplot as plt
 import cv2
 from config import *
-from xlr import write_excel
+from xlr import *
+time_lst = ['17', '18']
 
-time_lst = ['07', '08']
+
 # [116.356362, 39.92162, 'red'], [116.356013, 39.929951, 'red']
 
 
@@ -40,10 +41,11 @@ if __name__ == '__main__':
         for y in y_list:
             hmap, c, GPS_float = way_of_read('%s_%s' % (x, y))
             final, red, yellow, green = run_rgb(hmap, c)
-            ans, point_map = report(final, GPS_float)
+            ans, point_map = report(final, GPS_float, hmap)
+            ans.sort(key=lambda x: x[2], reverse=True)
             print(ans)
-            # start += write_excel(ans, 'morning', start)
+            add_redis(ans,'evening')
+            # start += write_excel(ans, 'evening', start)
             # cv2.imshow(" ", point_map)
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()
-
