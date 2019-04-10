@@ -53,8 +53,9 @@ function choose_type(checkbox, day) {
       'day': day
     }
     , function (result) {
-      var res = eval(result)
-      console.log("total:" + result.length)
+      var res = eval(result);
+            console.log("day:" + day);
+      console.log("total:" + result.length);
       res.forEach(function (item, line_index) {
         var points = eval([eval(item['start_point']), eval(item['end_point'])])
         if (item['type'] == checkbox) {
@@ -63,7 +64,6 @@ function choose_type(checkbox, day) {
           var no = (item['no'])
           var distance = (item['distance'])
           var day = item['day']
-          console.log(paths, type, no, distance, day);
           addMarker(points, type, no)
           // driver_match(points, type, no, distance, day)
           draw_poly(paths, type, no, distance, day);
