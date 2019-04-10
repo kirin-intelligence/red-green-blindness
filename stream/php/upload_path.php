@@ -19,13 +19,12 @@ $type = $_GET['type'];
 $no = $_GET['no'];
 $distance = $_GET['distance'];
 $day = $_GET['points'];
-
 $redis->select(8);
-$hname=$day.':'.$no;
+$hname='evening'.':'.$no;
 //$res=$redis->hGet($hname,'paths');
 $res=$redis->hSet($hname,'paths',$paths);
 $res=$redis->hSet($hname,'distance',$distance);
 
-var_dump($res);
+var_dump($day,$no);
 
 

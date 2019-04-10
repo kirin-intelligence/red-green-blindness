@@ -54,11 +54,10 @@ function choose_type(checkbox) {
           var type = (item['type'])
           var no = (item['no'])
           var distance = (item['distance'])
-          var day = (item['day'])
+          var day = item['day']
           addMarker(points, type, no)
-          console.log(paths);
-          driver_match(points, type, no, distance, day)
-
+          console.log(day);
+          // driver_match(points, type, no, distance, day)
           draw_poly(paths,type,no,distance,day);
 
         }
@@ -162,7 +161,7 @@ function update_data(points, paths, type, no, distance, day) {
 }
 
 function driver_match(points, type, no, distance, day) {
-  var steps
+  var steps;
   var driving_1 = new AMap.Driving({
     policy: AMap.DrivingPolicy.LEAST_DISTANCE,
     autoFitView: false,
@@ -180,14 +179,17 @@ function driver_match(points, type, no, distance, day) {
         showTraffic: false
       }).search(points[1], points[0], function (status, result) {
         if (status === 'complete') {
+          console.log(result['routes']);
           var two_steps = eval(result['routes'][0]['steps'])
           var two_distance = result['routes'][0]['distance']
+          console.log(two_distance);
+
           if (parseInt(two_distance) < parseInt(one_distance)) {
-            distance = two_distance
-            steps = two_steps
+            distance = two_distance;
+            steps = two_steps;
           } else {
-            distance = one_distance
-            steps = one_steps
+            distance = one_distance;
+            steps = one_steps;
           }
           if (parseInt(distance) > 1000) {
             if (parseInt(distance) > 1500) {

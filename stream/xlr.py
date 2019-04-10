@@ -28,14 +28,14 @@ def write_excel(day='evening'):
         start_place = redis.hget(k,'start_place')
         end_place = redis.hget(k,'end_place')
         distance = redis.hget(k,'distance')
-        no = int(redis.hget(k,'no'))+2
+        no = int(redis.hget(k,'no'))
         type = redis.hget(k,'type')
-        worksheet.write(no, 0, label="%s" % no)
-        worksheet.write(no, 1, label="%s" % start_place)
-        worksheet.write(no, 2, label="%s,%s" % (start_point, start_point))
-        worksheet.write(no, 3, label="%s" % end_place)
-        worksheet.write(no, 4, label="%s,%s" % (end_point, end_point))
-        worksheet.write(no, 5, label="%s" % distance)
+        worksheet.write(no+1, 0, label="%s" % no)
+        worksheet.write(no+1, 1, label="%s" % start_place)
+        worksheet.write(no+1, 2, label="%s,%s" % (start_point, start_point))
+        worksheet.write(no+1, 3, label="%s" % end_place)
+        worksheet.write(no+1, 4, label="%s,%s" % (end_point, end_point))
+        worksheet.write(no+1, 5, label="%s" % distance)
         if type=='red':
             color='红色'
         elif type=='yellow':
@@ -45,8 +45,7 @@ def write_excel(day='evening'):
         worksheet.write(no, 6, label=color)
         # worksheet.write(index, 7, label=point)
         # break
-        if index==30:
-            break
+
 
     workbook.save('data.xls')
 
