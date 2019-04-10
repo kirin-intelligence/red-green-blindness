@@ -25,6 +25,5 @@ $hname='evening'.':'.$no;
 $res=$redis->hSet($hname,'paths',$paths);
 $res=$redis->hSet($hname,'distance',$distance);
 
-var_dump($day,$no);
 
 

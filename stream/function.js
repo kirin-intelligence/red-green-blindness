@@ -23,25 +23,34 @@ init()
 function init() {
 
   $('#submit').click(function () {
+    var day = 'evening';
     obj = document.getElementsByTagName("input")
     check_val = []
     for (k in obj) {
       if (obj[k].checked) {
-        choose_type(obj[k].value)
-
+        console.log(obj[k].value);
+        if (obj[k].value == 'morning') {
+          day = 'morning';
+          break
+        }
+      }
+    }
+    for (k in obj) {
+      if (obj[k].checked) {
+        choose_type(obj[k].value,day)
       }
     }
 
   })
 }
 
-function choose_type(checkbox) {
+function choose_type(checkbox,day) {
   clearMarker()
   $('button').text('正在加载') // 按钮灰掉，但仍可点击。
   $('button').prop('disabled', true)
   $.get('php/get_streams.php',
     {
-      'day': 'evening'
+      'day': day
     }
     , function (result) {
       var res = eval(result)
@@ -58,7 +67,7 @@ function choose_type(checkbox) {
           addMarker(points, type, no)
           console.log(day);
           // driver_match(points, type, no, distance, day)
-          draw_poly(paths,type,no,distance,day);
+          draw_poly(paths, type, no, distance, day);
 
         }
       })
@@ -149,15 +158,15 @@ function driver_direct(paths, type, no, distance) {
 function update_data(points, paths, type, no, distance, day) {
   $.get('php/upload_path.php',
     {
-      points:JSON.stringify(points),
-      paths:JSON.stringify(paths),
-      type:type,
-      no:no,
-      distance:distance,
-      day:day
-    },function (result) {
+      points: JSON.stringify(points),
+      paths: JSON.stringify(paths),
+      type: type,
+      no: no,
+      distance: distance,
+      day: day
+    }, function (result) {
       console.log(result);
-    },'json');
+    }, 'json');
 }
 
 function driver_match(points, type, no, distance, day) {
@@ -195,7 +204,7 @@ function driver_match(points, type, no, distance, day) {
             if (parseInt(distance) > 1500) {
               distance = '879'
             }
-            update_data(points,points,type,no,distance,day);
+            update_data(points, points, type, no, distance, day);
             // draw_poly(points, type, no, distance, day)
             return
           }
@@ -204,7 +213,7 @@ function driver_match(points, type, no, distance, day) {
               paths.push([locate['lng'], locate['lat']])
             })
           })
-          update_data(points,paths,type,no,distance,day);
+          update_data(points, paths, type, no, distance, day);
           // draw_poly(paths, type, no, distance, day)
         }
       })
@@ -237,8 +246,8 @@ function draw_poly(paths, type, no, distance, day) {
   var mouseHandler = function (e) {
     new AMap.InfoWindow({
       content: '<h3>序号：' + no + '</h3>' +
-        '<h3>长度：' + distance + '米</h3>' +
-        '<h3>拥堵程度：' + desc + '</h3>',
+      '<h3>长度：' + distance + '米</h3>' +
+      '<h3>拥堵程度：' + desc + '</h3>',
       showShadow: true
     }).open(map, e.lnglat)
 

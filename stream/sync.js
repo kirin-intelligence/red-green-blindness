@@ -3,14 +3,14 @@ var marker, map = new AMap.Map("container", {
   resizeEnable: true,
   center: [116.35716199999999, 39.971875999999995],
   zoom: 15
-})
-map.on('click', get_point)
+});
+map.on('click', get_point);
 
-var polyEditors = []
-var POLYS_arr = []
-var markers_start = []
-var markers_end = []
-var MARKERS = []
+var polyEditors = [];
+var POLYS_arr = [];
+var markers_start = [];
+var markers_end = [];
+var MARKERS = [];
 init('morning');
 init('evening');
 
@@ -36,7 +36,7 @@ function init(day) {
           console.log(day);
           driver_match(points, type, no, distance, day,jam_time)
       })
-    }, 'json')
+    }, 'json');
 
 
   // draw_poly(paths, type, no, distance, day);
