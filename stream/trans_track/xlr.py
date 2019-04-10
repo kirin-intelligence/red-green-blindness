@@ -95,7 +95,7 @@ def write_excel(points, day, start=0, gps_center=0):
     return len(points)
 
 
-def add_redis(points, day='evening'):
+def add_redis(points, start=0,day='evening'):
     for index, point in enumerate(points):
         index += 2
         start_point = point[0]
@@ -103,7 +103,7 @@ def add_redis(points, day='evening'):
         start_place = get_place(start_point)
         end_place = get_place(end_point)
         jam_time = point[2]
-        no = index
+        no = start+index
         type = point[0][2]
         hset_name = "%s:%s" % (day, no)
         redis.hset(hset_name, "no", no)
@@ -114,7 +114,7 @@ def add_redis(points, day='evening'):
         redis.hset(hset_name, "end_place", end_place)
         redis.hset(hset_name, "day", day)
         redis.hset(hset_name, "jam_time", 120*jam_time)
-
+    return start+len(points)
 
 def move_erhuan():
     offset = 568

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import cv2
 from config import *
 from xlr import *
-time_lst = ['17', '18']
+time_lst = ['07', '08']
 
 
 # [116.356362, 39.92162, 'red'], [116.356013, 39.929951, 'red']
@@ -37,6 +37,7 @@ if __name__ == '__main__':
     print(len(x_list))
     print(len(y_list))
     start = 0
+
     for x in x_list:
         for y in y_list:
             hmap, c, GPS_float = way_of_read('%s_%s' % (x, y))
@@ -44,7 +45,7 @@ if __name__ == '__main__':
             ans, point_map = report(final, GPS_float, hmap)
             ans.sort(key=lambda x: x[2], reverse=True)
             print(ans)
-            add_redis(ans,'evening')
+            start=add_redis(ans,start,'morning',)
             # start += write_excel(ans, 'evening', start)
             # cv2.imshow(" ", point_map)
             # cv2.waitKey(0)
