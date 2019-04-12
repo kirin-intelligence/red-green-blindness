@@ -14,11 +14,11 @@ $redis->connect('123.56.19.49', 6379); //连接Redis
 $redis->auth('wscjxky123'); //密码验证
 $redis->select(10);
 
-$opera= $_GET['opera'];
+$opera = $_GET['opera'];
 $day = $_GET['day'];
 $no = $_GET['no'];
 $hname = $day . ':' . $no;
-if ($opera=='del'){
+if ($opera == 'del') {
     $res = $redis->del($hname);
     exit(1);
 }

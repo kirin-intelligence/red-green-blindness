@@ -26,13 +26,12 @@ foreach ($keys as $first => $key) {
     foreach ($points as $second => $value2) {
         $value2 = (json_decode($value2));
 
-        if (abs($value2[0][0] - $old_point[0])<0.000001 and abs($value2[0][1] - $old_point[1])<0.000001 ){
+        if (abs($value2[0][0] - $old_point[0]) < 0.000001 and abs($value2[0][1] - $old_point[1]) < 0.000001) {
             array_push($new_point, $value2[0][2]);
             array_push($arr, $new_point);
             array_push($arr, $value2[1]);
             $result = $redis->lSet($key, $second, json_encode($arr));
-        }
-        else if (abs($value2[1][0] - $old_point[0])<0.000001 and abs($value2[1][1] - $old_point[1])<0.000001) {
+        } else if (abs($value2[1][0] - $old_point[0]) < 0.000001 and abs($value2[1][1] - $old_point[1]) < 0.000001) {
             array_push($new_point, $value2[1][2]);
             array_push($arr, $new_point);
             array_unshift($arr, $value2[0]);
