@@ -140,7 +140,7 @@ def write_to_excel(day='evening'):
         end_point = json.loads(redis.hget(hset_name, "end_point"))
         start_place = redis.hget(hset_name, "start_place")
         end_place = redis.hget(hset_name, "end_place")
-        jam_time = redis.hget(hset_name, "jam_time")
+        jam_time = round(float(redis.hget(hset_name, "jam_time")),1)
         distance = redis.hget(hset_name, "distance")
         no = int(redis.hget(hset_name, "no"))
         type = redis.hget(hset_name, "type")
@@ -180,7 +180,13 @@ def move_erhuan():
 
 if __name__ == '__main__':
     # write_to_excel('morning')
-    write_to_excel()
-
+    # write_to_excel()
+    r=[]
+    a=redis.keys('evening' + ':*')
+    for i in a[:3]:
+        r.append(i)
+    c=redis.scan(0,"morning*",10000)
+    print(len(c[1]))
+    print(c)
     pass
 
