@@ -3,12 +3,12 @@ import cv2
 import numpy as np
 import datetime
 
-path = '/home/kirin/Python_Code/red-green-blindness/video_maker/useful/'
-Out_path = '/home/kirin/Python_Code/red-green-blindness/video_maker/output_video/OutPut_ori.mp4'
+path = '/home/kirin/Python_Code/red-green-blindness/video_maker/evening_xierhuan/'
+Out_path = '/home/kirin/Python_Code/red-green-blindness/video_maker/OutPut_evening_xierhuan.mp4'
 filelist = os.listdir(path)
 
 fps = 24
-size = (2048, 2048)
+size = (1200, 1200)
 
 fourcc = cv2.VideoWriter_fourcc('D', 'I', 'V', 'X')
 video = cv2.VideoWriter(Out_path, fourcc, fps, size)
@@ -30,7 +30,7 @@ for item in filelist:
         item = path + item
         img = cv2.imread(item)
         img = Time_mark(img, name_str)
-        for i in range(24):
+        for i in range(3):
             video.write(img)
 
 video.release()

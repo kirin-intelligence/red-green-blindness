@@ -13,7 +13,6 @@ def string_to_time(t):
     return datetime.strptime(t, "%Y-%m-%d-%H_%M_%S")
 
 
-
 def main():
     for r, d, f in os.walk("../input_img"):
         for file in f:
@@ -53,14 +52,27 @@ def spilt_file(dir_name, target_dir):
 
                             # shutil.copy("total_img/"+file,'day')
 
-# def spilit_lng():
-#     with open(dir_name+'filenames.txt', 'r')as f:
-#         lines=f.readlines()
-#         for file in lines:
-#             file = file.strip('\n')
-#             print(file)
-#             location = file[len('2019-03-21-15_04_11_'):-len('.png')]
-#             if os.path.isdir(target_dir+location):
-#                 print(time_str)
-#             break
+
+day = ['03-25', '03-26', '03-27', '03-28', '03-29']
+
+
+def spilit_point(p):
+    dir_name = '/run/media/kirin/新加卷/server/'
+    with open(dir_name + 'filenames.txt', 'r')as f:
+        lines = f.readlines()
+        for file in lines:
+            file = file.strip('\n')
+            if p in file:
+                for d in day:
+                    if d in file:
+                        if '-17_' in file or '-18_' in file:
+                            print(dir_name + file)
+                            shutil.copy(dir_name +"images/"+ file,
+                                        '/home/kirin/Python_Code/red-green-blindness/video_maker/evening_xierhuan')
+
+
+spilit_point('116.35716199999999_39.917876')
+# spilit_point('116.35716199999999_39.944875999999994')
+# spilit_point('116.35716199999999_39.93587599999999')
+
 # spilit_lng()
