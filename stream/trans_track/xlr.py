@@ -179,15 +179,13 @@ def move_erhuan():
 
 
 if __name__ == '__main__':
-    write_to_excel('morning')
-    write_to_excel()
-    # r=[]
-    # a=redis.keys('evening' + ':*')
-    # for i in a[:3]:
-    #     r.append(i)
-    # c=redis.scan(0,"morning*",10000)
-    # print(len(c[1]))
-    # print(c)
+    # write_to_excel('morning')
+    # write_to_excel()
+    # a=redis.hset('morning:329','distance','128')
+    # a = redis.hset('morning:329', 'distance', '128')
+    # a = redis.hset('evening:298', 'distance', '1004')
+    # a = redis.hset('evening:477', 'distance', '114')
+    a = redis.hset('evening:329', 'distance', '80')
     pass
 
 

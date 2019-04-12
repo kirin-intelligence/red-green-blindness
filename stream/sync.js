@@ -26,7 +26,6 @@ function init(day) {
             console.log("total:" + result.length);
             res.forEach(function (item, line_index) {
                 console.log(line_index);
-
                 var points = eval([eval(item['start_point']), eval(item['end_point'])]);
                 var paths = eval(item['paths']);
                 var type = (item['type']);
@@ -34,7 +33,6 @@ function init(day) {
                 var distance = (item['distance']);
                 var day = item['day'];
                 var jam_time = item['jam_time'];
-
                 // driver_match(points, type, no, distance, day, jam_time)
             })
         }, 'json');
