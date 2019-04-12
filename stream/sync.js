@@ -12,7 +12,7 @@ var markers_end = [];
 var MARKERS = [];
 /*init('morning');
 init('evening');*/
-update_json();
+init('json');
 
 
 
@@ -35,7 +35,7 @@ function init(day) {
                 var day = item['day'];
                 var jam_time = item['jam_time'];
 
-                driver_match(points, type, no, distance, day, jam_time)
+                // driver_match(points, type, no, distance, day, jam_time)
             })
         }, 'json');
 

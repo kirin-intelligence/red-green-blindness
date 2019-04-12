@@ -13,64 +13,97 @@ var POLYS_arr = []
 var markers_start = []
 var markers_end = []
 var MARKERS = []
-var all_data = []
+var all_data = null;
 var yellow_data = []
 var red_data = []
 var green_data = []
-init()
+var choose_day;
+var choose_types;
 
 
-function init() {
-
-    $('#submit').click(function () {
-        var day = 'evening';
-        obj = document.getElementsByTagName("input")
-        check_val = []
+$('#submit').click(function () {
+        choose_types = [];
+        choose_day = 'evening';
+        obj = document.getElementsByTagName("input");
+        check_val = [];
         for (k in obj) {
             if (obj[k].checked) {
                 console.log(obj[k].value);
                 if (obj[k].value == 'morning') {
-                    day = 'morning';
-                    break
+                    choose_day = 'morning';
                 }
             }
         }
         for (k in obj) {
             if (obj[k].checked) {
-                choose_type(obj[k].value, day)
+                choose_types.push(obj[k].value);
+                // choose_type(obj[k].value, day)
             }
         }
+        console.log(choose_types, choose_day);
+        if (all_data == null) {
+            get_streams();
 
-    })
+        } else {
+            choose_data();
+        }
+
+    }
+)
+
+function choose_data() {
+    clearMarker();
+    $('button').text('正在加载');// 按钮灰掉，但仍可点击。
+    $('button').prop('disabled', true);
+    console.log("day:" + choose_day);
+    console.log("total:" + all_data.length);
+    all_data.forEach(function (item, line_index) {
+        var points = eval([eval(item['start_point']), eval(item['end_point'])]);
+        if (choose_types.indexOf(item['type']) != -1) {
+            var paths = eval(item['paths']);
+            var type = (item['type']);
+            var no = (item['no']);
+            var distance = (item['distance']);
+            var day = item['day'];
+            var jam_time = parseFloat(item['jam_time']).toFixed(1);
+
+            addMarker(points, type, no);
+            // driver_match(points, type, no, distance, day)
+            draw_poly(paths, type, no, distance, day, jam_time);
+
+        }
+    });
+    $('button').text('确定');
+    $('button').prop('disabled', false)
 }
 
-function choose_type(checkbox, day) {
+function get_streams() {
     clearMarker()
-    $('button').text('正在加载') ;// 按钮灰掉，但仍可点击。
+    $('button').text('正在加载');// 按钮灰掉，但仍可点击。
     $('button').prop('disabled', true);
-    $.get('php/get_streams.php',
-        {
-            'day': day
-        }
+    $.get('php/' + choose_day + '_data.json'
         , function (result) {
-            var res = eval(result);
-            console.log("day:" + day);
-            console.log("total:" + result.length);
-            res.forEach(function (item, line_index) {
-                var points = eval([eval(item['start_point']), eval(item['end_point'])]);
-                if (item['type'] == checkbox) {
-                    var paths = eval(item['paths']);
-                    var type = (item['type']);
-                    var no = (item['no']);
-                    var distance = (item['distance']);
-                    var day = item['day'];
-                    var jam_time=item['jam_time'];
-                    addMarker(points, type, no);
-                    // driver_match(points, type, no, distance, day)
-                    draw_poly(paths, type, no, distance, day,jam_time);
-
-                }
-            });
+            all_data = eval(result);
+            choose_data();
+            // var res = eval(result);
+            // console.log("day:" + choose_day);
+            // console.log("total:" + result.length);
+            // res.forEach(function (item, line_index) {
+            //     var points = eval([eval(item['start_point']), eval(item['end_point'])]);
+            //     if (choose_types.indexOf(item['type'])!=-1) {
+            //         var paths = eval(item['paths']);
+            //         var type = (item['type']);
+            //         var no = (item['no']);
+            //         var distance = (item['distance']);
+            //         var day = item['day'];
+            //         var jam_time = parseFloat(item['jam_time']).toFixed(1);
+            //
+            //         addMarker(points, type, no);
+            //         // driver_match(points, type, no, distance, day)
+            //         draw_poly(paths, type, no, distance, day, jam_time);
+            //
+            //     }
+            // });
             $('button').text('确定');
             $('button').prop('disabled', false)
 
@@ -230,11 +263,11 @@ function draw_poly(paths, type, no, distance, day, jam_time) {
             desc = '黄色';
             color = 'yellow'
         } else if (type == "yellow") {
-            desc = '橙黄';
-            color = '#FF8C00'
-        } else {
             desc = '红色';
             color = 'red'
+        } else {
+            desc = '深红';
+            color = '#660000'
         }
     } else {
         if (type == "red") {
