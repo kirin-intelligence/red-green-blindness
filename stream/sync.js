@@ -10,8 +10,10 @@ var POLYS_arr = [];
 var markers_start = [];
 var markers_end = [];
 var MARKERS = [];
-init('morning');
-init('evening');
+/*init('morning');
+init('evening');*/
+update_json();
+
 
 
 function init(day) {

@@ -179,14 +179,22 @@ def move_erhuan():
 
 
 if __name__ == '__main__':
-    # write_to_excel('morning')
-    # write_to_excel()
-    r=[]
-    a=redis.keys('evening' + ':*')
-    for i in a[:3]:
-        r.append(i)
-    c=redis.scan(0,"morning*",10000)
-    print(len(c[1]))
-    print(c)
+    write_to_excel('morning')
+    write_to_excel()
+    # r=[]
+    # a=redis.keys('evening' + ':*')
+    # for i in a[:3]:
+    #     r.append(i)
+    # c=redis.scan(0,"morning*",10000)
+    # print(len(c[1]))
+    # print(c)
     pass
 
+
+#164 - 68
+#458  - 386
+#412 - 219
+
+
+# 晚
+# 701
