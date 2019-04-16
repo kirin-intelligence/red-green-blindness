@@ -93,8 +93,8 @@ plugin=AMap.PolyEditor,AMap.Driving,Amap.DrivingPolicy,AMap.Walking,AMap.Riding"
     <ul class="dowebok">
 
         <li><input type="checkbox" name="checkbox" value="morning" data-labelauty="是否早高峰"></li>
-        <li><input type="checkbox" name="checkbox" value="red" data-labelauty="红色"></li>
-        <li><input type="checkbox" name="checkbox" value="yellow" data-labelauty="橙黄"></li>
+        <li><input type="checkbox" name="checkbox" value="red" data-labelauty="深红"></li>
+        <li><input type="checkbox" name="checkbox" value="yellow" data-labelauty="红色"></li>
         <li><input type="checkbox" name="checkbox" value="green" data-labelauty="黄色"></li>
 
     </ul>
@@ -119,117 +119,117 @@ plugin=AMap.PolyEditor,AMap.Driving,Amap.DrivingPolicy,AMap.Walking,AMap.Riding"
 </table>
 
 <script>
-    $('table').bootstrapTable({
-        url: 'php/data.json',
-        strictSearch: true,
-        search: true,
-        clickToSelect: true,
-        height: 1000,
-        columns: [
-            {
-                field: "day",
-                title: "高峰",
-                sortable: true,
-                searchable: false,
+  $('table').bootstrapTable({
+    url: 'php/data.json',
+    strictSearch: true,
+    search: true,
+    clickToSelect: true,
+    height: 1000,
+    columns: [
+      {
+        field: "day",
+        title: "高峰",
+        sortable: true,
+        searchable: false,
 
-            },
-            {
-                field: "no",
-                title: "序号",
-                sortable: true,
+      },
+      {
+        field: "no",
+        title: "序号",
+        sortable: true,
 
-            },
-            {
-                field: "start_place",
-                title: "起点",
-                searchable: false,
+      },
+      {
+        field: "start_place",
+        title: "起点",
+        searchable: false,
 
-            },
-            {
-                field: "end_place",
-                title: "终点",
-                searchable: false,
+      },
+      {
+        field: "end_place",
+        title: "终点",
+        searchable: false,
 
-            }, {
-                field: "distance",
-                title: "长度",
-                sortable: true,
-                searchable: false,
+      }, {
+        field: "distance",
+        title: "长度",
+        sortable: true,
+        searchable: false,
 
 
-            }, {
-                field: "type",
-                title: "拥堵程度",
-                sortable: true,
-                formatter: function (value, row, index) {
-                    if (value == 'red')
-                        return '深红';
-                    else if (value == 'yellow')
-                        return '橙黄';
-                    else
-                        return '黄色';
-                }
-            }, {
-                field: "jam_time",
-                title: "拥堵时间",
-                sortable: true,
-                searchable: false,
-
-                formatter: function (value, row, index) {
-                    return parseFloat(value).toFixed(1) + "分钟";
-                }
-            }],
-
-        rowStyle: function rowStyle(row, index) {
-            return {
-                css: {'font-size': '14px', 'font-weight': 'bold'}
-            }
-        },
-        onClickRow: function (row, $element, field) {
-            console.log(row['no']);
-
-            var targetId = row['no'];
-            var targetMarker;
-            for (var i = 0; i < POLYS_arr.length; i++) {
-                // 获取存在每个 extData 中的 id
-                var no = POLYS_arr[i].getExtData()['no'];
-                if (no == targetId) {
-                    console.log(no);
-                    console.log(POLYS_arr[i].getExtData());
-                    targetMarker = POLYS_arr[i];
-                    break;
-                }
-            }
-            map.setFitView(targetMarker);
-            $(document).scrollTop(0);
-        },
-        onLoadSuccess: function () {
-
+      }, {
+        field: "type",
+        title: "拥堵程度",
+        sortable: true,
+        formatter: function (value, row, index) {
+          if (value == 'red')
+            return '深红';
+          else if (value == 'yellow')
+            return '红色';
+          else
+            return '黄色';
         }
-    });
+      }, {
+        field: "jam_time",
+        title: "拥堵时间",
+        sortable: true,
+        searchable: false,
 
-    function search(no) {
-        var ser = $("[placeholder='Search']");
-        ser.attr('placeholder', '搜索').val(no);
-        var e = jQuery.Event("keyup");//模拟一个键盘事件
-        e.keyCode = 13;//keyCode=13是回车
-        ser.trigger(e);
+        formatter: function (value, row, index) {
+          return parseFloat(value).toFixed(1) + "分钟";
+        }
+      }],
+
+    rowStyle: function rowStyle(row, index) {
+      return {
+        css: {'font-size': '14px', 'font-weight': 'bold'}
+      }
+    },
+    onClickRow: function (row, $element, field) {
+      console.log(row['no']);
+
+      var targetId = row['no'];
+      var targetMarker;
+      for (var i = 0; i < POLYS_arr.length; i++) {
+        // 获取存在每个 extData 中的 id
+        var no = POLYS_arr[i].getExtData()['no'];
+        if (no == targetId) {
+          console.log(no);
+          console.log(POLYS_arr[i].getExtData());
+          targetMarker = POLYS_arr[i];
+          break;
+        }
+      }
+      map.setFitView(targetMarker);
+      $(document).scrollTop(0);
+    },
+    onLoadSuccess: function () {
+      var ser = $("[placeholder='Search']");
+      ser.attr('placeholder', '搜索')
     }
+  });
+
+  function search(no) {
+    var ser = $("[placeholder='搜索']").val(no);
+    var e = $.Event("keyup");//模拟一个键盘事件
+    e.keyCode = 13;//keyCode=13是回车
+    ser.trigger(e);
+  }
 
 </script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $.goup({
-            trigger: 110,
-            bottomOffset: 80,
-            locationOffset: 80,
-            title: '回到顶部',
-            titleAsText: true,
+  $(document).ready(function () {
+    $.goup({
+      trigger: 110,
+      bottomOffset: 80,
+      locationOffset: 80,
+      title: '回到顶部',
+      titleAsText: true,
 //            containerRadius:400,
-            containerSize: 400,
+      containerSize: 400,
 
-        });
     });
+  });
 </script>
 <script src="function.js"></script>
 
