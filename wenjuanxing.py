@@ -6,7 +6,7 @@ with open('data.html','r',encoding='utf8')as f:
     for index,i in enumerate(a):
         b = i.find('div', class_='div_title_question')
         c = i.find_all('li')
-        print("%s、%s"%(index+1,b.text))
+        print("%s、%s"%(index+1,b.text.replace('*','')))
         for j in c:
             print('□'+j.text)
 
