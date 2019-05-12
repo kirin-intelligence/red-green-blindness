@@ -21,107 +21,12 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
     <link rel="stylesheet" href="static/css/table.css" property=""/>
     <script src="static/js/jquery-labelauty.js"></script>
     <script src="static/js/goto.js"></script>
-    <style>
-        .labelauty + label {
-            padding: 5px !important;
-        }
-
-        html,
-        body,
-        #container {
-            margin: 0 auto;
-            width: 98%;
-            height: 90%;
-        }
-
-        ul {
-            padding: 0 !important;
-            margin-inside-start: 0 !important;
-            padding-inline-start: 0 !important;
-            padding-inline: 0 !important;
-            padding-block: 0 !important;
-            margin-inline-start: 0 !important;
-            margin: 0 !important;
-            margin-block-start: 0 !important;
-            width: 100%;
-
-        }
-
-        .amap-icon img,
-        .amap-marker-content img {
-            width: 40px;
-            height: 40px;
-        }
-        .marker {
-            position: absolute;
-            top: -20px;
-            right: -140px;
-            color: #fff;
-            padding: 4px 10px;
-            box-shadow: 1px 1px 1px rgba(10, 10, 10, .2);
-            white-space: nowrap;
-            font-size: 12px;
-            font-family: "";
-            background-color: #25A5F7;
-            border-radius: 3px;
-        }
-
-        .input-card {
-            width: 32rem;
-            z-index: 170;
-        }
-
-        .input-card .btn {
-            margin-right: .8rem;
-        }
-
-        .input-card .btn:last-child {
-            margin-right: 0;
-        }
-
-        input.labelauty + label {
-            font: 12px "Microsoft Yahei";
-        }
-
-        ul {
-            list-style-type: none;
-            margin: 0;
-        }
-
-        li {
-            display: inline-block;
-            margin: 10px 0;
-
-        }
-    </style>
-    <style>
-        #main-contain {
-            cursor: move;
-
-            position: relative;
-            width: 100%;
-            height: 98%;
-        }
-
-        #expander {
-            z-index: 10000;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 6px;
-            background-color: #999;
-        }
-
-        #expander:hover {
-            cursor: n-resize;
-        }
-    </style>
+    <link rel="stylesheet" href="static/css/index.css"/>
 </head>
 <body>
 <div id="main-contain">
     <div id='main' style="text-align: center">
         <ul class="dowebok">
-
             <li><input type="radio" name="checkbox" value="morning" data-labelauty="早高峰"></li>
             <li><input type="radio" name="checkbox" value="evening" data-labelauty="晚高峰"></li>
             <li><input type="checkbox" name="checkbox" value="red" data-labelauty="深红"></li>
@@ -136,16 +41,6 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
     <div id="container" class="map"></div>
     <div id="expander"></div>
 </div>
-<!--<div class="input-card">-->
-<!--<label style="color:grey">点标记操作</label>-->
-<!--<div class="input-item">-->
-<!--<input  type="button" class="btn" onclick="open_lineedit()" value="编辑线段">-->
-<!--<input  type="button" class="btn" onclick="close_lineedit()" value="取消编辑">-->
-
-<!--</div>-->
-<!--</div>-->
-
-
 <table class="table-hover"
        id="table">
     <thead>
@@ -202,33 +97,6 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
     </div>
 </div>
 <script src="static/js/upload.js"></script>
-<script>
-    function isMobile() {
-        var userAgentInfo = navigator.userAgent;
-
-        var mobileAgents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
-
-        var mobile_flag = false;
-
-        //根据userAgent判断是否是手机
-        for (var v = 0; v < mobileAgents.length; v++) {
-            if (userAgentInfo.indexOf(mobileAgents[v]) > 0) {
-                mobile_flag = true;
-                break;
-            }
-        }
-
-        var screen_width = window.screen.width;
-        var screen_height = window.screen.height;
-
-        //根据屏幕分辨率判断是否是手机
-        if (screen_width < 500 && screen_height < 800) {
-            mobile_flag = true;
-        }
-
-        return mobile_flag;
-    }
-</script>
 <script>
     $('table').bootstrapTable({
         url: 'static/data.json',
@@ -336,46 +204,11 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
     }
 
 </script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $.goup({
-            trigger: 110,
-            bottomOffset: 80,
-            locationOffset: 80,
-            title: '回到顶部',
-            titleAsText: true,
-//            containerRadius:400,
-            containerSize: 400
-        });
-    });
-</script>
+<script src="static/js/mouse_move.js"></script>
+
 
 <script src="static/js/function.js"></script>
-<script>
-    $(function () {
-        var src_posi_Y = 0, dest_posi_Y = 0, move_Y = 0, is_mouse_down = false, destHeight = 30;
-        $("#expander")
-                .mousedown(function (e) {
-                    src_posi_Y = e.pageY;//鼠标指针的位置
-                    is_mouse_down = true;
-                });
-        $(document).bind("click mouseup", function (e) {
-            if (is_mouse_down) {
-                is_mouse_down = false;
-            }
-        })
-                .mousemove(function (e) {
-                    dest_posi_Y = e.pageY;
-                    move_Y = src_posi_Y - dest_posi_Y;
-                    src_posi_Y = dest_posi_Y;
-                    destHeight = $("#main-contain").height() - move_Y;
-                    if (is_mouse_down) {
-                        $("#main-contain").css("height", destHeight > 30 ? destHeight : 30);
-                    }
-                });
-    });
 
-</script>
 
 </body>
 </html>
