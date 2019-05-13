@@ -14690,7 +14690,7 @@ function close_lineedit() {
 }
 
 function open_lineedit() {
-  console.log(polyEditors)
+  console.log(polyEditors);
 
   polyEditors.forEach(function (value, index) {
     value.open()
