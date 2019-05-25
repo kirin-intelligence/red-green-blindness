@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>矩形的绘制和编辑</title>
+    <script src="static/js/qwebchannel.js"></script>
+
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <script src="https://webapi.amap.com/maps?v=1.4.14&key=2be4c36d53e74e0c585326d62d6fe6e3&plugin=AMap.RectangleEditor"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+</head>
+<style>
+    html,
+    body,
+    #container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .amap-logo {
+        display: none;
+        opacity: 0;
+
+    }
+
+    .amap-copyright {
+        opacity: 0;
+    }
+</style>
+
+<body>
+<div id="container"></div>
+<div class="input-card" style="width: 120px">
+    <button class="btn" onclick="rectangleEditor.close()">结束编辑</button>
+</div>
+<script>
+    new QWebChannel(qt.webChannelTransport,
+        function(channel) {
+            window.Bridge = channel.objects.Bridge;
+
+        }
+    );
+
+    function finish_rect(rect) {
+       Bridge.getRect(rect,function (rect) {
+
+        });
+    }
+</script>
+
+<script>
+    var map = new AMap.Map('container', {
+        center: [116.387175, 39.876405],
+        zoom: 13
+    });
+
+    var southWest = new AMap.LngLat(116.356449, 39.859008)
+    var northEast = new AMap.LngLat(116.417901, 39.893797)
+
+    var bounds = new AMap.Bounds(southWest, northEast)
+
+    var rectangle = new AMap.Rectangle({
+        bounds: bounds,
+        strokeColor: 'red',
+        strokeWeight: 6,
+        strokeOpacity: 0.5,
+        strokeDasharray: [30, 10],
+        // strokeStyle还支持 solid
+        strokeStyle: 'dashed',
+        fillColor: 'blue',
+        fillOpacity: 0.5,
+        cursor: 'pointer',
+        zIndex: 50,
+    })
+
+    rectangle.setMap(map)
+    // 缩放地图到合适的视野级别
+    map.setFitView([rectangle])
+
+    var rectangleEditor = new AMap.RectangleEditor(map, rectangle)
+    rectangleEditor.open();
+    rectangleEditor.on('adjust', function (event) {
+    })
+
+    rectangleEditor.on('end', function (event) {
+        var rect=new AMap.Rectangle();
+        rect=event.target;
+        var bounds=rect.getBounds();
+        var topright=bounds.getNorthEast().toString();
+        var leftbottom=bounds.getSouthWest().toString();
+        console.log(topright);
+
+        finish_rect(leftbottom+" "+topright);
+        // event.target 即为编辑后的矩形对象
+    })
+
+</script>
+
+</body>
+</html>

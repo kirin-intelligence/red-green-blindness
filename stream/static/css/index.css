@@ -1,0 +1,103 @@
+.labelauty + label {
+    padding: 5px !important;
+}
+
+html,
+body,
+#container {
+    margin: 0 auto;
+    width: 98%;
+    height: 90%;
+}
+
+ul {
+    padding: 0 !important;
+    margin-inside-start: 0 !important;
+    padding-inline-start: 0 !important;
+    padding-inline: 0 !important;
+    padding-block: 0 !important;
+    margin-inline-start: 0 !important;
+    margin: 0 !important;
+    margin-block-start: 0 !important;
+    width: 100%;
+
+}
+
+.amap-icon img,
+.amap-marker-content img {
+    width: 40px;
+    height: 40px;
+}
+
+.marker {
+    position: absolute;
+    top: -20px;
+    right: -140px;
+    color: #fff;
+    padding: 4px 10px;
+    box-shadow: 1px 1px 1px rgba(10, 10, 10, .2);
+    white-space: nowrap;
+    font-size: 12px;
+    font-family: "";
+    background-color: #25A5F7;
+    border-radius: 3px;
+}
+
+.input-card {
+    width: 32rem;
+    z-index: 170;
+}
+
+.input-card .btn {
+    margin-right: .8rem;
+}
+
+.input-card .btn:last-child {
+    margin-right: 0;
+}
+
+input.labelauty + label {
+    font: 12px "Microsoft Yahei";
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+li {
+    display: inline-block;
+    margin: 10px 0;
+
+}
+
+#main-contain {
+    cursor: move;
+
+    position: relative;
+    width: 100%;
+    height: 98%;
+}
+
+#expander {
+    z-index: 10000;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 6px;
+    background-color: #999;
+}
+
+#expander:hover {
+    cursor: n-resize;
+}
+
+.amap-logo {
+    display: none;
+    opacity: 0;
+
+}
+
+.amap-copyright {
+    opacity: 0;
+}

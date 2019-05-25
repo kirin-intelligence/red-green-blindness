@@ -1,25 +1,22 @@
 $(function () {
   $(':input').labelauty()
-})
+});
 var marker, map = new AMap.Map("container", {
   resizeEnable: true,
   center: [116.35716199999999, 39.971875999999995],
   zoom: 15
-})
-map.on('click', get_point)
+});
+map.on('click', get_point);
 
 var polyEditors = []
 var POLYS_arr = []
 var markers_start = []
 var markers_end = []
 var MARKERS = []
-var all_data = []
-var yellow_data = []
-var red_data = []
-var green_data = []
-var choose_day;
-var choose_types;
-
+var START_MARKER = null;
+var END_MARKER = null;
+var MARKS_NO = null;
+var DAY = null;
 
 $('#submit').click(function () {
     choose_types = [];
@@ -46,14 +43,11 @@ $('#submit').click(function () {
   }
 );
 
-$('button').text('正在加载');// 按钮灰掉，但仍可点击。
-$('button').prop('disabled', true);
-$.get('php/data.json'
+var all_data;
+$.get('area/area.php'
   , function (result) {
     all_data = eval(result);
-    $('button').text('确定');
-    $('button').prop('disabled', false);
-  }, 'json');
+  });
 
 function get_streams() {
   clearMarker();
@@ -87,9 +81,9 @@ function addMarker(points, type, no) {
       'type': type,
       'is_start': true
     }
-  })
+  });
 
-  marker.setMap(map)
+  marker.setMap(map);
   var marker_end = new AMap.Marker({
     icon: "http://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png",
     position: points[1],
@@ -100,29 +94,30 @@ function addMarker(points, type, no) {
       'type': type,
       'is_start': false
     }
-  })
+  });
 
-  markers_start.push(points[0])
-  markers_end.push(points[1])
-  MARKERS.push(marker)
-  MARKERS.push(marker_end)
+  MARKERS.push(marker);
+  MARKERS.push(marker_end);
   marker_end.setMap(map)
+
 
 }
 
-function draw_poly(paths, type, no, distance, day, jam_time) {
+
+function draw_poly(paths, type, no, distance, jam_time) {
+
   var desc;
   var color;
-  if (day) {
+  if (DAY) {
     if (type == "green") {
       desc = '黄色';
       color = 'yellow'
     } else if (type == "yellow") {
+      desc = '橙黄';
+      color = '#FF8C00'
+    } else {
       desc = '红色';
       color = 'red'
-    } else {
-      desc = '深红';
-      color = '#660000'
     }
   } else {
     if (type == "red") {
@@ -141,7 +136,7 @@ function draw_poly(paths, type, no, distance, day, jam_time) {
       showShadow: true
     }).open(map, e.lnglat)
 
-  }
+  };
   var polyline = new AMap.Polyline({
     path: paths, //设置线覆盖物路径
     strokeColor: color, //线颜色
@@ -154,33 +149,46 @@ function draw_poly(paths, type, no, distance, day, jam_time) {
       'type': type,
       "paths": paths,
       "distance": distance,
-      "day": day
+      "day": DAY
     }
   });
-  map.setFitView();
 
-  polyline.on('dblclick', poly_dblclick);
-  polyline.on('mouseover', mouseHandler);
-  polyline.setMap(map)
+  // polyline.on('mouseover', mouseHandler);
+  polyline.on('dblclick', del_line);
+  polyline.setMap(map);
   POLYS_arr.push(polyline);
-  var polyEditor = new AMap.PolyEditor(map, polyline)
-  polyEditors.push(polyEditor)
-}
-function poly_dblclick(e) {
-  var no = e.target.getExtData()['no'];
-  var t = $('#table').offset().top;//  获取需要跳转到标签的top值
-  $(window).scrollTop(t);
-  search(no);
-
+  var polyEditor = new AMap.PolyEditor(map, polyline);
+  polyEditors.push(polyEditor);
 }
 
 function get_point(e) {
-  console.log(e)
+  console.log(e);
   console.log(e['lnglat']['lng'] + ',' + e['lnglat']['lat'])
+
+}
+function del_line(e) {
+  var p = eval(e['target']);
+  var ext = p.getExtData();
+  console.log(ext);
+  map.remove(p);
+  map.remove(START_MARKER);
+  map.remove(END_MARKER);
+  START_MARKER = null;
+  END_MARKER = null;
+  MARKS_NO -= 1;
+  $.get('area/del_path.php',
+    {
+      no: ext['no'],
+      day: DAY,
+      opera: 'del'
+    }, function (result) {
+      console.log(result);
+    }, 'json');
 
 
 }
 
+var old_point = [];
 // 清除 marker
 function clearMarker() {
   map.clearMap()
@@ -193,7 +201,7 @@ function close_lineedit() {
 }
 
 function open_lineedit() {
-  console.log(polyEditors)
+  console.log(polyEditors);
 
   polyEditors.forEach(function (value, index) {
     value.open()
