@@ -12,10 +12,11 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
 from PyQt5.QtWidgets import QVBoxLayout
 from PyQt5.QtWidgets import QMessageBox
 
-from mainw import APP_HtmlPath
+from main import APP_HtmlPath
 
 listInfo = []
-
+DATA_XLS='data.xls'
+EXCEL_FILE=APP_HtmlPath+os.sep+DATA_XLS
 
 class MapWindow(QDialog):
     rectSignal = pyqtSignal(str)

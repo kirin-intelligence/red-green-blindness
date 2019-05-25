@@ -5,6 +5,7 @@
 # Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
+import os
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -12,6 +13,11 @@ class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
         mainWindow.resize(1045, 821)
+        icon = QtGui.QIcon()
+        icon.addPixmap(
+            QtGui.QPixmap("D:/pycharmproject/red-green-blindness/demo/image/Highway_48px_1109853_easyicon.net.png"),
+            QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        mainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout_11 = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -30,11 +36,11 @@ class Ui_mainWindow(object):
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         self.textBrowser_3 = QtWidgets.QTextBrowser(self.tab)
-        self.textBrowser_3.setGeometry(QtCore.QRect(70, 480, 861, 221))
+        self.textBrowser_3.setGeometry(QtCore.QRect(70, 460, 861, 221))
         self.textBrowser_3.setMinimumSize(QtCore.QSize(641, 0))
         self.textBrowser_3.setObjectName("textBrowser_3")
         self.label_7 = QtWidgets.QLabel(self.tab)
-        self.label_7.setGeometry(QtCore.QRect(70, 430, 60, 39))
+        self.label_7.setGeometry(QtCore.QRect(70, 410, 60, 39))
         self.label_7.setMinimumSize(QtCore.QSize(60, 0))
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
@@ -47,7 +53,8 @@ class Ui_mainWindow(object):
         self.pushButton.setGeometry(QtCore.QRect(590, 300, 151, 51))
         self.pushButton.setMinimumSize(QtCore.QSize(101, 0))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../../../chrmoedownload/play_button_48px_1201205_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("image/play_button_48px_1201205_easyicon.net.png"), QtGui.QIcon.Normal,
+                       QtGui.QIcon.Off)
         self.pushButton.setIcon(icon)
         self.pushButton.setIconSize(QtCore.QSize(30, 30))
         self.pushButton.setObjectName("pushButton")
@@ -55,7 +62,7 @@ class Ui_mainWindow(object):
         self.pushButton_2.setGeometry(QtCore.QRect(770, 300, 151, 51))
         self.pushButton_2.setMinimumSize(QtCore.QSize(101, 0))
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("../../../chrmoedownload/stop_48px_1229026_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("image/stop_48px_1229026_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_2.setIcon(icon1)
         self.pushButton_2.setIconSize(QtCore.QSize(30, 30))
         self.pushButton_2.setObjectName("pushButton_2")
@@ -143,7 +150,8 @@ class Ui_mainWindow(object):
         self.pushButton_3.setGeometry(QtCore.QRect(750, 150, 151, 31))
         self.pushButton_3.setMinimumSize(QtCore.QSize(101, 0))
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("image/map_46.16091954023px_1224917_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("image/map_46.16091954023px_1224917_easyicon.net.png"), QtGui.QIcon.Normal,
+                        QtGui.QIcon.Off)
         self.pushButton_3.setIcon(icon2)
         self.pushButton_3.setIconSize(QtCore.QSize(30, 30))
         self.pushButton_3.setObjectName("pushButton_3")
@@ -152,7 +160,7 @@ class Ui_mainWindow(object):
         self.label_3.setMinimumSize(QtCore.QSize(631, 0))
         self.label_3.setObjectName("label_3")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("../../../chrmoedownload/gear_48px_1180534_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon3.addPixmap(QtGui.QPixmap("image/gear_48px_1180534_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tabWidget.addTab(self.tab, icon3, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
@@ -184,7 +192,7 @@ class Ui_mainWindow(object):
         self.progressBar_3.setProperty("value", 0)
         self.progressBar_3.setObjectName("progressBar_3")
         self.label_2 = QtWidgets.QLabel(self.tab_2)
-        self.label_2.setGeometry(QtCore.QRect(90, 40, 571, 21))
+        self.label_2.setGeometry(QtCore.QRect(90, 40, 721, 21))
         self.label_2.setObjectName("label_2")
         self.label_18 = QtWidgets.QLabel(self.tab_2)
         self.label_18.setGeometry(QtCore.QRect(90, 70, 721, 41))
@@ -192,7 +200,8 @@ class Ui_mainWindow(object):
         self.pushButton_13 = QtWidgets.QPushButton(self.tab_2)
         self.pushButton_13.setGeometry(QtCore.QRect(800, 290, 101, 51))
         icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("../../../chrmoedownload/brand_brands_excel_logo_48px_1212964_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon4.addPixmap(QtGui.QPixmap("image/brand_brands_excel_logo_48px_1212964_easyicon.net.png"),
+                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_13.setIcon(icon4)
         self.pushButton_13.setIconSize(QtCore.QSize(30, 30))
         self.pushButton_13.setObjectName("pushButton_13")
@@ -213,7 +222,8 @@ class Ui_mainWindow(object):
         self.textEdit_7.setGeometry(QtCore.QRect(180, 190, 401, 31))
         self.textEdit_7.setObjectName("textEdit_7")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("../../../chrmoedownload/about_help_smart_watch_35.185520361991px_1225400_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(QtGui.QPixmap("image/about_help_smart_watch_35.185520361991px_1225400_easyicon.net.png"),
+                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tabWidget.addTab(self.tab_2, icon5, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
@@ -221,7 +231,7 @@ class Ui_mainWindow(object):
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("../../../chrmoedownload/map_64px_1228276_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon6.addPixmap(QtGui.QPixmap("image/map_64px_1228276_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tabWidget.addTab(self.tab_3, icon6, "")
         self.tab_4 = QtWidgets.QWidget()
         self.tab_4.setObjectName("tab_4")
@@ -239,7 +249,7 @@ class Ui_mainWindow(object):
         mainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(mainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
@@ -250,11 +260,12 @@ class Ui_mainWindow(object):
         self.pushButton_2.setText(_translate("mainWindow", "停止"))
         self.label.setText(_translate("mainWindow", "提示：该页面用于启动数据爬取程序，需要输入指定区域左下角的经纬度与右上角的经纬度，也可以直接使用地图选点选择矩形框。"))
         self.label_19.setText(_translate("mainWindow", "间隔时间(分钟)"))
-        self.textEdit_9.setHtml(_translate("mainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2</p></body></html>"))
+        self.textEdit_9.setHtml(_translate("mainWindow",
+                                           "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+                                           "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                           "p, li { white-space: pre-wrap; }\n"
+                                           "</style></head><body style=\" font-family:\'SimSun\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+                                           "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2</p></body></html>"))
         self.label_5.setText(_translate("mainWindow", "开始时间"))
         self.label_4.setText(_translate("mainWindow", "左下角经纬度"))
         self.label_32.setText(_translate("mainWindow", "右上角经纬度"))
@@ -273,4 +284,3 @@ class Ui_mainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("mainWindow", "数据处理"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("mainWindow", "地图展示"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("mainWindow", "关于我们"))
-
