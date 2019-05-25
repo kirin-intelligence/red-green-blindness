@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta name="viewport" content="initial-scale=1.0, user-scalable=no">-->
+    <meta name="viewport"
+          content="initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no, width=device-width">
+    <title>默认点标记</title>
+    <meta content="width=device-width" name="viewport">
+
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/demo-center.css"/>
+    <script src="static/js/jquery.js"></script>
+    <script type="text/javascript"
+            src="https://webapi.amap.com/maps?v=1.4.13&key=2be4c36d53e74e0c585326d62d6fe6e3"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.13&key=c536f4eae991666b64267ca01f855153&
+plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingPolicy,AMap.Walking,AMap.Riding"></script>
+    <link rel="stylesheet" href="static/css/jquery-labelauty.css">
+    <script src="static/js/table.js"></script>
+    <link rel="stylesheet" href="static/css/table.css" property=""/>
+    <script src="static/js/jquery-labelauty.js"></script>
+    <script src="static/js/goto.js"></script>
+    <link rel="stylesheet" href="static/css/index.css"/>
+</head>
+<body>
+<div id="main-contain">
+    <div id='main' style="text-align: center">
+        <ul class="dowebok">
+            <li><input type="radio" name="checkbox" value="morning" data-labelauty="早高峰"></li>
+            <li><input type="radio" name="checkbox" value="evening" data-labelauty="晚高峰"></li>
+            <li><input type="checkbox" name="checkbox" value="red" data-labelauty="深红"></li>
+            <li><input type="checkbox" name="checkbox" value="yellow" data-labelauty="红色"></li>
+            <li><input type="checkbox" name="checkbox" value="green" data-labelauty="黄色"></li>
+
+        </ul>
+        <button style="margin-left: 40px;
+            width: 200px;" class="btn btn-info" type="submit" id="submit" value="确定">确定
+        </button>
+    </div>
+    <div id="container" class="map"></div>
+    <div id="expander"></div>
+</div>
+<table class="table-hover"
+       id="table">
+    <thead>
+    </thead>
+</table>
+<div class="am-modal am-modal-no-btn up-frame-bj am-form-group am-form-file" tabindex="-1" id="doc-modal-1">
+    <div class="am-modal-dialog up-frame-parent up-frame-radius">
+        <div class="am-modal-hd up-frame-header">
+            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd  up-frame-body">
+            <div class="am-g am-fl">
+                <div class="am-form-group am-form-file">
+                    <div class="am-fl">
+                        <button type="button" class="btn btn-info">
+                            选择要上传的文件
+                        </button>
+                    </div>
+                    <input type="file" id="inputImage">
+                </div>
+            </div>
+            <div class="am-g am-fl">
+                <div class="up-pre-before up-frame-radius">
+                    <img alt="" src="" id="image">
+                </div>
+                <br>
+                <ul>
+                    <li style="font-weight: bold" id="location"></li>
+                    <li style="font-weight: bold" id="angle"></li>
+                    <li style="font-weight: bold" id="place"></li>
+
+                </ul>
+            </div>
+            <div class="am-g am-fl">
+                <div class="up-control-btns">
+                    <button class="btn btn-success" style="width: 100px" id="up-btn-ok" onclick="submit_image(this)"
+                            type="submit">提交
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="am-modal am-modal-no-btn up-frame-bj am-form-group am-form-file" tabindex="-1" id="doc-modal-2">
+    <div class="am-modal-dialog up-frame-parent up-frame-radius">
+
+        <ul></ul>
+    </div>
+</div>
+<div class="am-modal am-modal-no-btn up-frame-bj am-form-group am-form-file" tabindex="-1" id="doc-modal-3">
+    <div class="am-modal-dialog up-frame-parent up-frame-radius">
+
+        <img alt="" src="">
+    </div>
+</div>
+<script src="static/js/upload.js"></script>
+<script src="static/js/mouse_move.js"></script>
+
+<script>
+    $('table').bootstrapTable({
+        url: 'static/data.json',
+        strictSearch: true,
+        search: true,
+        clickToSelect: true,
+        height: 1000,
+        columns: [
+            {
+                field: "day",
+                title: "高峰",
+                searchable: false,
+                formatter: function (value, row, index) {
+
+                    if (value == 'morning')
+                        return '早';
+                    else
+                        return '晚';
+                }
+            },
+            {
+                field: "no",
+                title: "序号",
+                sortable: true,
+
+            },
+            {
+                field: "start_place",
+                title: "起点",
+                searchable: false,
+                visible: !isMobile()
+
+            },
+            {
+                field: "end_place",
+                title: "终点",
+                searchable: false,
+                visible: !isMobile()
+
+            }, {
+                field: "distance",
+                title: "长度",
+                sortable: true,
+                searchable: false
+            }, {
+                field: "type",
+                title: "拥堵",
+                formatter: function (value, row, index) {
+                    if (value == 'red')
+                        return '深红';
+                    else if (value == 'yellow')
+                        return '红色';
+                    else
+                        return '黄色';
+                }
+            }, {
+                field: "jam_time",
+                title: "拥堵时间",
+                sortable: true,
+                searchable: false,
+                formatter: function (value, row, index) {
+                    return parseFloat(value).toFixed(1) + "分钟";
+                }
+            },
+            {
+                title: '图片',
+                field: 'operate',
+                formatter: add_image
+            }
+
+        ],
+        rowStyle: function rowStyle(row, index) {
+            return {
+                css: {'font-size': '14px', 'font-weight': 'bold'}
+            }
+        },
+        onClickRow: function (row, $element, field) {
+            console.log(row['no']);
+
+            var targetId = row['no'];
+            var targetMarker;
+            for (var i = 0; i < POLYS_arr.length; i++) {
+                // 获取存在每个 extData 中的 id
+                var no = POLYS_arr[i].getExtData()['no'];
+                if (no == targetId) {
+                    console.log(no);
+                    console.log(POLYS_arr[i].getExtData());
+                    targetMarker = POLYS_arr[i];
+                    break;
+                }
+            }
+            map.setFitView(targetMarker);
+            $(document).scrollTop(0);
+        },
+        onLoadSuccess: function () {
+            var ser = $("[placeholder='Search']");
+            ser.attr('placeholder', '搜索')
+        }
+    });
+    function search(no) {
+        var ser = $("[placeholder='搜索']").val(no);
+        var e = $.Event("keyup");//模拟一个键盘事件
+        e.keyCode = 13;//keyCode=13是回车
+        ser.trigger(e);
+    }
+
+</script>
+
+
+<script src="static/js/function.js"></script>
+
+
+</body>
+</html>
