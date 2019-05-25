@@ -16,7 +16,7 @@ setup(name="交通拥堵分析系统",
       description="交通拥堵分析系统",
       options={"build_exe": build_exe_options},
       executables=[Executable("main.py", base=base,
-                              icon="D:/pycharmproject/red-green-blindness/demo/image/Highway_48px_1109853_easyicon.net.png ",
-                              targetName='main.exe',
+                              targetName='transport.exe',
+                              icon='D:/pycharmproject/red-green-blindness/demo/image/app.ico'
                               )
                    ])

@@ -5,21 +5,14 @@
 # @Link    : https://lewistian.github.io/
 # @Version : Python3.6
 import shutil
-
-from PyQt5.QtCore import QSize, pyqtSlot
-from PyQt5.QtGui import QIcon
 from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtWebChannel import QWebChannel
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QListWidgetItem, QFileDialog, QDial, QDialog, QBoxLayout, QButtonGroup, QPushButton, \
-    QInputDialog
+from PyQt5.QtWidgets import  QFileDialog
 from PyQt5.QtWidgets import QDesktopWidget
 from qtpy.QtCore import QStandardPaths
-
 from mainw import Ui_mainWindow
 from utils import *
 from PyQt5.QtCore import QUrl
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QMessageBox, QProgressBar
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 import re
 import sys
 import os
@@ -87,8 +80,8 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
         print('开始')
 
     def setLoadFinished(self, ):
-        self.loadWidget.setVisible(False)
         self.webview.setVisible(True)
+        self.loadWidget.setVisible(False)
         print('ok')
 
     def setBrower(self):

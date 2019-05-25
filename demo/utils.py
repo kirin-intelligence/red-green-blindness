@@ -1,16 +1,14 @@
 import os
 import sys
-from time import sleep, time
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import QUrl, pyqtSlot
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QSize
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWidgets import QDialog
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QVBoxLayout
-from PyQt5.QtWidgets import QMessageBox
 
 from main import APP_HtmlPath
 
