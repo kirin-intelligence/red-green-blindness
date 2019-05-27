@@ -28,11 +28,10 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
         super(MissevanKit, self).__init__(parent)
         self.setupUi(self)
         self.center()
-
-
         self.setTab1()
         self.setTab2()
         self.setTab3()
+        self.tabWidget.setCurrentIndex(0)
 
     def center(self):  # 实现窗体在屏幕中央
         screen = QDesktopWidget().screenGeometry()  # QDesktopWidget为一个类，调用screenGeometry函数获得屏幕的尺寸

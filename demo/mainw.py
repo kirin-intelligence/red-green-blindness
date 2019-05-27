@@ -128,6 +128,7 @@ class Ui_mainWindow(object):
         self.dateTimeEdit_9 = QtWidgets.QDateTimeEdit(self.tab)
         self.dateTimeEdit_9.setGeometry(QtCore.QRect(690, 230, 209, 20))
         self.dateTimeEdit_9.setMinimumSize(QtCore.QSize(209, 0))
+        self.dateTimeEdit_9.setDate(QtCore.QDate(2018, 6, 1))
         self.dateTimeEdit_9.setObjectName("dateTimeEdit_9")
         self.label_6 = QtWidgets.QLabel(self.tab)
         self.label_6.setGeometry(QtCore.QRect(590, 220, 71, 41))
@@ -275,4 +276,3 @@ class Ui_mainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("mainWindow", "数据处理"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("mainWindow", "地图展示"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("mainWindow", "关于我们"))
-
