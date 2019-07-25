@@ -29,7 +29,6 @@ $('#submit').click(function () {
       choose_types.push($(obj).val())
     });
     console.log(choose_day);
-
     console.log(choose_types);
     get_streams();
   }
@@ -2779,7 +2778,7 @@ all_data = [{
   "end_point": "[116.35534919723182, 39.942240051094885]",
   "distance": "22",
   "start_place": "\u5317\u4eac\u5e02\u897f\u57ce\u533a\u5c55\u89c8\u8def\u8857\u9053\u5317\u4e8c\u73af",
-  "paths": "[[116.355362,39.942974],[116.355339,39.942768]]",
+  "paths": "[[116.35531701730102,39.942773810218966],[116.35534919723182,39.942240051094885]]",
   "type": "red",
   "jam_time": "115.78132769321026"
 }, {
@@ -3519,17 +3518,6 @@ all_data = [{
   "paths": "[[116.38002,39.968746],[116.379822,39.968719],[116.378899,39.968697]]",
   "type": "green",
   "jam_time": "54.39910471369819"
-}, {
-  "no": "520",
-  "start_point": "[116.3686716885813, 39.947807569343055]",
-  "end_place": "\u5317\u4eac\u5e02\u6d77\u6dc0\u533a\u5317\u592a\u5e73\u5e84\u8857\u9053\u5317\u4e8c\u73af\u5fb7\u80dc\u95e8\u897f\u5927\u885764\u53f7\u9662",
-  "day": "evening",
-  "end_point": "[116.36931528719721, 39.94804570802919]",
-  "distance": "61",
-  "start_place": "\u5317\u4eac\u5e02\u6d77\u6dc0\u533a\u5317\u592a\u5e73\u5e84\u8857\u9053\u5317\u4e8c\u73af\u5fb7\u80dc\u95e8\u897f\u5927\u885764\u53f7\u9662",
-  "paths": "[[116.369301,39.948063],[116.368652,39.947845]]",
-  "type": "green",
-  "jam_time": "53.14239581891181"
 }, {
   "no": "669",
   "end_place": "\u5317\u4eac\u5e02\u671d\u9633\u533a\u5b89\u8d1e\u8857\u9053\u5317\u4e09\u73af\u4e2d\u8def",
@@ -9396,12 +9384,12 @@ all_data = [{
 }, {
   "no": "295",
   "end_place": "\u5317\u4eac\u5e02\u6d77\u6dc0\u533a\u5b66\u9662\u8def\u8857\u9053\u6e05\u534e\u4e1c\u8def",
-  "start_point": "[116.33709244982697, 40.000600452554735]",
+  "start_point": "[116.338249, 40.000614]",
   "day": "evening",
-  "end_point": "[116.33825092733562, 40.000600452554735]",
-  "distance": "385",
+  "end_point": "[116.337181, 40.000614]",
+  "distance": "85",
   "start_place": "\u5317\u4eac\u5e02\u6d77\u6dc0\u533a\u6e05\u534e\u56ed\u8857\u9053\u6e05\u534e\u4e1c\u8def\u6e05\u534e\u5927\u5b66",
-  "paths": "[[116.338249,40.000614],[116.339981,40.00061],[116.339973,40.000725],[116.338242,40.000698],[116.337181,40.000679]]",
+  "paths": "[[116.338249,40.000614],[116.337181,40.000614]]",
   "type": "yellow",
   "jam_time": "61.08176985804894"
 }, {
@@ -9630,9 +9618,9 @@ all_data = [{
   "start_point": "[116.34246649826989, 40.01507764233576]",
   "day": "evening",
   "end_point": "[116.34319591003458, 40.01508585401459]",
-  "distance": "194",
+  "distance": "74",
   "start_place": "\u5317\u4eac\u5e02\u6d77\u6dc0\u533a\u4e1c\u5347\u9547\u6708\u6cc9\u8def",
-  "paths": "[[116.343201,40.015083],[116.343193,40.015442],[116.343193,40.015545],[116.343185,40.015759],[116.342979,40.015751],[116.342979,40.015568],[116.342987,40.015434],[116.342987,40.015079],[116.342987,40.015079],[116.342461,40.01506]]",
+  "paths": "[[116.34246649826989, 40.01507764233576],[116.34319591003458, 40.01508585401459]]",
   "type": "green",
   "jam_time": "38.646552905249266"
 }, {
@@ -14555,7 +14543,12 @@ function get_streams() {
       var distance = (item['distance']);
       var day = item['day'];
       var jam_time = ((parseFloat(item['jam_time']) * 5) / 60).toFixed(1);
-
+      if (no=='295'){
+        console.log(paths
+        )
+        console.log(no
+        )
+      }
       addMarker(points, type, no);
       // driver_match(points, type, no, distance, day)
 
@@ -14566,8 +14559,18 @@ function get_streams() {
 }
 
 function addMarker(points, type, no) {
+  var img = 'static/images/bullet_yellow.png';
+  if (type == "green") {
+    img = 'static/images/bullet_yellow.png';
+  }
+  else if (type == "yellow") {
+    img = 'static/images/bullet_red.png';
+  }
+  else {
+    img = 'static/images/bullet_black.png';
+  }
   var marker = new AMap.Marker({
-    icon: "static/images/red.png",
+    icon: img,
     position: points[0],
     offset: new AMap.Pixel(-20, -21),
     draggable: false,
@@ -14576,11 +14579,11 @@ function addMarker(points, type, no) {
       'type': type,
       'is_start': true
     }
-  })
-
-  marker.setMap(map)
+  });
+  marker.setMap(map);
   var marker_end = new AMap.Marker({
-    icon: "static/images/blue.png",
+
+    icon: img,
     position: points[1],
     offset: new AMap.Pixel(-20, -18),
     draggable: false,
@@ -14589,13 +14592,12 @@ function addMarker(points, type, no) {
       'type': type,
       'is_start': false
     }
-  })
-
-  markers_start.push(points[0])
-  markers_end.push(points[1])
-  MARKERS.push(marker)
-  MARKERS.push(marker_end)
-  marker_end.setMap(map)
+  });
+  markers_start.push(points[0]);
+  markers_end.push(points[1]);
+  MARKERS.push(marker);
+  MARKERS.push(marker_end);
+  marker_end.setMap(map);
 
 }
 
@@ -14622,7 +14624,6 @@ function draw_poly(paths, type, no, distance, day, jam_time) {
 
   var mouseHandler = function (e) {
     var b = jam_time.split(".");
-    console.log(b);
     var x = b[0];
     var y = b[1];
     var t = "<h3>拥堵时间：" + x + "小时" + (y * 6) + "分钟</h3>";
@@ -14672,7 +14673,6 @@ function poly_dblclick(e) {
 }
 
 function get_point(e) {
-  console.log(e)
   console.log(e['lnglat']['lng'] + ',' + e['lnglat']['lat'])
 
 
@@ -14690,7 +14690,6 @@ function close_lineedit() {
 }
 
 function open_lineedit() {
-  console.log(polyEditors);
 
   polyEditors.forEach(function (value, index) {
     value.open()
