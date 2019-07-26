@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main.ui'
 #
-# Created by: PyQt5 UI code generator 5.10
+# Created by: PyQt5 UI code generator 5.10.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,6 +12,9 @@ class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
         mainWindow.resize(750, 800)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("image/app.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        mainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_4 = QtWidgets.QGridLayout(self.centralwidget)
@@ -81,9 +84,9 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("image/play_button_48px_1201205_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton.setIcon(icon)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("image/play_button_48px_1201205_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton.setIcon(icon1)
         self.pushButton.setIconSize(QtCore.QSize(30, 30))
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_9.addWidget(self.pushButton)
@@ -107,9 +110,9 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("image/stop_48px_1229026_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_2.setIcon(icon1)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("image/stop_48px_1229026_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_2.setIcon(icon2)
         self.pushButton_2.setIconSize(QtCore.QSize(30, 30))
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout_9.addWidget(self.pushButton_2)
@@ -229,9 +232,9 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("../../../chrmoedownload/play_button_48px_1201205_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_4.setIcon(icon2)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("../../../chrmoedownload/play_button_48px_1201205_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_4.setIcon(icon3)
         self.pushButton_4.setIconSize(QtCore.QSize(30, 30))
         self.pushButton_4.setObjectName("pushButton_4")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.pushButton_4)
@@ -278,7 +281,7 @@ class Ui_mainWindow(object):
         self.horizontalLayout_10.addWidget(self.label_12)
         self.textEdit_left = QtWidgets.QTextEdit(self.groupBox_4)
         self.textEdit_left.setMinimumSize(QtCore.QSize(0, 0))
-        self.textEdit_left.setMaximumSize(QtCore.QSize(1512412, 30))
+        self.textEdit_left.setMaximumSize(QtCore.QSize(1512412, 35))
         self.textEdit_left.setObjectName("textEdit_left")
         self.horizontalLayout_10.addWidget(self.textEdit_left)
         self.gridLayout_7.addLayout(self.horizontalLayout_10, 0, 0, 1, 1)
@@ -302,9 +305,9 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("image/map_46.16091954023px_1224917_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_9.setIcon(icon3)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("image/map_46.16091954023px_1224917_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_9.setIcon(icon4)
         self.pushButton_9.setIconSize(QtCore.QSize(30, 30))
         self.pushButton_9.setObjectName("pushButton_9")
         self.gridLayout_7.addWidget(self.pushButton_9, 1, 1, 1, 1)
@@ -323,14 +326,14 @@ class Ui_mainWindow(object):
         self.horizontalLayout_11.addWidget(self.label_34)
         self.textEdit_right = QtWidgets.QTextEdit(self.groupBox_4)
         self.textEdit_right.setMinimumSize(QtCore.QSize(0, 0))
-        self.textEdit_right.setMaximumSize(QtCore.QSize(1512412, 30))
+        self.textEdit_right.setMaximumSize(QtCore.QSize(1512412, 35))
         self.textEdit_right.setObjectName("textEdit_right")
         self.horizontalLayout_11.addWidget(self.textEdit_right)
         self.gridLayout_7.addLayout(self.horizontalLayout_11, 1, 0, 1, 1)
         self.gridLayout.addWidget(self.groupBox_4, 1, 0, 1, 1)
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("image/Highway_48px_1109853_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget.addTab(self.tab, icon4, "")
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap("image/Highway_48px_1109853_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget.addTab(self.tab, icon5, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.tab_2)
@@ -385,9 +388,9 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("image/road_48px_1232324_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_choose_road.setIcon(icon5)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("image/road_48px_1232324_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_choose_road.setIcon(icon6)
         self.pushButton_choose_road.setIconSize(QtCore.QSize(25, 25))
         self.pushButton_choose_road.setObjectName("pushButton_choose_road")
         self.horizontalLayout_8.addWidget(self.pushButton_choose_road)
@@ -457,9 +460,9 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("image/folder_48px_1219812_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_7.setIcon(icon6)
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap("image/folder_48px_1219812_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_7.setIcon(icon7)
         self.pushButton_7.setIconSize(QtCore.QSize(25, 25))
         self.pushButton_7.setObjectName("pushButton_7")
         self.gridLayout_6.addWidget(self.pushButton_7, 0, 2, 1, 1)
@@ -501,9 +504,9 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(QtGui.QPixmap("image/brand_brands_excel_logo_48px_1212964_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_14.setIcon(icon7)
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap("image/brand_brands_excel_logo_48px_1212964_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_14.setIcon(icon8)
         self.pushButton_14.setIconSize(QtCore.QSize(25, 25))
         self.pushButton_14.setObjectName("pushButton_14")
         self.horizontalLayout_15.addWidget(self.pushButton_14)
@@ -526,7 +529,7 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        self.pushButton_13.setIcon(icon1)
+        self.pushButton_13.setIcon(icon2)
         self.pushButton_13.setIconSize(QtCore.QSize(25, 25))
         self.pushButton_13.setObjectName("pushButton_13")
         self.horizontalLayout_15.addWidget(self.pushButton_13)
@@ -605,7 +608,7 @@ class Ui_mainWindow(object):
 "                     border-style: outset;\n"
 "                     }\n"
 "")
-        self.pushButton_8.setIcon(icon2)
+        self.pushButton_8.setIcon(icon3)
         self.pushButton_8.setIconSize(QtCore.QSize(30, 30))
         self.pushButton_8.setObjectName("pushButton_8")
         self.verticalLayout_4.addWidget(self.pushButton_8)
@@ -614,16 +617,16 @@ class Ui_mainWindow(object):
         self.textBrowser_6.setObjectName("textBrowser_6")
         self.verticalLayout_4.addWidget(self.textBrowser_6)
         self.gridLayout_5.addWidget(self.groupBox_10, 6, 0, 1, 1)
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap("image/gear_48px_1180534_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget.addTab(self.tab_2, icon8, "")
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap("image/gear_48px_1180534_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget.addTab(self.tab_2, icon9, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.tab_3)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        icon9 = QtGui.QIcon()
-        icon9.addPixmap(QtGui.QPixmap("image/map_64px_1228276_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.tabWidget.addTab(self.tab_3, icon9, "")
+        icon10 = QtGui.QIcon()
+        icon10.addPixmap(QtGui.QPixmap("image/map_64px_1228276_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.tabWidget.addTab(self.tab_3, icon10, "")
         self.gridLayout_4.addWidget(self.tabWidget, 0, 0, 1, 1)
         mainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(mainWindow)
@@ -631,7 +634,7 @@ class Ui_mainWindow(object):
         mainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(mainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):

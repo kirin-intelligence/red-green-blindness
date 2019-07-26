@@ -1,18 +1,12 @@
 import os
 
-# os.system("pyuic5 -o  mainw.py  main.ui")
-
-import shutil
-from PyQt5.QtWidgets import QFileDialog, QInputDialog
-from PyQt5.QtWidgets import QDesktopWidget
+os.system("pyuic5 -o  mainw.py  main.ui")
+import sys
 from PyQt5.QtSvg import QSvgWidget
 from qtpy.QtCore import QStandardPaths
-from PyQt5.QtCore import  QDateTime
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from mainw import Ui_mainWindow
 from utils import *
 import qtmodern.windows
-
 
 
 class MissevanKit(QMainWindow, Ui_mainWindow):
@@ -108,13 +102,13 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
     def downloadExcel(self):
         dir = QFileDialog.getExistingDirectory(self, "EXCEL文件保存到",
                                                QStandardPaths.writableLocation(QStandardPaths.DesktopLocation))
-        target_file = dir + os.sep + DATA_XLS
+        # target_file = dir + os.sep + DATA_XLS
         if dir:
             try:
-                if os.path.isfile(target_file):
-                    os.remove(target_file)
-                shutil.copy(EXCEL_FILE, target_file)
-                print(dir)
+                # if os.path.isfile(target_file):
+                #     os.remove(target_file)
+                # shutil.copy(EXCEL_FILE, target_file)
+                write_excel(dir)
                 self.echo("文件已保存。")
             except Exception as e:
                 print(e)

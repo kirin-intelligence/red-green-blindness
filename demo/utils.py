@@ -1,15 +1,12 @@
 import os
-import sys
-import time
-
-from PyQt5 import QtWidgets
-from PyQt5.QtCore import QUrl, pyqtSlot, QThread
+import xlwt
+from PyQt5.QtCore import QUrl, pyqtSlot, QThread, QDateTime, Qt
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QSize
 from PyQt5.QtWebChannel import QWebChannel
-from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QVBoxLayout
+from PyQt5.QtWidgets import QFileDialog, QInputDialog, QDesktopWidget, \
+    QApplication, QMainWindow, QMessageBox,QVBoxLayout,QDialog, QLabel
 
 CWD = os.getcwd()
 APP_ImagePath = CWD + os.sep + 'image'
@@ -57,7 +54,7 @@ class MapWindow(QDialog):
 
     def __init__(self, parent=None):
         super(MapWindow, self).__init__(parent)
-        self.label = QtWidgets.QLabel(self)
+        self.label = QLabel(self)
         self.setWindowTitle("交通拥堵分析系统")
 
         self.resize(QSize(1400, 900))
@@ -106,3 +103,17 @@ class MyThread(QThread):
             self.sleep(1)
             if self.num == 5:
                 self.working = False
+
+
+def write_excel(dir_name):
+    now = QDateTime.currentDateTime().toString(Qt.ISODate)
+    now = now.replace(':', '-')
+    file_path = dir_name + os.sep + now + '-data.xls'
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('Worksheet')
+    # 参数对应 行, 列, 值
+    worksheet.write(1, 0, label='this is test')
+    # 保存
+    workbook.save(file_path)
