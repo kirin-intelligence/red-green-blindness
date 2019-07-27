@@ -34,8 +34,11 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
             <li><input type="checkbox" name="checkbox" value="green" data-labelauty="黄色"></li>
 
         </ul>
-        <button style="margin-left: 40px;
-            width: 200px;" class="btn btn-info" type="submit" id="submit" value="确定">确定
+        <button class="btn btn-info" id="submit" style="margin-left: 5px;
+            width: 150px;" type="submit" value="确定">确定
+        </button>
+        <button class="btn btn-info" style="margin-left: 5px;
+            width: 150px;"  onclick="location.reload();">刷新页面
         </button>
     </div>
     <div id="container" class="map"></div>
@@ -160,7 +163,12 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
                 sortable: true,
                 searchable: false,
                 formatter: function (value, row, index) {
-                    return parseFloat(value).toFixed(1) + "分钟";
+                    // value = ((parseFloat(value) * 5) / 60).toFixed(1);
+                    value = parseFloat(value).toFixed(1);
+                    var b = value.split(".");
+                    var x = b[0];
+                    var y = b[1];
+                    return x + "小时" + (y * 6) + "分钟";
                 }
             },
             {
@@ -176,7 +184,6 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
             }
         },
         onClickRow: function (row, $element, field) {
-            console.log(row['no']);
 
             var targetId = row['no'];
             var targetMarker;
@@ -184,7 +191,6 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
                 // 获取存在每个 extData 中的 id
                 var no = POLYS_arr[i].getExtData()['no'];
                 if (no == targetId) {
-                    console.log(no);
                     console.log(POLYS_arr[i].getExtData());
                     targetMarker = POLYS_arr[i];
                     break;
@@ -198,6 +204,7 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
             ser.attr('placeholder', '搜索')
         }
     });
+
     function search(no) {
         var ser = $("[placeholder='搜索']").val(no);
         var e = $.Event("keyup");//模拟一个键盘事件

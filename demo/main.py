@@ -1,5 +1,8 @@
 import os
 
+from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QProgressBar
+
 os.system("pyuic5 -o  mainw.py  main.ui")
 import sys
 from PyQt5.QtSvg import QSvgWidget
@@ -14,7 +17,6 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
         super(MissevanKit, self).__init__(parent)
         self.setupUi(self)
         # self.set_style()
-
         self.center()
         self.setTab1()
         self.setTab2()
@@ -28,42 +30,75 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
 
     def setTab1(self):
         self.pushButton.clicked.connect(self.start_collect)
-        self.pushButton_2.clicked.connect(lambda: self.slotAdd(-1))
-
+        self.pushButton_2.clicked.connect(lambda: self.collect_progress(-1))
         self.pushButton_9.clicked.connect(self.set_choose_rect_brower)
         self.pushButton_4.clicked.connect(lambda: self.set_browser_collapse(self.textBrowser_3))
-        self.set_date_time()
+
+    def gen_tab1_config(self):
+        # worktime
+        GLOBAL_CONFIG[ONLY_WORK_DAY] = False
+        if self.radioButton_5.isChecked():
+            if self.textEdit_right_2.toPlainText():
+                GLOBAL_CONFIG[WORKTIME] = [int(i) for i in self.textEdit_right_2.toPlainText().split()]
+            else:
+                self.echo_error('抓取的时间点（小时）为空，请检查')
+                return False
+        elif self.checkBox.isChecked():
+            GLOBAL_CONFIG[ONLY_WORK_DAY] = True
+        elif self.radioButton_4.isChecked():
+            GLOBAL_CONFIG[WORKTIME] = [i for i in range(24)]
+        elif self.radioButton_3.isChecked():
+            GLOBAL_CONFIG[WORKTIME] = [i for i in range(7, 10)] + [i for i in range(17, 20)]
+        elif self.radioButton_2.isChecked():
+            GLOBAL_CONFIG[WORKTIME] = [i for i in range(17, 20)]
+        elif self.radioButton.isChecked():
+            GLOBAL_CONFIG[WORKTIME] = [i for i in range(7, 10)]
+        else:
+            self.echo_error('抓取的时间点（小时）为空，请检查')
+            return False
+
+        if self.textEdit_left.toPlainText():
+            GLOBAL_CONFIG[LEFT_POINT] = self.textEdit_left.toPlainText()
+            GLOBAL_CONFIG[RIGHT_POINT] = self.textEdit_right.toPlainText()
+        else:
+            self.echo_error('矩形区域为空，请检查')
+            return False
+
+        if self.textEdit_9.toPlainText():
+            GLOBAL_CONFIG[SPACING_TIME] = int(self.textEdit_9.toPlainText())
+        else:
+            self.echo_error('间隔时间为空，请检查')
+            return False
+        return True
 
     def start_collect(self):
-        self.collect_thread = MyThread()
-        self.collect_thread.sinOut.connect(self.slotAdd)
+        # if self.gen_tab1_config():
+        #     print(GLOBAL_CONFIG)
+        # else
+        add_tb_log(self.textBrowser_3, "程序开始运行...")
+        add_tb_log(self.textBrowser_3, GLOBAL_CONFIG)
+
+        self.collect_thread = CollectThread()
+        self.collect_thread.sinOut.connect(self.collect_progress)
         self.collect_thread.start()
+        # 循环滚动
+        self.progressBar.setMaximum(0)
         self.pushButton.setEnabled(False)
 
-    def slotAdd(self, progress):
+    def collect_progress(self, flag):
         # 向列表控件中添加条目
-        progress = int(progress)
-        print(progress)
-        if progress == 5:
-            print("finish")
-            self.pushButton.setEnabled(True)
-            self.textBrowser_3.clear()
-
-        elif progress == -1:
+        if flag == -1:
+            add_tb_log(self.textBrowser_3, "用户终止程序")
             self.collect_thread.terminate()
+            GLOBAL_CONFIG[THREAD_FLAG] = False
             self.pushButton.setEnabled(True)
-            self.progressBar.setValue(0)
-            self.textBrowser_3.clear()
+            self.progressBar.setMaximum(100)
         else:
-            self.textBrowser_3.append(str(progress))
-            self.progressBar.setValue(progress)
+            add_tb_log(self.textBrowser_3, flag)
 
     def set_date_time(self):
-        datetime = QDateTime.currentDateTime()
-        self.dateTimeEdit.setDateTime(datetime)
-        self.dateTimeEdit_9.setDateTime(datetime.addDays(7))
-
-        print(datetime.toString())
+        # datetime = QDateTime.currentDateTime()
+        pass
 
     def set_choose_rect_brower(self):
         map_win = MapWindow(self)
@@ -73,6 +108,7 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
     def set_browser_collapse(self, browser):
         if browser.isVisible():
             browser.setVisible(False)
+            browser.clear()
         else:
             browser.setVisible(True)
 
@@ -80,38 +116,80 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
         print(rect)
         if rect:
             leftb = rect.split(' ')[0]
-            rightt = rect.split(' ')[1]
+            right = rect.split(' ')[1]
             self.textEdit_left.setText(leftb)
-            self.textEdit_right.setText(rightt)
+            self.textEdit_right.setText(right)
 
     def setTab2(self):
-        self.pushButton_14.clicked.connect(self.downloadExcel)
+        self.pushButton_14.clicked.connect(self.start_gen_data)
         self.pushButton_7.clicked.connect(self.choose_data_dir)
         self.pushButton_8.clicked.connect(lambda: self.set_browser_collapse(self.textBrowser_6))
         self.pushButton_choose_road.clicked.connect(self.choose_road_dialog)
 
-    def choose_road_dialog(self):
-        road_datas = ["全部", "道路"]
-        # 1为默认选中选项目，True/False  列表框是否可编辑。
-        road, ok = QInputDialog.getItem(self, "选择指定道路", "'全部'代表所有道路\n\n请选择道路:", road_datas, 1, True)
-        print(road)
-        if road:
-            if road == road_datas[0]:
-                pass
+    def gen_tab2_config(self):
 
-    def downloadExcel(self):
+        time_weight = self.textEdit_timeweight.toPlainText()
+        if time_weight:
+            time_weight = float(time_weight)
+            if 0 < time_weight < 1:
+                GLOBAL_CONFIG[TIME_WEIGHT] = float(time_weight)
+            else:
+                self.echo_error('拥堵时长权重值为大于0且小于1的小数，请检查')
+                return False
+        else:
+            self.echo_error('拥堵时长权重不能为空，请检查')
+            return False
+        save_path = self.textEdit_7.toPlainText()
+        if save_path:
+            GLOBAL_CONFIG[SAVE_PATH] = save_path
+        else:
+            self.echo_error('数据储存路径不能为空，请检查')
+            # return False
         dir = QFileDialog.getExistingDirectory(self, "EXCEL文件保存到",
                                                QStandardPaths.writableLocation(QStandardPaths.DesktopLocation))
-        # target_file = dir + os.sep + DATA_XLS
         if dir:
-            try:
-                # if os.path.isfile(target_file):
-                #     os.remove(target_file)
-                # shutil.copy(EXCEL_FILE, target_file)
-                write_excel(dir)
-                self.echo("文件已保存。")
-            except Exception as e:
-                print(e)
+            GLOBAL_CONFIG[EXCEL_DIR] = dir
+        else:
+            self.echo_error("excel存储路径不能为空")
+            return False
+        return True
+
+    def choose_road_dialog(self):
+        road, ok = QInputDialog.getItem(self, "选择指定道路", "'全部'代表所有道路\n\n请选择道路:", ROAD_DATAS, 1, True)
+        if road:
+            self.textEdit_11.setText(road)
+            if road == ROAD_DATAS[0]:
+                pass
+
+    def start_gen_data(self):
+        if self.gen_tab2_config():
+            print(GLOBAL_CONFIG)
+        add_tb_log(self.textBrowser_6, "程序开始运行...")
+        add_tb_log(self.textBrowser_6, GLOBAL_CONFIG)
+
+        # else:
+        self.progressBar_3.setMaximum(0)
+        self.pushButton_14.setEnabled(False)
+        self.gen_data_thread = GenDataThread()
+        self.gen_data_thread.sinOut.connect(self.gen_data_progress)
+        self.gen_data_thread.start()
+
+    def gen_data_progress(self, flag):
+        if flag == -1:
+            add_tb_log(self.textBrowser_6, "用户终止程序")
+            self.gen_data_thread.terminate()
+            GLOBAL_CONFIG[THREAD_FLAG] = False
+            self.pushButton_14.setEnabled(True)
+            self.progressBar_3.setMaximum(100)
+        elif flag == SUCCESS:
+            add_tb_log(self.textBrowser_6, "excel数据文件生成完成,可进入地图展示模块查看")
+            self.echo("excel数据文件生成完成,可进入地图展示模块查看")
+            GLOBAL_CONFIG[THREAD_FLAG] = False
+            self.pushButton_14.setEnabled(True)
+            self.progressBar_3.setMaximum(100)
+        else:
+            add_tb_log(self.textBrowser_6, flag)
+            # self.echo("excel数据文件生成成功")
 
     def choose_data_dir(self):
         dir = QFileDialog.getExistingDirectory(self, "选择数据文件夹",
@@ -157,6 +235,11 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
         box.information(self, "操作成功", "{}\n".format(value),
                         QMessageBox.Ok)
         # box.setIcon(("D:/pycharmproject/red-green-blindness/demo/image/success_48px_1129030_easyicon.net.png"))
+
+    def echo_error(self, value):
+        box = QMessageBox(self)
+        box.warning(self, "错误", "{}\n".format(value),
+                    QMessageBox.Ok)
 
 
 if __name__ == "__main__":

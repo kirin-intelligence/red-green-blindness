@@ -185,7 +185,9 @@ if __name__ == '__main__':
     # a = redis.hset('morning:329', 'distance', '128')
     # a = redis.hset('evening:298', 'distance', '1004')
     # a = redis.hset('evening:477', 'distance', '114')
-    a = redis.hset('evening:329', 'distance', '80')
+    # a = redis.hset('evening:329', 'distance', '80')
+    a='116.359848'
+    print(float(a))
     pass
 
 
