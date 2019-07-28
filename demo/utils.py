@@ -1,14 +1,16 @@
 import json
-import xlwt
+import xlwings as xw
 from PyQt5.QtCore import QUrl, pyqtSlot, QThread, QDateTime, Qt
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QSize
+from PyQt5.QtNetwork import QNetworkRequest, QNetworkAccessManager, QNetworkReply
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWidgets import QFileDialog, QInputDialog, QDesktopWidget, \
     QApplication, QMainWindow, QMessageBox, QVBoxLayout, QDialog, QLabel
 from constant import *
 from get_data import *
+from urllib.request import urlopen
 
 
 class MapWindow(QDialog):
@@ -142,19 +144,11 @@ class GenDataThread(QThread):
         # 开始生成json文件，并且写入excel
         now = QDateTime.currentDateTime().toString(Qt.ISODate)
         now = now.replace(':', '-')
-        file_path = GLOBAL_CONFIG[EXCEL_DIR] + os.sep + now + '-data.xls'
+        file_path = GLOBAL_CONFIG[EXCEL_DIR] + os.sep + now + '-data.xlsx'
         if os.path.isfile(file_path):
             os.remove(file_path)
-        workbook = xlwt.Workbook(encoding='utf-8')
-        worksheet = workbook.add_sheet('Worksheet')
-        worksheet.write(0, 0, label='序号')
-        worksheet.write(0, 1, label='起点')
-        worksheet.write(0, 2, label='起点经纬度')
-        worksheet.write(0, 3, label='终点')
-        worksheet.write(0, 4, label='终点经纬度')
-        worksheet.write(0, 5, label='长度')
-        worksheet.write(0, 6, label='拥堵情况（颜色）')
-        worksheet.write(0, 7, label='拥堵时间（小时）')
+
+        rows_data=[]
         for no, point in enumerate(total_ans):
             json_data = {}
             start_point = point[0][:-1]
@@ -176,33 +170,36 @@ class GenDataThread(QThread):
             json_data[JSON_END_POINT] = end_point
             json_data[JSON_END_PLACE] = end_place
             json_data[JSON_PATHS] = paths
-
             # TODO
             json_data[JSON_DAY] = 'evening'
             json_data[JSON_TYPE] = jam_type
 
             # for template in JSON_TEMPLATE:
             #     assert (json_data[template])
-            json_data_arr.append(json_data)
-            worksheet.write(no + 1, 0, label="%s" % no)
-            worksheet.write(no + 1, 1, label="%s" % start_place)
-            worksheet.write(no + 1, 2, label="%s,%s" % (start_point[0], start_point[1]))
-            worksheet.write(no + 1, 3, label="%s" % end_place)
-            worksheet.write(no + 1, 4, label="%s,%s" % (end_point[0], end_point[1]))
-            worksheet.write(no + 1, 5, label="%s" % distance)
-            if type == 'red':
+
+            if jam_type == 'red':
                 color = '红色'
-            elif type == 'yellow':
+            elif jam_type == 'yellow':
                 color = '橙黄'
             else:
                 color = '黄色'
-            worksheet.write(no + 1, 6, label="%s" % color)
-            worksheet.write(no + 1, 7, label="%s" % jam_time)
+            row_data= [no, start_place, str(start_point).replace('[','').replace(']',''), end_place,
+                        str(end_point).replace('[','').replace(']',''), distance,
+                                                        color, jam_time]
+
+            rows_data.append(row_data)
+            json_data_arr.append(json_data)
         with open(JSON_FILE_PATH, "w") as json_file:
             # ensure_ascii =
-            json.dump(json_data_arr, json_file, )
+            json.dump(json_data_arr, json_file)
+        workbook = xw.Book()
+        worksheet = workbook.sheets[0]
+        title_row = [['序号', '起点', '起点经纬度', '终点', '终点经纬度', '长度', '拥堵情况（颜色）', '拥堵时间（小时）']]
+        worksheet.range('A1').value = title_row
+        worksheet.range('A2').value = rows_data
         workbook.save(file_path)
-        os.system(f'start {file_path}')
+        # workbook.close()
+        # os.system(f'start {file_path}')
         # 保存
         self.sinOut.emit(f"EXCEL文件所在路径:{file_path}")
         self.sinOut.emit(SUCCESS)
@@ -220,7 +217,7 @@ def add_tb_log(textBrowser, value):
 def get_place(point):
     url = 'https://restapi.amap.com/v3/geocode/regeo?key=2be4c36d53e74e0c585326d62d6fe6' \
           'e3&location=%s,%s&poitype=&radius=1000&extensions=base&batch=false&roadlevel=0' % (point[0], point[1])
-    data = json.loads(requests.get(url).text)
+    data = json.loads(urlopen(url).read())
     place = (data['regeocode']['formatted_address'])
     return place
 
@@ -232,14 +229,14 @@ def get_driving_data(start_point, end_point):
     url = f"https://restapi.amap.com/v3/direction/driving?origin={start_point[0]},{start_point[1]}" \
         f"&destination={end_point[0]},{end_point[1]}&strategy=2&waypoints={waypoint[0]},{waypoint[1]}" \
         f"&extension=all&key={GAODE_KEY}"
-    data_first = json.loads(requests.get(url).text)['route']['paths'][0]
+    data_first = json.loads(urlopen(url).read())['route']['paths'][0]
     return data_first
 
 
 def get_line_road(start_p, end_p):
     line_url = f'https://restapi.amap.com/v3/distance?origins={start_p[0]},{start_p[1]}&' \
         f'type=0&destination={end_p[0]},{end_p[1]}&key={GAODE_KEY}'
-    dis = json.loads(requests.get(line_url).text)['results'][0]['distance']
+    dis = json.loads(urlopen(line_url).read())['results'][0]['distance']
     polyline = [start_p, end_p]
     return dis, polyline
 
@@ -272,7 +269,6 @@ def get_right_steps(s_point, e_point):
             new_point = [float(p) for p in point]
             new_polylines.append(new_point)
     return right_dis, new_polylines
-
 
 def is_weekendday():
     dayOfWeek = datetime.datetime.now().weekday()

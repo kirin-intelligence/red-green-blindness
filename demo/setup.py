@@ -5,13 +5,15 @@ from cx_Freeze import setup, Executable
 # fine tuning.
 build_exe_options = {
     "include_files": ["lib", 'image', 'python36.dll'],
-    "packages": ["pyqt5", "os", "sys"], "excludes": []}
+    "packages": ["pyqt5", "os", "sys","xlwings","numpy"], "excludes": []}
 
 # GUI applications require a different base on Windows (the default is for a
 # console application).
 base = None
 if sys.platform == "win32":
     base = "win32gui"
+base = None
+
 # product_name = u'交通拥堵分析系统'.encode('gb2312')
 # exec_name = u'交通拥堵分析系统.exe'.encode('gb2312')
 product_name = 'Transport'

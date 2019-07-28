@@ -1,9 +1,5 @@
 import os
-
-from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QProgressBar
-
-os.system("pyuic5 -o  mainw.py  main.ui")
+# os.system("pyuic5 -o  mainw.py  main.ui")
 import sys
 from PyQt5.QtSvg import QSvgWidget
 from qtpy.QtCore import QStandardPaths
@@ -36,6 +32,7 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
 
     def gen_tab1_config(self):
         # worktime
+        # 是否只是工作日抓取
         GLOBAL_CONFIG[ONLY_WORK_DAY] = False
         if self.radioButton_5.isChecked():
             if self.textEdit_right_2.toPlainText():
@@ -215,7 +212,6 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
     def setLoadFinished(self, ):
         self.webview.setVisible(True)
         self.loadWidget.setVisible(False)
-        print('ok')
 
     def setBrower(self):
         self.webview = QWebEngineView()
