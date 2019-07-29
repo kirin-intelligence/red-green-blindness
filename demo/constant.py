@@ -1,24 +1,33 @@
 import os
 # 分析的数据包含的天数
 DATA_CONTAIN_DAYS='data_contain_days'
-WORKTIME = 'worktime'
+WORK_TIME = 'worktime'
 LEFT_POINT = 'left_point'
 RIGHT_POINT = 'right_point'
+#间隔时间
 SPACING_TIME = 'spacing_time'
 GLOBAL_CONFIG = {}
 TIME_WEIGHT = 'time_weight'
 SAVE_PATH = 'save_path'
+CHOOSE_ROAD='choose_road'
 THREAD_FLAG = 'thread_flag'
-ROAD_DATAS = ["全部", "道路"]
+ROAD_DATAS = ["全部", "德胜门外大街","西外大街","学院路","万泉河路","阜石路","紫竹院路","三环路","二环路"]
 EXCEL_DIR = 'excel_dir'
+
+STOP='stop'
+ERROR='error'
 SUCCESS = 'success'
 DATA_DIR = 'data_dir'
 # 工作日爬不爬，只爬工作日
 ONLY_WORK_DAY='only_walk_day'
 # dayOfWeek = datetime.datetime.now().weekday()
 # 去掉工作日
-JSON_FILE_PATH='lib/static/data.json'
+ALPHA = 0.8
+BELTA = 0.5
+GAMA = 0.3
+SOCKET_TIMEOUT = 25
 
+JSON_FILE_PATH='lib/static/data.json'
 JSON_NO='no'
 JSON_START_POINT='start_point'
 JSON_END_POINT='end_point'
@@ -38,8 +47,9 @@ APP_ImagePath = CWD + os.sep + 'image'
 APP_HtmlPath = CWD + os.sep + 'lib'
 
 DATA_XLS = 'data.xls'
-EXCEL_FILE = APP_HtmlPath + os.sep + DATA_XLS
 GAODE_KEY = '2be4c36d53e74e0c585326d62d6fe6e3'
+
+
 
 Svg_icon_loading = '''<svg width="100%" height="100%" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -72,3 +82,4 @@ Svg_icon_loading = '''<svg width="100%" height="100%" viewBox="0 0 38 38" xmlns=
         </g>
     </g>
 </svg>'''.encode()
+

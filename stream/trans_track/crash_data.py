@@ -1,6 +1,6 @@
 import os
 import datetime
-from util import *
+from gen_data_util import *
 
 
 def reflush_ori():

@@ -1,10 +1,68 @@
+import datetime
+import time
 import numpy as np
 import cv2
+from math import radians, cos, sin, asin, sqrt
+import os
+import socket
+import gc
+from urllib.request import urlopen
+from constant import THREAD_FLAG, GLOBAL_CONFIG, SPACING_TIME,DATA_DIR, WORK_TIME, ALPHA,BELTA,GAMA,SOCKET_TIMEOUT
 
-Threshold_Time = 0.2
-alpha = 0.8
-belta = 0.5
-gama = 0.3
+socket.setdefaulttimeout(SOCKET_TIMEOUT)
+
+headers = {
+    'Connection': 'close',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+    'Accept - Encoding': 'gzip, deflate',
+    'Accept-Language': 'zh-Hans-CN, zh-Hans; q=0.5',
+    'Host': 'restapi.amap.com',
+    'Pragma': 'no-cache',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063'
+}
+
+
+def background_worker(GPS_x, GPS_y):
+    while True:
+        if not GLOBAL_CONFIG[THREAD_FLAG]:
+            print('线程终止')
+            exit()
+        try:
+            time_now = datetime.datetime.now()
+            time_h = time_now.hour
+            if time_h in GLOBAL_CONFIG[WORK_TIME]:
+                child_path = "{0}_{1}/".format(time.strftime("%Y_%m_%d"), str(time_h))
+                if not os.path.exists("{}{}".format(GLOBAL_CONFIG[DATA_DIR], child_path)):
+                    os.mkdir("{}{}".format(GLOBAL_CONFIG[DATA_DIR], child_path))
+                name_string = "{0}{1}{2}_{3}_{4}_{5}.npz".format(GLOBAL_CONFIG[DATA_DIR], child_path, time.strftime("%Y_%m_%d"),
+                                                                 str(time_h), str(GPS_x), str(GPS_y))
+                URL = "https://restapi.amap.com/v3/staticmap?&zoom=15&size=600*600&location={0},{1}&scale=2&traffic=1&key=2be4c36d53e74e0c585326d62d6fe6e3".format(
+                    str(GPS_x), str(GPS_y))
+                img_data = urlopen(URL).read()
+                img = cv2.imdecode(np.frombuffer(img_data, np.uint8), cv2.IMREAD_COLOR)
+                del img_data
+                gc.collect()
+                hot_map = get_line_hotmap(img)
+                del img
+                gc.collect()
+                if os.path.exists(name_string):
+                    old_data = np.load(name_string)
+                    np.savez_compressed(name_string, old_data['arr_0'] + 1, old_data['arr_1'] + hot_map)
+                    del old_data, hot_map, time_h, child_path, name_string, URL
+                else:
+                    np.savez_compressed(name_string, 1, hot_map)
+                    del hot_map, time_h, child_path, name_string, URL
+                gc.collect()
+                print([GPS_x, GPS_y])
+                time.sleep(GLOBAL_CONFIG[SPACING_TIME])
+                print("Working...{}".format(str(time_now)))
+            else:
+                gc.collect()
+                time.sleep(GLOBAL_CONFIG[SPACING_TIME])
+                print("Waiting...{}".format(str(time_now)))
+        except Exception as e:
+            print(e)
+
 
 color_dic = {'RED_l': np.array([0, 0, 220]), 'RED_h': np.array([0, 0, 222]),
              'YELLO_l': np.array([0, 202, 253]), 'YELLO_h': np.array([0, 204, 255]),
@@ -31,9 +89,10 @@ def get_line(frame):
 
 
 def run_rgb(hmap, count):
-    red_ori = hmap > alpha
-    yellow_ori = (hmap > belta) & (hmap <= alpha)
-    green_ori = (hmap <= belta) & (hmap > gama)
+    hmap = hmap / count
+    red_ori = hmap > ALPHA
+    yellow_ori = (hmap > BELTA) & (hmap <= ALPHA)
+    green_ori = (hmap <= BELTA) & (hmap > GAMA)
 
     red = red_ori[:, :, np.newaxis]
     yellow = yellow_ori[:, :, np.newaxis]
@@ -145,25 +204,25 @@ def report(img, gps_centor, ori_data):
     return result, point_res_map
 
 
-from math import radians, cos, sin, asin, sqrt
-
-
-def geodistance(lng1, lat1, lng2, lat2):
-    # lng1,lat1,lng2,lat2 = (120.12802999999997,30.28708,115.86572000000001,28.7427)
-    lng1, lat1, lng2, lat2 = map(radians, [float(lng1), float(lat1), float(lng2), float(lat2)])  # 经纬度转换成弧度
+def geodistance(lng1,lat1,lng2,lat2):
+    #lng1,lat1,lng2,lat2 = (120.12802999999997,30.28708,115.86572000000001,28.7427)
+    lng1, lat1, lng2, lat2 = map(radians, [float(lng1), float(lat1), float(lng2), float(lat2)])# 经纬度转换成弧度
     dlon = lng2 - lng1
     dlat = lat2 - lat1
-    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-    distance = 2 * asin(sqrt(a)) * 6371 * 1000  # 地球平均半径，6371km
-    distance = round(distance / 1000, 3)
+    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+    distance = 2*asin(sqrt(a))*6371*1000# 地球平均半径，6371km
+    distance = round(distance/1000, 3)
     return distance
 
+
+def cal_middle(lng1,lat1,lng2,lat2):
+    return (lng1+lng2)/2, (lat1+lat2)/2
 
 def cal_length(ans_pair):
     new_ans = []
     for ans in ans_pair:
         length = geodistance(ans[0][0], ans[0][1], ans[1][0], ans[1][1])
         ans.append(length)
+        ans.append(cal_middle(ans[0][0], ans[0][1], ans[1][0], ans[1][1]))
         new_ans.append(ans)
     return new_ans
-

@@ -1,5 +1,5 @@
 import os
-from util import *
+from gen_data_util import *
 import matplotlib.pyplot as plt
 import cv2
 from config import *

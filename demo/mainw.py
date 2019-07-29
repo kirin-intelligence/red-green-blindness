@@ -335,33 +335,17 @@ class Ui_mainWindow(object):
         self.tab_2.setObjectName("tab_2")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.tab_2)
         self.gridLayout_5.setObjectName("gridLayout_5")
-        self.groupBox = QtWidgets.QGroupBox(self.tab_2)
-        self.groupBox.setTitle("")
-        self.groupBox.setObjectName("groupBox")
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.groupBox)
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.label_22 = QtWidgets.QLabel(self.groupBox)
-        self.label_22.setMinimumSize(QtCore.QSize(0, 0))
+        self.horizontalLayout_15 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_15.setObjectName("horizontalLayout_15")
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_15.addItem(spacerItem1)
+        self.pushButton_14 = QtWidgets.QPushButton(self.tab_2)
         font = QtGui.QFont()
-        font.setFamily("微软雅黑")
-        font.setPointSize(11)
         font.setBold(True)
+        font.setItalic(False)
         font.setWeight(75)
-        self.label_22.setFont(font)
-        self.label_22.setObjectName("label_22")
-        self.horizontalLayout_8.addWidget(self.label_22)
-        self.textEdit_11 = QtWidgets.QTextEdit(self.groupBox)
-        self.textEdit_11.setMaximumSize(QtCore.QSize(16777215, 40))
-        self.textEdit_11.setObjectName("textEdit_11")
-        self.horizontalLayout_8.addWidget(self.textEdit_11)
-        self.pushButton_choose_road = QtWidgets.QPushButton(self.groupBox)
-        self.pushButton_choose_road.setMinimumSize(QtCore.QSize(0, 50))
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        font.setBold(True)
-        font.setWeight(75)
-        self.pushButton_choose_road.setFont(font)
-        self.pushButton_choose_road.setStyleSheet("QPushButton:hover{\n"
+        self.pushButton_14.setFont(font)
+        self.pushButton_14.setStyleSheet("QPushButton:hover{\n"
 "\n"
 "background-color:rgb(211, 211, 211)}  \n"
 "QPushButton\n"
@@ -375,12 +359,46 @@ class Ui_mainWindow(object):
 "                     }\n"
 "")
         icon6 = QtGui.QIcon()
-        icon6.addPixmap(QtGui.QPixmap("image/road_48px_1232324_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_choose_road.setIcon(icon6)
-        self.pushButton_choose_road.setIconSize(QtCore.QSize(25, 25))
-        self.pushButton_choose_road.setObjectName("pushButton_choose_road")
-        self.horizontalLayout_8.addWidget(self.pushButton_choose_road)
-        self.gridLayout_5.addWidget(self.groupBox, 1, 0, 1, 1)
+        icon6.addPixmap(QtGui.QPixmap("image/brand_brands_excel_logo_48px_1212964_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_14.setIcon(icon6)
+        self.pushButton_14.setIconSize(QtCore.QSize(25, 25))
+        self.pushButton_14.setObjectName("pushButton_14")
+        self.horizontalLayout_15.addWidget(self.pushButton_14)
+        self.pushButton_13 = QtWidgets.QPushButton(self.tab_2)
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.pushButton_13.setFont(font)
+        self.pushButton_13.setStyleSheet("QPushButton:hover{\n"
+"\n"
+"background-color:rgb(211, 211, 211)}  \n"
+"QPushButton\n"
+"                     {text-align : center;\n"
+"                     border-color: gray;\n"
+"                     padding:8px;\n"
+"                     font:bold;\n"
+"                     border-width: 1px;\n"
+"                     border-radius: 5px;\n"
+"                     border-style: outset;\n"
+"                     }\n"
+"")
+        self.pushButton_13.setIcon(icon2)
+        self.pushButton_13.setIconSize(QtCore.QSize(25, 25))
+        self.pushButton_13.setObjectName("pushButton_13")
+        self.horizontalLayout_15.addWidget(self.pushButton_13)
+        self.gridLayout_5.addLayout(self.horizontalLayout_15, 4, 0, 1, 1)
+        self.label_3 = QtWidgets.QLabel(self.tab_2)
+        self.label_3.setMinimumSize(QtCore.QSize(0, 0))
+        font = QtGui.QFont()
+        font.setFamily("黑体")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setWordWrap(True)
+        self.label_3.setObjectName("label_3")
+        self.gridLayout_5.addWidget(self.label_3, 0, 0, 1, 1)
         self.groupBox_8 = QtWidgets.QGroupBox(self.tab_2)
         self.groupBox_8.setMaximumSize(QtCore.QSize(16777215, 100))
         self.groupBox_8.setTitle("")
@@ -513,70 +531,6 @@ class Ui_mainWindow(object):
         self.textBrowser_6.setObjectName("textBrowser_6")
         self.verticalLayout_4.addWidget(self.textBrowser_6)
         self.gridLayout_5.addWidget(self.groupBox_10, 6, 0, 1, 1)
-        self.label_3 = QtWidgets.QLabel(self.tab_2)
-        self.label_3.setMinimumSize(QtCore.QSize(0, 0))
-        font = QtGui.QFont()
-        font.setFamily("黑体")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.label_3.setFont(font)
-        self.label_3.setWordWrap(True)
-        self.label_3.setObjectName("label_3")
-        self.gridLayout_5.addWidget(self.label_3, 0, 0, 1, 1)
-        self.horizontalLayout_15 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_15.setObjectName("horizontalLayout_15")
-        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_15.addItem(spacerItem1)
-        self.pushButton_14 = QtWidgets.QPushButton(self.tab_2)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.pushButton_14.setFont(font)
-        self.pushButton_14.setStyleSheet("QPushButton:hover{\n"
-"\n"
-"background-color:rgb(211, 211, 211)}  \n"
-"QPushButton\n"
-"                     {text-align : center;\n"
-"                     border-color: gray;\n"
-"                     padding:8px;\n"
-"                     font:bold;\n"
-"                     border-width: 1px;\n"
-"                     border-radius: 5px;\n"
-"                     border-style: outset;\n"
-"                     }\n"
-"")
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(QtGui.QPixmap("image/brand_brands_excel_logo_48px_1212964_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_14.setIcon(icon8)
-        self.pushButton_14.setIconSize(QtCore.QSize(25, 25))
-        self.pushButton_14.setObjectName("pushButton_14")
-        self.horizontalLayout_15.addWidget(self.pushButton_14)
-        self.pushButton_13 = QtWidgets.QPushButton(self.tab_2)
-        font = QtGui.QFont()
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.pushButton_13.setFont(font)
-        self.pushButton_13.setStyleSheet("QPushButton:hover{\n"
-"\n"
-"background-color:rgb(211, 211, 211)}  \n"
-"QPushButton\n"
-"                     {text-align : center;\n"
-"                     border-color: gray;\n"
-"                     padding:8px;\n"
-"                     font:bold;\n"
-"                     border-width: 1px;\n"
-"                     border-radius: 5px;\n"
-"                     border-style: outset;\n"
-"                     }\n"
-"")
-        self.pushButton_13.setIcon(icon2)
-        self.pushButton_13.setIconSize(QtCore.QSize(25, 25))
-        self.pushButton_13.setObjectName("pushButton_13")
-        self.horizontalLayout_15.addWidget(self.pushButton_13)
-        self.gridLayout_5.addLayout(self.horizontalLayout_15, 4, 0, 1, 1)
         self.groupBox_2 = QtWidgets.QGroupBox(self.tab_2)
         font = QtGui.QFont()
         font.setPointSize(11)
@@ -604,6 +558,53 @@ class Ui_mainWindow(object):
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_13.addItem(spacerItem2)
         self.gridLayout_5.addWidget(self.groupBox_2, 2, 0, 1, 1)
+        self.groupBox = QtWidgets.QGroupBox(self.tab_2)
+        self.groupBox.setTitle("")
+        self.groupBox.setObjectName("groupBox")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.groupBox)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.label_22 = QtWidgets.QLabel(self.groupBox)
+        self.label_22.setMinimumSize(QtCore.QSize(0, 0))
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_22.setFont(font)
+        self.label_22.setObjectName("label_22")
+        self.horizontalLayout_8.addWidget(self.label_22)
+        self.textEdit_11 = QtWidgets.QTextEdit(self.groupBox)
+        self.textEdit_11.setEnabled(False)
+        self.textEdit_11.setMaximumSize(QtCore.QSize(16777215, 40))
+        self.textEdit_11.setObjectName("textEdit_11")
+        self.horizontalLayout_8.addWidget(self.textEdit_11)
+        self.pushButton_choose_road = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton_choose_road.setMinimumSize(QtCore.QSize(0, 50))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.pushButton_choose_road.setFont(font)
+        self.pushButton_choose_road.setStyleSheet("QPushButton:hover{\n"
+"\n"
+"background-color:rgb(211, 211, 211)}  \n"
+"QPushButton\n"
+"                     {text-align : center;\n"
+"                     border-color: gray;\n"
+"                     padding:8px;\n"
+"                     font:bold;\n"
+"                     border-width: 1px;\n"
+"                     border-radius: 5px;\n"
+"                     border-style: outset;\n"
+"                     }\n"
+"")
+        icon8 = QtGui.QIcon()
+        icon8.addPixmap(QtGui.QPixmap("image/road_48px_1232324_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_choose_road.setIcon(icon8)
+        self.pushButton_choose_road.setIconSize(QtCore.QSize(25, 25))
+        self.pushButton_choose_road.setObjectName("pushButton_choose_road")
+        self.horizontalLayout_8.addWidget(self.pushButton_choose_road)
+        self.gridLayout_5.addWidget(self.groupBox, 1, 0, 1, 1)
         icon9 = QtGui.QIcon()
         icon9.addPixmap(QtGui.QPixmap("image/gear_48px_1180534_easyicon.net.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.tabWidget.addTab(self.tab_2, icon9, "")
@@ -652,16 +653,14 @@ class Ui_mainWindow(object):
         self.groupBox_7.setTitle(_translate("mainWindow", "日志"))
         self.pushButton_4.setText(_translate("mainWindow", "系统日志(点击收缩并清空)"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("mainWindow", "数据采集"))
-        self.label_22.setText(_translate("mainWindow", "指定道路"))
-        self.pushButton_choose_road.setText(_translate("mainWindow", "选择道路"))
+        self.pushButton_14.setText(_translate("mainWindow", "生成"))
+        self.pushButton_13.setText(_translate("mainWindow", "停止"))
+        self.label_3.setText(_translate("mainWindow", "    提示：该页面用于启动数据生成，选择指定道路，配置拥堵时长权重（默认为0.2）后点击生成，即可生产拥堵情况excel表格，也可进入地图展示标签查看。"))
         self.pushButton_7.setText(_translate("mainWindow", "选择文件夹"))
         self.label_21.setText(_translate("mainWindow", "数据所在路径"))
         self.label_17.setText(_translate("mainWindow", "进度："))
         self.groupBox_10.setTitle(_translate("mainWindow", "日志"))
         self.pushButton_8.setText(_translate("mainWindow", "系统日志(点击收缩并清空)"))
-        self.label_3.setText(_translate("mainWindow", "    提示：该页面用于启动数据生成，选择指定道路，配置拥堵时长权重（默认为0.2）后点击生成，即可生产拥堵情况excel表格，也可进入地图展示标签查看。"))
-        self.pushButton_14.setText(_translate("mainWindow", "生成"))
-        self.pushButton_13.setText(_translate("mainWindow", "停止"))
         self.groupBox_2.setTitle(_translate("mainWindow", "权重设置"))
         self.label_24.setText(_translate("mainWindow", "拥堵时长权重（0-1）"))
         self.textEdit_timeweight.setHtml(_translate("mainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -669,6 +668,13 @@ class Ui_mainWindow(object):
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'SimSun\'; font-size:11pt; font-weight:600; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">0.2</p></body></html>"))
+        self.label_22.setText(_translate("mainWindow", "指定道路"))
+        self.textEdit_11.setHtml(_translate("mainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'SimSun\'; font-size:11pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">全部</p></body></html>"))
+        self.pushButton_choose_road.setText(_translate("mainWindow", "选择道路"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("mainWindow", "数据处理"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("mainWindow", "地图展示"))
 
