@@ -1,7 +1,7 @@
 import os
 # 分析的数据包含的天数
 DATA_CONTAIN_DAYS='data_contain_days'
-WORK_TIME = 'worktime'
+WORK_TIME = 'work_time'
 LEFT_POINT = 'left_point'
 RIGHT_POINT = 'right_point'
 #间隔时间
@@ -38,15 +38,13 @@ JSON_DISTANCE='distance'
 JSON_PATHS='paths'
 JSON_TYPE='type'
 JSON_JAM_TIME='jam_time'
-
 JSON_TEMPLATE = ['no', 'start_point', 'start_place', 'end_point'
     , 'end_place', 'day', 'distance', 'paths', 'type', 'jam_time']
+WRONG_POINT_ARR=[125,]
 
 CWD = os.getcwd()
 APP_ImagePath = CWD + os.sep + 'image'
 APP_HtmlPath = CWD + os.sep + 'lib'
-
-DATA_XLS = 'data.xls'
 GAODE_KEY = '2be4c36d53e74e0c585326d62d6fe6e3'
 
 

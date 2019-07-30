@@ -26,7 +26,6 @@ setup(name=product_name,
                },
       executables=[Executable("main.py", base=base,
                               targetName='Transport.exe',
-                              icon='image/app.ico',
-
-                              )
+                              icon='image/app.ico'
+                   )
                    ])

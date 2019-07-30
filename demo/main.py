@@ -1,7 +1,6 @@
 import os
 import sys
-
-os.system("pyuic5 -o  mainw.py  main.ui")
+# os.system("pyuic5 -o  mainw.py  main.ui")
 from PyQt5.QtSvg import QSvgWidget
 from mainw import Ui_mainWindow
 from utils import *
@@ -188,9 +187,6 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
             print(GLOBAL_CONFIG)
             add_tb_log(self.textBrowser_6, "程序开始运行...")
             add_tb_log(self.textBrowser_6, GLOBAL_CONFIG)
-
-            # else:
-
             self.progressBar_3.setMaximum(0)
             self.pushButton_14.setEnabled(False)
             if self.gen_data_thread:
@@ -208,7 +204,7 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
             GLOBAL_CONFIG[THREAD_FLAG] = False
             self.pushButton_14.setEnabled(True)
             self.progressBar_3.setMaximum(100)
-        if flag == ERROR:
+        elif flag == ERROR:
             add_tb_log(self.textBrowser_6, "系统崩溃，请查明原因")
             self.echo("系统崩溃，请查明原因")
             self.gen_data_thread.terminate()

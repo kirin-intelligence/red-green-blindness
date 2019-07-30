@@ -79,7 +79,6 @@ class CollectThread(QThread):
 
             x_list = [x1 + i * x_step for i in range(x_count)]
             y_list = [y1 - i * y_step for i in range(y_count)]
-            print(x_list, y_list)
             point_lst = [(x, y) for x in x_list for y in y_list]
             # for sp in config.special_point:
             #     point_lst.append(sp)
@@ -104,6 +103,7 @@ class CollectThread(QThread):
                 t.join()
         except Exception as e:
             self.sinOut.emit(f"生成错误，请检查：{e}")
+            self.sinOut.emit(ERROR)
 
 
 class GenDataThread(QThread):
@@ -156,6 +156,7 @@ class GenDataThread(QThread):
                             pass
             except Exception as e:
                 self.sinOut.emit(f"出现错误，请检查配置是否正确{str(e)}")
+                self.sinOut.emit(ERROR)
 
             # x[0]起始点,x[1]终点 ,x[2]时间,  ?x[3]路程 ,x[4]当前所在时间点，x[5]中点
 
@@ -170,11 +171,11 @@ class GenDataThread(QThread):
             self.total_ans.extend(new_ans)
         self.total_ans.sort(key=lambda x: GLOBAL_CONFIG[TIME_WEIGHT] * x[2] + (1 - GLOBAL_CONFIG[TIME_WEIGHT]) * x[3],
                             reverse=True)
-        print(self.total_ans)
+        print(self.total_ans[:10])
 
         self.datetime_list = sorted(self.datetime_list, key=lambda x: x.timestamp())
         data_contant_day = self.datetime_list[-1] - self.datetime_list[0]
-        self.sinOut.emit(f"数据生成完成，一共包含：{data_contant_day.days}天，每天时间点为： {GLOBAL_CONFIG[WORK_TIME]} ")
+        self.sinOut.emit(f"数据生成完成，一共包含：{data_contant_day.days}天。 ")
 
     def write_to_excel(self):
         json_data_arr = []
@@ -198,6 +199,8 @@ class GenDataThread(QThread):
             if no % 100 == 0:
                 self.sinOut.emit(f"当前写入：{start_place}...")
             distance, paths = get_right_steps(start_point, end_point, mid_point)
+            if no in WRONG_POINT_ARR:
+                distance, paths=get_line_road(start_point,end_point)
             json_data[JSON_NO] = no
             json_data[JSON_DISTANCE] = distance
             json_data[JSON_JAM_TIME] = jam_time
@@ -246,7 +249,9 @@ class GenDataThread(QThread):
             self.analyse_map()
             self.write_to_excel()
         except Exception as e:
-            self.sinOut.emit(f"生产错误，请查验：{e}")
+
+            self.sinOut.emit(f"生成错误，请检查：{e}")
+            self.sinOut.emit(ERROR)
 
         # except Exception as e:
         #     print(e)
@@ -273,8 +278,6 @@ def get_place(point):
 
 
 def get_driving_data(start_point, end_point, mid_point):
-    # TODO
-    # waypoint
 
     url = f"https://restapi.amap.com/v3/direction/driving?origin={start_point[0]},{start_point[1]}" \
         f"&destination={end_point[0]},{end_point[1]}&strategy=2&waypoints={mid_point[0]},{mid_point[1]}" \
@@ -307,7 +310,7 @@ def get_right_steps(s_point, e_point, mid_point):
         right_dis = dis_second
 
     new_polylines = []
-    if right_dis > 700:
+    if right_dis > 500:
         return get_line_road(s_point, e_point)
     # elif "左转" in str(right_steps) or "右转" in str(right_steps):
     #     return get_line_road(s_point, e_point)
