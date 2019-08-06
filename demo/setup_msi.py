@@ -12,8 +12,8 @@ build_exe_options = {
 base = None
 if sys.platform == "win32":
     base = "win32gui"
-product_name = u'交通拥堵分析系统'.encode('gbk')
-exec_name = u'交通拥堵分析系统.exe'.encode('gbk')
+product_name = u'全自动交通拥堵点识别和评价系统'.encode('gbk')
+exec_name = u'全自动交通拥堵点识别和评价系统.exe'.encode('gbk')
 product_name='Transport'
 exec_name='Transport'
 shortcut_table = [

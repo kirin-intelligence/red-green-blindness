@@ -10,13 +10,12 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QSize
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-# from PyQtWebEngine
 from PyQt5.QtWidgets import QFileDialog, QInputDialog, QDesktopWidget, \
     QApplication, QMainWindow, QMessageBox, QVBoxLayout, QDialog, QLabel
 from constant import *
 from urllib.request import urlopen
 
-from gen_data_util import background_worker, run_rgb, report, cal_length, np
+from gen_data_util import background_worker, run_rgb, report, cal_length, np, reflush_main_road, reflush_not_main_road
 
 
 class MapWindow(QDialog):
@@ -25,7 +24,7 @@ class MapWindow(QDialog):
     def __init__(self, parent=None):
         super(MapWindow, self).__init__(parent)
         self.label = QLabel(self)
-        self.setWindowTitle("交通拥堵分析系统")
+        self.setWindowTitle(APP_NAME)
         self.resize(QSize(1400, 900))
         layout = QVBoxLayout(self)
         self.webview = QWebEngineView(self)
@@ -66,7 +65,7 @@ class CollectThread(QThread):
         try:
             GLOBAL_CONFIG[THREAD_FLAG] = True
             # TODO
-            GLOBAL_CONFIG[DATA_DIR] = 'data/'
+            GLOBAL_CONFIG[DATA_DIR] = 'data'+os.sep
             # 左下角
             x1 = float(GLOBAL_CONFIG[LEFT_POINT][0])
             y1 = float(GLOBAL_CONFIG[LEFT_POINT][1])
@@ -114,17 +113,18 @@ class GenDataThread(QThread):
         # 设置工作状态与初始num数值
         self.working = True
         self.num = 0
-        self.Hotmap_DIR = {}
-        self.total_ans = []
-        self.count_DIR = {}
         self.datetime_list = []
+        self.final_ans = []
+        self.progress = 10
 
     def __del__(self):
         # 线程状态改变与线程终止
         self.working = False
         self.wait()
 
-    def gen_data(self):
+    def gen_data(self, date_time_arr):
+        Hotmap_DIR = {}
+        count_DIR = {}
         for root, dirs, files in os.walk(GLOBAL_CONFIG[DATA_DIR], topdown=False):
             # if (current_time >= date_begin_time) and (current_time <= date_end_time):
             try:
@@ -134,108 +134,105 @@ class GenDataThread(QThread):
                                                      int(date_time.split("_")[2]),
                                                      int(date_time.split("_")[3]))
                     self.datetime_list.append(current_time)
-
-                self.sinOut.emit(f"当前正在处理目录为：{root}的数据")
-
-                for name in files:
-                    if name.endswith("npz"):
-                        if not GLOBAL_CONFIG[THREAD_FLAG]:
-                            exit()
-                        try:
-                            # 添加时间
-                            dir_string = name.split("_")[4] + "_" + name.split("_")[5]
-                            dir_string = dir_string[:-4]
-                            X = np.load(os.path.join(root, name))
-                            if dir_string in self.Hotmap_DIR.keys():
-                                self.Hotmap_DIR[dir_string] += X['arr_1']
-                                self.count_DIR[dir_string] += X['arr_0']
-                            else:
-                                self.Hotmap_DIR[dir_string] = X['arr_1']
-                                self.count_DIR[dir_string] = X['arr_0']
-                        except:
-                            pass
+                    if int(date_time.split("_")[3]) in date_time_arr:
+                        self.sinOut.emit(f"当前正在处理目录为：{root}的数据")
+                        for name in files:
+                            if name.endswith("npz"):
+                                if not GLOBAL_CONFIG[THREAD_FLAG]:
+                                    exit()
+                                try:
+                                    # 添加时间
+                                    dir_string = name.split("_")[4] + "_" + name.split("_")[5]
+                                    dir_string = dir_string[:-4]
+                                    X = np.load(os.path.join(root, name))
+                                    if dir_string in Hotmap_DIR.keys():
+                                        Hotmap_DIR[dir_string] += X['arr_1']
+                                        count_DIR[dir_string] += X['arr_0']
+                                    else:
+                                        Hotmap_DIR[dir_string] = X['arr_1']
+                                        count_DIR[dir_string] = X['arr_0']
+                                except:
+                                    pass
             except Exception as e:
                 self.sinOut.emit(f"出现错误，请检查配置是否正确{str(e)}")
                 self.sinOut.emit(ERROR)
+        return Hotmap_DIR, count_DIR
+        # x[0]起始点,x[1]终点 ,x[2]时间,  ?x[3]路程 ,x[4]当前所在时间点，x[5]中点
 
-            # x[0]起始点,x[1]终点 ,x[2]时间,  ?x[3]路程 ,x[4]当前所在时间点，x[5]中点
-
-    def analyse_map(self):
-        for k in self.Hotmap_DIR:
+    def analyse_map(self, date_type, Hotmap_DIR, count_DIR):
+        total_ans = []
+        # 因为刚进来就是10了，出去是98，然后要两次analyse，所以是98-10 //2
+        each_progress = 44 / len(Hotmap_DIR)
+        for k in Hotmap_DIR:
+            self.progress += each_progress
+            self.sinOut.emit(str(int(self.progress)))
             if not GLOBAL_CONFIG[THREAD_FLAG]:
-                exit()
-            GPS_float = (float(k.split('_')[0]), float(k.split('_')[1]))
-            final, red, yellow, green = run_rgb(self.Hotmap_DIR[k], self.count_DIR[k])
-            ans, point_map = report(final, GPS_float, self.Hotmap_DIR[k])
+                return False
+            GPS_float = float(k.split('_')[0]), float(k.split('_')[1])
+            final, red, yellow, green = run_rgb(Hotmap_DIR[k], count_DIR[k])
+            ans = report(final, GPS_float, Hotmap_DIR[k])
             new_ans = cal_length(ans)
-            self.total_ans.extend(new_ans)
-        self.total_ans.sort(key=lambda x: GLOBAL_CONFIG[TIME_WEIGHT] * x[2] + (1 - GLOBAL_CONFIG[TIME_WEIGHT]) * x[3],
-                            reverse=True)
-        print(self.total_ans[:10])
+            total_ans.extend(new_ans)
+            if GLOBAL_CONFIG[GEN_ROAD_TYPE] == FAST_ROAD:
+                total_ans = reflush_main_road(total_ans)
+            elif GLOBAL_CONFIG[GEN_ROAD_TYPE] == COMMON_ROAD:
+                total_ans = reflush_not_main_road(total_ans)
+        if total_ans:
+            for x in total_ans:
+                x.append(date_type)
+            print(total_ans[:5])
+            self.datetime_list = sorted(self.datetime_list, key=lambda x: x.timestamp())
+            data_contant_day = self.datetime_list[-1] - self.datetime_list[0]
+            self.sinOut.emit(f"一共包含：{data_contant_day.days + 1}天。 ")
 
-        self.datetime_list = sorted(self.datetime_list, key=lambda x: x.timestamp())
-        data_contant_day = self.datetime_list[-1] - self.datetime_list[0]
-        self.sinOut.emit(f"数据生成完成，一共包含：{data_contant_day.days}天。 ")
+        return total_ans
 
     def write_to_excel(self):
         json_data_arr = []
         # 开始生成json文件，并且写入excel
         now = QDateTime.currentDateTime().toString(Qt.ISODate)
         now = now.replace(':', '-')
-        file_path = GLOBAL_CONFIG[EXCEL_DIR] + os.sep + now + '-data.xlsx'
+        file_path= gen_date_filename(GLOBAL_CONFIG[EXCEL_DIR] ,'data.xlsx')
         self.sinOut.emit(f"开始写入EXCEL文件:{file_path}...")
         rows_data = []
-        for no, point in enumerate(self.total_ans):
+        for no, point in enumerate(self.final_ans):
+            try:
+                json_data = {}
+                start_point = point[0][:-1]
+                end_point = point[1][:-1]
+                jam_type = point[0][-1]
+                mid_point = point[4]
+                date_type = point[5]
+                # 乘以数据的天数，转换为小时。
+                jam_time = round(float(point[2]) / 60.0 * 2.0, 1)
+                start_place = get_place(start_point)
+                end_place = get_place(end_point)
+                if no % 100 == 0:
+                    self.sinOut.emit(f"当前写入：{start_place}...")
+                distance, paths = get_right_steps(start_point, end_point, mid_point)
+                # if no in WRONG_POINT_ARR:
+                #     distance, paths = get_line_road(start_point, end_point)
+                json_data[JSON_NO] = no
+                json_data[JSON_DISTANCE] = distance
+                json_data[JSON_JAM_TIME] = jam_time
+                json_data[JSON_START_POINT] = start_point
+                json_data[JSON_START_PLACE] = start_place
+                json_data[JSON_END_POINT] = end_point
+                json_data[JSON_END_PLACE] = end_place
+                json_data[JSON_PATHS] = paths
+                # TODO
+                json_data[JSON_DAY] = date_type
+                json_data[JSON_TYPE] = jam_type
+                # for template in JSON_TEMPLATE:
+                #     assert (json_data[template])
 
-            json_data = {}
-            start_point = point[0][:-1]
-            end_point = point[1][:-1]
-            jam_type = point[0][-1]
-            mid_point = point[4]
-            # 乘以数据的天数，转换为小时。
-            jam_time = round(float(point[2]) / 60.0, 1)
-            start_place = get_place(start_point)
-            end_place = get_place(end_point)
-            if no % 100 == 0:
-                self.sinOut.emit(f"当前写入：{start_place}...")
-            distance, paths = get_right_steps(start_point, end_point, mid_point)
-            if no in WRONG_POINT_ARR:
-                distance, paths=get_line_road(start_point,end_point)
-            json_data[JSON_NO] = no
-            json_data[JSON_DISTANCE] = distance
-            json_data[JSON_JAM_TIME] = jam_time
-            json_data[JSON_START_POINT] = start_point
-            json_data[JSON_START_PLACE] = start_place
-            json_data[JSON_END_POINT] = end_point
-            json_data[JSON_END_PLACE] = end_place
-            json_data[JSON_PATHS] = paths
-            # TODO
-            json_data[JSON_DAY] = 'evening'
-            json_data[JSON_TYPE] = jam_type
-            # for template in JSON_TEMPLATE:
-            #     assert (json_data[template])
-
-            if jam_type == 'red':
-                color = '红色'
-            elif jam_type == 'yellow':
-                color = '橙黄'
-            else:
-                color = '黄色'
-            row_data = [no, start_place, str(start_point).replace('[', '').replace(']', ''), end_place,
-                        str(end_point).replace('[', '').replace(']', ''), distance,
-                        color, jam_time]
-
-            rows_data.append(row_data)
-            json_data_arr.append(json_data)
+                json_data_arr.append(json_data)
+            except Exception as e:
+                pass
         with open(JSON_FILE_PATH, "w") as json_file:
             # ensure_ascii =
             json.dump(json_data_arr, json_file)
-        workbook = xw.Book()
-        worksheet = workbook.sheets[0]
-        title_row = [['序号', '起点', '起点经纬度', '终点', '终点经纬度', '长度', '拥堵情况（颜色）', '拥堵时间（小时）']]
-        worksheet.range('A1').value = title_row
-        worksheet.range('A2').value = rows_data
-        workbook.save(file_path)
+
         # workbook.close()
         # os.system(f'start {file_path}')
         # 保存
@@ -244,20 +241,29 @@ class GenDataThread(QThread):
 
     def run(self):
         GLOBAL_CONFIG[THREAD_FLAG] = True
-        try:
-            self.gen_data()
-            self.analyse_map()
-            self.write_to_excel()
-        except Exception as e:
+        self.sinOut.emit("10")
+        Hotmap_DIR, count_DIR = self.gen_data(GLOBAL_CONFIG[MORNING])
+        self.final_ans = self.analyse_map(MORNING, Hotmap_DIR, count_DIR)
+        self.sinOut.emit("早高峰数据生成完成， ")
+        Hotmap_DIR, count_DIR = self.gen_data(GLOBAL_CONFIG[EVENING])
+        self.final_ans += self.analyse_map(EVENING, Hotmap_DIR, count_DIR)
+        self.sinOut.emit("晚高峰数据生成完成， ")
+        self.sinOut.emit("99")
+        if self.final_ans:
+            self.sinOut.emit(SUCCESS)
+        else:
+            self.sinOut.emit("数据生成完成，没有发现拥堵点。 ")
+            self.sinOut.emit(SUCCESS)
 
-            self.sinOut.emit(f"生成错误，请检查：{e}")
-            self.sinOut.emit(ERROR)
 
-        # except Exception as e:
-        #     print(e)
-        #     self.sinOut.emit(f"系统内存不足，请减少数据内容"
-        #                      f"{str(e)}")
-        #     self.sinOut.emit(ERROR)
+def is_float(point):
+    return 0.0 < point < 1.0
+
+
+def gen_date_filename(dir, filename):
+    now = QDateTime.currentDateTime().toString(Qt.ISODate)
+    now = now.replace(':', '-')
+    return dir + os.sep + now +'-'+ filename
 
 
 def get_current_time():
@@ -265,8 +271,9 @@ def get_current_time():
     return now
 
 
-def add_tb_log(textBrowser, value):
-    textBrowser.append(f"当前时间：{get_current_time()} ----- {str(value)}")
+def write_to_log(log_file, value):
+    with open(log_file,'a', encoding='utf8')as f:
+        f.write(f"当前时间：{get_current_time()} ----- {str(value)}\n")
 
 
 def get_place(point):
@@ -278,7 +285,6 @@ def get_place(point):
 
 
 def get_driving_data(start_point, end_point, mid_point):
-
     url = f"https://restapi.amap.com/v3/direction/driving?origin={start_point[0]},{start_point[1]}" \
         f"&destination={end_point[0]},{end_point[1]}&strategy=2&waypoints={mid_point[0]},{mid_point[1]}" \
         f"&extension=all&key={GAODE_KEY}"
@@ -322,10 +328,3 @@ def get_right_steps(s_point, e_point, mid_point):
             new_point = [float(p) for p in point]
             new_polylines.append(new_point)
     return right_dis, new_polylines
-
-
-def is_weekendday():
-    dayOfWeek = datetime.datetime.now().weekday()
-    if dayOfWeek < 5:
-        return False
-    return True

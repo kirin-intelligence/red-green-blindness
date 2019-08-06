@@ -1,5 +1,6 @@
 import os
 import sys
+from PyQt5.QtWidgets import QTableWidgetItem
 # os.system("pyuic5 -o  mainw.py  main.ui")
 from PyQt5.QtSvg import QSvgWidget
 from mainw import Ui_mainWindow
@@ -16,20 +17,24 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
         self.setTab1()
         self.setTab2()
         self.setTab3()
+        self.setTab4()
         self.gen_data_thread = None
         self.collect_thread = None
-        # self.tabWidget.setCurrentIndex(0)
+        self.tab_1_log = gen_date_filename(APP_LogPath, "数据采集日志.txt")
+        self.tab_2_log =gen_date_filename(APP_LogPath, "数据处理日志.txt")
+
+    # self.tabWidget.setCurrentIndex(0)
 
     def center(self):  # 实现窗体在屏幕中央
-        screen = QDesktopWidget().screenGeometry()  # QDesktopWidget为一个类，调用screenGeometry函数获得屏幕的尺寸
+        screen = QDesktopWidget().screenGeometry()
         size = self.geometry()  # 同上
-        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 4)
 
     def setTab1(self):
         self.pushButton.clicked.connect(self.start_collect)
         self.pushButton_2.clicked.connect(lambda: self.collect_progress(STOP))
         self.pushButton_9.clicked.connect(self.set_choose_rect_brower)
-        self.pushButton_4.clicked.connect(lambda: self.set_browser_collapse(self.textBrowser_3))
+        # self.pushButton_4.clicked.connect(lambda: self.set_browser_collapse(self.textBrowser_3))
 
     def gen_tab1_config(self):
         # worktime
@@ -38,22 +43,19 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
         if self.checkBox.isChecked():
             GLOBAL_CONFIG[ONLY_WORK_DAY] = True
         if self.radioButton_5.isChecked():
-            if self.textEdit_right_2.toPlainText():
-                GLOBAL_CONFIG[WORK_TIME] = [int(i) for i in self.textEdit_right_2.toPlainText().split()]
+            if self.textEdit.toPlainText():
+                GLOBAL_CONFIG[WORK_TIME] = [int(i) for i in self.textEdit.toPlainText().split()]
             else:
                 self.echo_error('抓取的时间点（小时）为空，请检查')
                 return False
         elif self.radioButton_4.isChecked():
             GLOBAL_CONFIG[WORK_TIME] = [i for i in range(24)]
         elif self.radioButton_3.isChecked():
-            GLOBAL_CONFIG[WORK_TIME] = [i for i in range(7, 10)] + [i for i in range(17, 20)]
+            GLOBAL_CONFIG[WORK_TIME] = [i for i in range(7, 9)] + [i for i in range(17, 19)]
         elif self.radioButton_2.isChecked():
-            GLOBAL_CONFIG[WORK_TIME] = [i for i in range(17, 20)]
+            GLOBAL_CONFIG[WORK_TIME] = [i for i in range(17, 19)]
         elif self.radioButton.isChecked():
-            GLOBAL_CONFIG[WORK_TIME] = [i for i in range(7, 10)]
-        else:
-            self.echo_error('抓取的时间点（小时）为空，请检查')
-            return False
+            GLOBAL_CONFIG[WORK_TIME] = [i for i in range(7, 9)]
 
         if self.textEdit_left.toPlainText():
             # 左下角换到左上角
@@ -74,14 +76,12 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
 
     def start_collect(self):
         if self.gen_tab1_config():
-            print(GLOBAL_CONFIG)
-
-            add_tb_log(self.textBrowser_3, "程序开始运行...")
-            add_tb_log(self.textBrowser_3, GLOBAL_CONFIG)
+            write_to_log(self.tab_1_log, "程序开始运行...")
+            write_to_log(self.tab_1_log, GLOBAL_CONFIG)
             # 初始化
             if self.collect_thread:
                 self.collect_thread.terminate()
-                self.collect_thread=None
+                self.collect_thread = None
             self.collect_thread = CollectThread()
             self.collect_thread.sinOut.connect(self.collect_progress)
             self.collect_thread.start()
@@ -92,22 +92,22 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
     def collect_progress(self, flag):
         # 向列表控件中添加条目
         if flag == STOP:
-            add_tb_log(self.textBrowser_3, "用户终止程序")
+            write_to_log(self.tab_1_log, "用户终止程序")
             self.collect_thread.terminate()
             GLOBAL_CONFIG[THREAD_FLAG] = False
             self.pushButton.setEnabled(True)
             self.progressBar.setMaximum(100)
         elif flag == ERROR:
-            add_tb_log(self.textBrowser_3, "系统发生错误，请检查")
+            write_to_log(self.tab_1_log, "系统发生错误，请检查")
             self.collect_thread.terminate()
             GLOBAL_CONFIG[THREAD_FLAG] = False
             self.pushButton.setEnabled(True)
             self.progressBar.setMaximum(100)
         else:
-            add_tb_log(self.textBrowser_3, flag)
+            write_to_log(self.tab_1_log, flag)
 
     def set_date_time(self):
-        # datetime = QDateTime.currentDateTime()
+        # datetime = Qcommon_roadDateTime.currentDateTime()
         pass
 
     def set_choose_rect_brower(self):
@@ -123,7 +123,6 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
             browser.setVisible(True)
 
     def getRect(self, rect):
-        print(rect)
         if rect:
             leftb = rect.split(' ')[0]
             right = rect.split(' ')[1]
@@ -134,44 +133,69 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
     def setTab2(self):
         self.pushButton_14.clicked.connect(self.start_gen_data)
         self.pushButton_7.clicked.connect(self.choose_data_dir)
-        self.pushButton_8.clicked.connect(lambda: self.set_browser_collapse(self.textBrowser_6))
-        self.pushButton_choose_road.clicked.connect(self.choose_road_dialog)
+        # self.pushButton_choose_road.clicked.connect(self.choose_road_dialog)
         self.pushButton_13.clicked.connect(lambda: self.gen_data_progress(STOP))
+        self.textEdit_red.selectionChanged.connect(self.change_green_threshold)
+        self.textEdit_yellow.selectionChanged.connect(self.change_green_threshold)
+        self.textEdit_green.selectionChanged.connect(self.change_green_threshold)
+
+    def change_green_threshold(self):
+        try:
+            red = float(self.textEdit_red.toPlainText())
+            yellow = float(self.textEdit_yellow.toPlainText())
+            green = float(self.textEdit_green.toPlainText())
+            if is_float(red) and is_float(yellow) and is_float(green):
+                if not red > yellow > green:
+                    self.echo_error("输入错误，红点阈值应该大于黄色大于绿色")
+                    return
+            else:
+                self.echo_error("输入错误 ，需要为(0-1)的小数")
+                return
+
+        except:
+            self.echo_error("输入错误，需要为(0-1)的小数")
+            return
 
     def gen_tab2_config(self):
-        choose_road = self.textEdit_11.toPlainText()
-        if choose_road:
-            GLOBAL_CONFIG[CHOOSE_ROAD] = choose_road
-            # else:
-            #     self.echo_error('输入的道路不存在，请检查')
-            #     return False
-        else:
-            self.echo_error('道路选择不能为空，请检查')
-            return False
-        time_weight = self.textEdit_timeweight.toPlainText()
-        if time_weight:
-            time_weight = float(time_weight)
-            if 0 < time_weight < 1:
-                GLOBAL_CONFIG[TIME_WEIGHT] = float(time_weight)
-            else:
-                self.echo_error('拥堵时长权重值为大于0且小于1的小数，请检查')
-                return False
-        else:
-            self.echo_error('拥堵时长权重不能为空，请检查')
-            return False
+        if self.radioButton_9.isChecked():
+            GLOBAL_CONFIG[GEN_ROAD_TYPE] = ALL_ROAD
+        elif self.radioButton_10.isChecked():
+            GLOBAL_CONFIG[GEN_ROAD_TYPE] = FAST_ROAD
+        elif self.radioButton_11.isChecked():
+            GLOBAL_CONFIG[GEN_ROAD_TYPE] = COMMON_ROAD
+        red_thre = float(self.textEdit_red.toPlainText())
+        yellow_thre = float(self.textEdit_yellow.toPlainText())
+        green_thre = float(self.textEdit_green.toPlainText())
+        GLOBAL_CONFIG[RED_THRESHOLD] = red_thre
+        GLOBAL_CONFIG[YELLOW_THRESHOLD] = yellow_thre
+        GLOBAL_CONFIG[GREEN_THRESHOLD] = green_thre
+
+        # if choose_road:
+        #     GLOBAL_CONFIG[CHOOSE_ROAD] = choose_road
+        #     # else:
+        #     #     self.echo_error('输入的道路不存在，请检查')
+        #     #     return False
+        # else:
+        #     self.echo_error('道路选择不能为空，请检查')
+        #     return False
+        # if self.radioButton_5.isChecked():
+        #     GLOBAL_CONFIG[GEN_DATA_TYPE] = MORNING
+        # elif self.radioButton_6.isChecked():
+        #     GLOBAL_CONFIG[GEN_DATA_TYPE] = EVENING
+        # elif self.radioButton_7.isChecked():
+        #     GLOBAL_CONFIG[GEN_DATA_TYPE] = ALL
+
         data_dir = self.textEdit_7.toPlainText()
         if data_dir:
-            GLOBAL_CONFIG[DATA_DIR] = data_dir
+            if data_dir.endswith(os.sep):
+
+                GLOBAL_CONFIG[DATA_DIR] = data_dir
+            else:
+                GLOBAL_CONFIG[DATA_DIR] = data_dir+os.sep
         else:
             self.echo_error('数据所在路径不能为空，请检查')
             return False
-        dir = QFileDialog.getExistingDirectory(self, "EXCEL文件保存到",
-                                               )
-        if dir:
-            GLOBAL_CONFIG[EXCEL_DIR] = dir
-        else:
-            self.echo_error("excel存储路径不能为空")
-            return False
+
         return True
 
     def choose_road_dialog(self):
@@ -185,42 +209,47 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
     def start_gen_data(self):
         if self.gen_tab2_config():
             print(GLOBAL_CONFIG)
-            add_tb_log(self.textBrowser_6, "程序开始运行...")
-            add_tb_log(self.textBrowser_6, GLOBAL_CONFIG)
-            self.progressBar_3.setMaximum(0)
+            write_to_log(self.tab_2_log, "程序开始运行...")
+            write_to_log(self.tab_2_log, GLOBAL_CONFIG)
             self.pushButton_14.setEnabled(False)
             if self.gen_data_thread:
                 self.gen_data_thread.terminate()
-                self.gen_data_thread=None
-
+                self.gen_data_thread = None
+            self.progressBar_3.setValue(0)
             self.gen_data_thread = GenDataThread()
             self.gen_data_thread.sinOut.connect(self.gen_data_progress)
             self.gen_data_thread.start()
 
     def gen_data_progress(self, flag):
         if flag == STOP:
-            add_tb_log(self.textBrowser_6, "用户终止程序")
+            write_to_log(self.tab_2_log, "用户终止程序")
             self.gen_data_thread.terminate()
             GLOBAL_CONFIG[THREAD_FLAG] = False
             self.pushButton_14.setEnabled(True)
-            self.progressBar_3.setMaximum(100)
+            self.progressBar_3.setValue(0)
+
         elif flag == ERROR:
-            add_tb_log(self.textBrowser_6, "系统崩溃，请查明原因")
+            write_to_log(self.tab_2_log, "系统崩溃，请查明原因")
             self.echo("系统崩溃，请查明原因")
             self.gen_data_thread.terminate()
             GLOBAL_CONFIG[THREAD_FLAG] = False
             self.pushButton_14.setEnabled(True)
-            self.progressBar_3.setMaximum(100)
+            self.progressBar_3.setValue(0)
+
         elif flag == SUCCESS:
-            add_tb_log(self.textBrowser_6, "excel数据文件生成完成,可进入地图展示模块查看")
-            self.echo("excel数据文件生成完成,可进入地图展示模块查看")
+            write_to_log(self.tab_2_log, "数据生成完成，可进入识别或评价标签进行处理")
+            self.echo("数据生成完成，可进入识别或评价标签进行处理")
             self.webview.reload()
             GLOBAL_CONFIG[THREAD_FLAG] = False
             self.pushButton_14.setEnabled(True)
-            self.progressBar_3.setMaximum(100)
+            self.progressBar_3.setValue(100)
+
         else:
-            add_tb_log(self.textBrowser_6, flag)
-            # self.echo("excel数据文件生成成功")
+            try:
+                flag=int(flag)
+                self.progressBar_3.setValue(flag)
+            except:
+                write_to_log(self.tab_2_log, flag)
 
     def choose_data_dir(self):
         dir = QFileDialog.getExistingDirectory(self, "选择数据文件夹",
@@ -250,12 +279,102 @@ class MissevanKit(QMainWindow, Ui_mainWindow):
     def setBrower(self):
         self.webview = QWebEngineView()
         html_path = APP_HtmlPath + os.sep + "index.html"
-        print(html_path)
         self.webview.load(QUrl.fromLocalFile(html_path))
         self.gridLayout_2.addWidget(self.webview)
         self.webview.setVisible(False)
         self.webview.page().loadStarted.connect(self.setLoadStarted)
         self.webview.page().loadFinished.connect(self.setLoadFinished)
+
+    def setTab4(self):
+        self.pushButton_16.clicked.connect(self.export_excel)
+        self.pushButton_15.clicked.connect(self.gen_table)
+
+    def gen_table(self):
+        time_weight = self.textEdit_timeweight.toPlainText()
+        if time_weight:
+            time_weight = float(time_weight)
+        else:
+            self.echo_error('拥堵时长权重不能为空，请检查')
+            return False
+        length_weight = self.textEdit_lengthweight.toPlainText()
+        if length_weight:
+            length_weight = float(length_weight)
+        else:
+            self.echo_error('拥堵距离权重不能为空，请检查')
+            return False
+        # 表格行
+        self.tableWidget.setSortingEnabled(True)
+        self.tableWidget.horizontalHeader().setStyleSheet("background-color: gray")
+        self.tableWidget.setSelectionBehavior(1)
+        self.tableWidget.horizontalHeader().setStretchLastSection(True)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(1)
+        self.tableWidget.setShowGrid(True)
+
+        file = open(JSON_FILE_PATH, 'r', encoding='utf-8')
+        json_datas = json.load(file)
+        time_max = max([float(x['jam_time']) for x in json_datas])
+        length_max = max([float(x['distance']) for x in json_datas])
+        json_datas.sort(
+            key=lambda x: time_weight * float(x['jam_time']) / time_max + length_weight
+                          * float(x['distance']) / length_max, reverse=True)
+        print(json_datas[:3])
+        self.tableWidget.clear()
+        self.tableWidget.setColumnCount(len(TITLE_ROW))
+        self.tableWidget.setRowCount(len(json_datas))
+        self.tableWidget.setHorizontalHeaderLabels(TITLE_ROW)
+        for row_index, json_data in enumerate(json_datas):
+            no = json_data[JSON_NO]
+            distance = json_data[JSON_DISTANCE]
+            jam_time = json_data[JSON_JAM_TIME]
+            start_point = json_data[JSON_START_POINT]
+            start_place = json_data[JSON_START_PLACE]
+            end_point = json_data[JSON_END_POINT]
+            end_place = json_data[JSON_END_PLACE]
+            # TODO
+            date_type = json_data[JSON_DAY]
+            jam_type = json_data[JSON_TYPE]
+            if jam_type == 'red':
+                color = '红色'
+            elif jam_type == 'yellow':
+                color = '橙黄'
+            else:
+                color = '黄色'
+            if date_type == 'morning':
+                day = '早高峰'
+            else:
+                day = '晚高峰'
+            row_data = [no, day, start_place, str(start_point).replace('[', '').replace(']', ''),
+                        end_place, str(end_point).replace('[', '').replace(']', ''), float(distance), color, jam_time]
+            for col_index, item in enumerate(row_data):
+                qitem = QTableWidgetItem()
+                qitem.setTextAlignment(Qt.AlignCenter)
+                # set data好，不然text排序只按字符串排
+                qitem.setData(0, item)
+                self.tableWidget.setItem(row_index, col_index, qitem)
+
+    def export_excel(self):
+        dir = QFileDialog.getExistingDirectory(self, "EXCEL文件保存到")
+        if dir:
+
+            file_path = gen_date_filename(dir, '-拥堵分析.xlsx')
+            workbook = xw.Book()
+            worksheet = workbook.sheets[0]
+            rows = self.tableWidget.rowCount()
+            cols = self.tableWidget.columnCount()
+            rows_data = []
+            for row in range(rows):
+                row_data = []
+                for col in range(cols):
+                    data = self.tableWidget.item(row, col).text()
+                    row_data.append(data)
+                rows_data.append(row_data)
+            worksheet.range('A2').value = rows_data
+            workbook.save(file_path)
+            workbook.close()
+            self.echo(f"导出完成，EXCEL文件所在路径:\n{file_path}")
+        else:
+            self.echo_error("EXCEL文件存储路径不能为空")
+            return False
 
     def echo(self, value):
         '''显示对话框返回值'''

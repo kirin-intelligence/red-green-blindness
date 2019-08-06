@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>900</height>
+    <width>820</width>
+    <height>940</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>交通拥堵分析系统</string>
+   <string>全自动交通拥堵点识别和评价系统</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -70,13 +70,13 @@
       <widget class="QWidget" name="tab">
        <attribute name="icon">
         <iconset>
-         <normaloff>image/Highway_48px_1109853_easyicon.net.png</normaloff>image/Highway_48px_1109853_easyicon.net.png</iconset>
+         <normaloff>image/road.png</normaloff>image/road.png</iconset>
        </attribute>
        <attribute name="title">
         <string>数据采集</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
+        <item row="6" column="0">
          <widget class="QLabel" name="label">
           <property name="minimumSize">
            <size>
@@ -87,20 +87,221 @@
           <property name="font">
            <font>
             <family>黑体</family>
-            <pointsize>12</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
            </font>
           </property>
           <property name="text">
-           <string>    提示：该页面用于启动数据爬取程序，需要输入指定区域左下角的经纬度与右上角的经纬度，也可以直接使用地图选点选择矩形框。默认爬取间隔时间为120秒,时间点3 23（用空格分隔）代表抓取当天凌晨3点和23点的数据</string>
+           <string>    提示：该页面用于数据采集。1、点击地图选取，框出需要爬取数据的矩形区域。2、设置抓取时间段。其中勾选时间点后输入：7 12 21  空格分隔,代表每天7点，12点，晚上9点进行数据抓取。3、设置时间间隔，默认为120秒。4、点击开始，程序自动后台运行。运行日志存放在log文件夹中。</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_background">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>820</width>
+              <height>335</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">#label_background{
+			border-color: gray;
+                 margin:8px;
+			border-width:1px;
+                     border-radius: 6px;
+                     border-style: solid;}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap>image/background.jpg</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="groupBox_4">
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="title">
+           <string>矩形区域配置</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="3" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <item>
+              <widget class="QLabel" name="label_34">
+               <property name="minimumSize">
+                <size>
+                 <width>140</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>微软雅黑</family>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string> 右上角经纬度</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTextEdit" name="textEdit_right">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>1512412</width>
+                 <height>35</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="1">
+            <widget class="QPushButton" name="pushButton_9">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton:hover{
+
+background-color:rgb(211, 211, 211)}  
+QPushButton
+                     {text-align : center;
+                     border-color: gray;
+                     padding:8px;
+                     font:bold;
+                     border-width: 1px;
+                     border-radius: 5px;
+                     border-style: outset;
+                     }
+</string>
+             </property>
+             <property name="text">
+              <string>地图选点</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>image/locate.png</normaloff>image/locate.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>30</width>
+               <height>30</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <property name="spacing">
+              <number>4</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="label_12">
+               <property name="minimumSize">
+                <size>
+                 <width>140</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>微软雅黑</family>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string> 左下角经纬度</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTextEdit" name="textEdit_left">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>1512412</width>
+                 <height>35</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="4" column="0">
          <widget class="QGroupBox" name="groupBox_6">
           <property name="title">
            <string/>
@@ -212,7 +413,7 @@ QPushButton
                </property>
                <property name="icon">
                 <iconset>
-                 <normaloff>image/play_button_48px_1201205_easyicon.net.png</normaloff>image/play_button_48px_1201205_easyicon.net.png</iconset>
+                 <normaloff>image/play.png</normaloff>image/play.png</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -257,7 +458,7 @@ QPushButton
                </property>
                <property name="icon">
                 <iconset>
-                 <normaloff>image/stop_48px_1229026_easyicon.net.png</normaloff>image/stop_48px_1229026_easyicon.net.png</iconset>
+                 <normaloff>image/stop.png</normaloff>image/stop.png</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -272,259 +473,7 @@ QPushButton
           </layout>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="groupBox_4">
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="title">
-           <string>矩形区域配置</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_7">
-           <item row="0" column="0">
-            <layout class="QHBoxLayout" name="horizontalLayout_10">
-             <property name="spacing">
-              <number>4</number>
-             </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="label_12">
-               <property name="minimumSize">
-                <size>
-                 <width>140</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>微软雅黑</family>
-                 <pointsize>11</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string> 左下角经纬度</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QTextEdit" name="textEdit_left">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>1512412</width>
-                 <height>35</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="1" column="1">
-            <widget class="QPushButton" name="pushButton_9">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton:hover{
-
-background-color:rgb(211, 211, 211)}  
-QPushButton
-                     {text-align : center;
-                     border-color: gray;
-                     padding:8px;
-                     font:bold;
-                     border-width: 1px;
-                     border-radius: 5px;
-                     border-style: outset;
-                     }
-</string>
-             </property>
-             <property name="text">
-              <string>地图选点</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>image/map_46.16091954023px_1224917_easyicon.net.png</normaloff>image/map_46.16091954023px_1224917_easyicon.net.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <layout class="QHBoxLayout" name="horizontalLayout_11">
-             <item>
-              <widget class="QLabel" name="label_34">
-               <property name="minimumSize">
-                <size>
-                 <width>140</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>微软雅黑</family>
-                 <pointsize>11</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string> 右上角经纬度</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QTextEdit" name="textEdit_right">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>1512412</width>
-                 <height>35</height>
-                </size>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QGroupBox" name="groupBox_5">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="title">
-           <string>抓取的时间点（小时）</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QCheckBox" name="checkBox">
-             <property name="text">
-              <string>仅工作日</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton">
-             <property name="text">
-              <string>早高峰</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton_2">
-             <property name="text">
-              <string>晚高峰</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton_3">
-             <property name="text">
-              <string>早+晚高峰</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton_4">
-             <property name="text">
-              <string>全天</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="radioButton_5">
-             <property name="text">
-              <string>时间点</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextEdit" name="textEdit_right_2">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>1512412</width>
-               <height>35</height>
-              </size>
-             </property>
-             <property name="placeholderText">
-              <string>2 3 4 5 23 24</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="4" column="0">
+        <item row="5" column="0">
          <widget class="QGroupBox" name="groupBox_3">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -594,79 +543,120 @@ QPushButton
           </layout>
          </widget>
         </item>
-        <item row="5" column="0">
-         <widget class="QGroupBox" name="groupBox_7">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QGroupBox{border:1px ridge gray;margin-top: 1ex;} QGroupBox::title{subcontrol-origin: margin;subcontrol-position:top center;padding:0 3px;}</string>
+        <item row="2" column="0">
+         <widget class="QGroupBox" name="groupBox_5">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
           </property>
           <property name="title">
-           <string>日志</string>
+           <string>抓取时间段</string>
           </property>
-          <layout class="QFormLayout" name="formLayout">
-           <item row="0" column="0">
-            <widget class="QPushButton" name="pushButton_4">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
-             </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QCheckBox" name="checkBox">
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
+               <family>黑体</family>
+               <weight>50</weight>
+               <bold>false</bold>
               </font>
              </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton:hover{
-
-background-color:rgb(211, 211, 211)}  
-QPushButton
-                     {text-align : center;
-                     border-color: gray;
-                     padding:8px;
-                     font:bold;
-                     border-width: 1px;
-                     border-radius: 5px;
-                     border-style: outset;
-                     }
-</string>
-             </property>
              <property name="text">
-              <string>系统日志(点击收缩并清空)</string>
+              <string>仅工作日</string>
              </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>../../../chrmoedownload/play_button_48px_1201205_easyicon.net.png</normaloff>../../../chrmoedownload/play_button_48px_1201205_easyicon.net.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="1" column="0" colspan="2">
-            <widget class="QTextBrowser" name="textBrowser_3">
-             <property name="minimumSize">
+           <item>
+            <widget class="QRadioButton" name="radioButton_4">
+             <property name="font">
+              <font>
+               <family>黑体</family>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>全天</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton">
+             <property name="font">
+              <font>
+               <family>黑体</family>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>早高峰</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_2">
+             <property name="font">
+              <font>
+               <family>黑体</family>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>晚高峰</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_3">
+             <property name="font">
+              <font>
+               <family>黑体</family>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>早晚高峰</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_5">
+             <property name="font">
+              <font>
+               <family>黑体</family>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>时间点</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="textEdit">
+             <property name="maximumSize">
               <size>
-               <width>0</width>
-               <height>0</height>
+               <width>13123</width>
+               <height>40</height>
               </size>
              </property>
             </widget>
@@ -679,14 +669,17 @@ QPushButton
       <widget class="QWidget" name="tab_2">
        <attribute name="icon">
         <iconset>
-         <normaloff>image/gear_48px_1180534_easyicon.net.png</normaloff>image/gear_48px_1180534_easyicon.net.png</iconset>
+         <normaloff>image/manger.png</normaloff>image/manger.png</iconset>
        </attribute>
        <attribute name="title">
         <string>数据处理</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="4" column="0">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="5" column="0">
          <layout class="QHBoxLayout" name="horizontalLayout_15">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
           <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
@@ -729,7 +722,7 @@ QPushButton
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>image/brand_brands_excel_logo_48px_1212964_easyicon.net.png</normaloff>image/brand_brands_excel_logo_48px_1212964_easyicon.net.png</iconset>
+              <normaloff>image/play.png</normaloff>image/play.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -768,7 +761,7 @@ QPushButton
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>image/stop_48px_1229026_easyicon.net.png</normaloff>image/stop_48px_1229026_easyicon.net.png</iconset>
+              <normaloff>image/stop.png</normaloff>image/stop.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -780,7 +773,7 @@ QPushButton
           </item>
          </layout>
         </item>
-        <item row="0" column="0">
+        <item row="7" column="0">
          <widget class="QLabel" name="label_3">
           <property name="minimumSize">
            <size>
@@ -791,21 +784,211 @@ QPushButton
           <property name="font">
            <font>
             <family>黑体</family>
-            <pointsize>12</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+            <kerning>true</kerning>
            </font>
           </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="midLineWidth">
+           <number>0</number>
+          </property>
           <property name="text">
-           <string>    提示：该页面用于启动数据生成，选择指定道路，配置拥堵时长权重（默认为0.2）后点击生成，即可生产拥堵情况excel表格，也可进入地图展示标签查看。</string>
+           <string>    提示：该页面用于数据处理，1、选择指定道路。2、设置拥堵等级阈值，红点比例0.8代表拥堵超过80%的点为红色拥堵点，橙黄点比例0.5代表拥堵超过50%且不超过80%的点为黄色拥堵点。3、选择采集后数据所在文件夹。5、点击生成，即可生成拥堵情况数据，可进入拥堵点识别或拥堵点评价标签查看分析。</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
           </property>
          </widget>
         </item>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>指定道路</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QRadioButton" name="radioButton_10">
+             <property name="text">
+              <string>快速路</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_11">
+             <property name="text">
+              <string>一般路</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_9">
+             <property name="text">
+              <string>所有路段</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QGroupBox" name="groupBox_11">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>拥堵等级阈值(0-1)</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label_25">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>微软雅黑</family>
+               <pointsize>11</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>红点比例</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="textEdit_red">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:11pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0.8&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_26">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>微软雅黑</family>
+               <pointsize>11</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>橙黄点比例</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="textEdit_yellow">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:11pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_27">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>微软雅黑</family>
+               <pointsize>11</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>黄点比例</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTextEdit" name="textEdit_green">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:11pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0.2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item row="3" column="0">
          <widget class="QGroupBox" name="groupBox_8">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -861,7 +1044,7 @@ QPushButton
              </property>
              <property name="icon">
               <iconset>
-               <normaloff>image/folder_48px_1219812_easyicon.net.png</normaloff>image/folder_48px_1219812_easyicon.net.png</iconset>
+               <normaloff>image/folder_1.png</normaloff>image/folder_1.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -895,7 +1078,7 @@ QPushButton
           </layout>
          </widget>
         </item>
-        <item row="5" column="0">
+        <item row="6" column="0">
          <widget class="QGroupBox" name="groupBox_9">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -938,7 +1121,7 @@ QPushButton
               </font>
              </property>
              <property name="text">
-              <string>进度：</string>
+              <string>完成进度：</string>
              </property>
             </widget>
            </item>
@@ -959,101 +1142,42 @@ QPushButton
               <number>0</number>
              </property>
              <property name="textVisible">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
             </widget>
            </item>
           </layout>
          </widget>
         </item>
-        <item row="6" column="0">
-         <widget class="QGroupBox" name="groupBox_10">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>11</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QGroupBox{border:1px ridge gray;margin-top: 1ex;} QGroupBox::title{subcontrol-origin: margin;subcontrol-position:top center;padding:0 3px;}</string>
-          </property>
-          <property name="title">
-           <string>日志</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <item>
-            <widget class="QPushButton" name="pushButton_8">
-             <property name="minimumSize">
-              <size>
-               <width>150</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>300</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton:hover{
-
-background-color:rgb(211, 211, 211)}  
-QPushButton
-                     {text-align : center;
-                     border-color: gray;
-                     padding:8px;
-                     font:bold;
-                     border-width: 1px;
-                     border-radius: 5px;
-                     border-style: outset;
-                     }
-</string>
-             </property>
-             <property name="text">
-              <string>系统日志(点击收缩并清空)</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>../../../chrmoedownload/play_button_48px_1201205_easyicon.net.png</normaloff>../../../chrmoedownload/play_button_48px_1201205_easyicon.net.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>30</width>
-               <height>30</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextBrowser" name="textBrowser_6">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="2" column="0">
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="icon">
+        <iconset>
+         <normaloff>image/mapl.png</normaloff>image/mapl.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>拥堵点识别</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2"/>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="icon">
+        <iconset>
+         <normaloff>image/analyse.png</normaloff>image/analyse.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>拥堵点评价</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
          <widget class="QGroupBox" name="groupBox_2">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>150</height>
+           </size>
+          </property>
           <property name="font">
            <font>
             <pointsize>11</pointsize>
@@ -1067,8 +1191,29 @@ QPushButton
           <property name="alignment">
            <set>Qt::AlignCenter</set>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_13">
-           <item>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="3">
+            <widget class="QLabel" name="label_28">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>微软雅黑</family>
+               <pointsize>11</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>拥堵距离权重</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
             <widget class="QLabel" name="label_24">
              <property name="minimumSize">
               <size>
@@ -1085,11 +1230,11 @@ QPushButton
               </font>
              </property>
              <property name="text">
-              <string>拥堵时长权重（0-1）</string>
+              <string>拥堵时长权重</string>
              </property>
             </widget>
            </item>
-           <item>
+           <item row="0" column="1">
             <widget class="QTextEdit" name="textEdit_timeweight">
              <property name="maximumSize">
               <size>
@@ -1106,54 +1251,8 @@ p, li { white-space: pre-wrap; }
              </property>
             </widget>
            </item>
-           <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string/>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_8">
-           <item>
-            <widget class="QLabel" name="label_22">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>微软雅黑</family>
-               <pointsize>11</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>指定道路</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTextEdit" name="textEdit_11">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
+           <item row="0" column="4">
+            <widget class="QTextEdit" name="textEdit_lengthweight">
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -1165,27 +1264,39 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:11pt; font-weight:600; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;全部&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;0.5&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_choose_road">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>50</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton:hover{
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_15">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton:hover{
 
 background-color:rgb(211, 211, 211)}  
 QPushButton
@@ -1198,36 +1309,98 @@ QPushButton
                      border-style: outset;
                      }
 </string>
-             </property>
-             <property name="text">
-              <string>选择道路</string>
-             </property>
-             <property name="icon">
-              <iconset>
-               <normaloff>image/road_48px_1232324_easyicon.net.png</normaloff>image/road_48px_1232324_easyicon.net.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>25</width>
-               <height>25</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
+            </property>
+            <property name="text">
+             <string>生成</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>image/play.png</normaloff>image/play.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_16">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <italic>false</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton:hover{
+
+background-color:rgb(211, 211, 211)}  
+QPushButton
+                     {text-align : center;
+                     border-color: gray;
+                     padding:8px;
+                     font:bold;
+                     border-width: 1px;
+                     border-radius: 5px;
+                     border-style: outset;
+                     }
+</string>
+            </property>
+            <property name="text">
+             <string>导出</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>image/excel.png</normaloff>image/excel.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>25</width>
+              <height>25</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableWidget"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>黑体</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+            <kerning>true</kerning>
+           </font>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="midLineWidth">
+           <number>0</number>
+          </property>
+          <property name="text">
+           <string>    提示：该页面用于数据处理，1、输入拥堵道路时间和拥堵道路时长的权重（为任意值）。2、点击生成，则显示table。3、点击导出，按照table中的顺序生成excel表格。</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="tab_3">
-       <attribute name="icon">
-        <iconset>
-         <normaloff>image/map_64px_1228276_easyicon.net.png</normaloff>image/map_64px_1228276_easyicon.net.png</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>地图展示</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_2"/>
       </widget>
      </widget>
     </item>

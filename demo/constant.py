@@ -1,53 +1,74 @@
 import os
+
 # 分析的数据包含的天数
-DATA_CONTAIN_DAYS='data_contain_days'
+GLOBAL_CONFIG = {}
+DATA_CONTAIN_DAYS = 'data_contain_days'
 WORK_TIME = 'work_time'
+# 有orning,evening,allm
+GEN_DATA_TYPE = 'gen_data_type'
+# 有fast,common,all
+GEN_ROAD_TYPE = 'gen_road_type'
+COMMON_ROAD='common_road'
+FAST_ROAD='fast_road'
+ALL_ROAD='all_road'
+RED_THRESHOLD='red_threshold'
+YELLOW_THRESHOLD='yellow_threshold'
+GREEN_THRESHOLD='green_threshold'
+
+MORNING = 'morning'
+EVENING = 'evening'
+GLOBAL_CONFIG[MORNING] = [7,8]
+GLOBAL_CONFIG[EVENING] = [17,18]
+
+ALL = 'all'
 LEFT_POINT = 'left_point'
 RIGHT_POINT = 'right_point'
-#间隔时间
+# 间隔时间
 SPACING_TIME = 'spacing_time'
-GLOBAL_CONFIG = {}
 TIME_WEIGHT = 'time_weight'
+LENGTH_WEIGHT = 'length_weight'
+
 SAVE_PATH = 'save_path'
-CHOOSE_ROAD='choose_road'
+CHOOSE_ROAD = 'choose_road'
 THREAD_FLAG = 'thread_flag'
-ROAD_DATAS = ["全部", "德胜门外大街","西外大街","学院路","万泉河路","阜石路","紫竹院路","三环路","二环路"]
+ROAD_DATAS = ["全部", "德胜门外大街", "西外大街", "学院路", "万泉河路", "阜石路", "紫竹院路", "三环路", "二环路"]
 EXCEL_DIR = 'excel_dir'
 
-STOP='stop'
-ERROR='error'
+STOP = 'stop'
+ERROR = 'error'
 SUCCESS = 'success'
 DATA_DIR = 'data_dir'
 # 工作日爬不爬，只爬工作日
-ONLY_WORK_DAY='only_walk_day'
+ONLY_WORK_DAY = 'only_walk_day'
 # dayOfWeek = datetime.datetime.now().weekday()
 # 去掉工作日
-ALPHA = 0.8
-BELTA = 0.5
-GAMA = 0.3
-SOCKET_TIMEOUT = 25
 
-JSON_FILE_PATH='lib/static/data.json'
-JSON_NO='no'
-JSON_START_POINT='start_point'
-JSON_END_POINT='end_point'
-JSON_END_PLACE='end_place'
-JSON_START_PLACE='start_place'
-JSON_DAY='day'
-JSON_DISTANCE='distance'
-JSON_PATHS='paths'
-JSON_TYPE='type'
-JSON_JAM_TIME='jam_time'
+SOCKET_TIMEOUT = 50
+
+JSON_FILE_PATH = 'lib/static/data.json'
+JSON_NO = 'no'
+JSON_START_POINT = 'start_point'
+JSON_END_POINT = 'end_point'
+JSON_END_PLACE = 'end_place'
+JSON_START_PLACE = 'start_place'
+JSON_DAY = 'day'
+JSON_DISTANCE = 'distance'
+JSON_PATHS = 'paths'
+JSON_TYPE = 'type'
+JSON_JAM_TIME = 'jam_time'
 JSON_TEMPLATE = ['no', 'start_point', 'start_place', 'end_point'
     , 'end_place', 'day', 'distance', 'paths', 'type', 'jam_time']
-WRONG_POINT_ARR=[125,]
+WRONG_POINT_ARR = []
 
 CWD = os.getcwd()
 APP_ImagePath = CWD + os.sep + 'image'
 APP_HtmlPath = CWD + os.sep + 'lib'
+APP_LogPath = CWD + os.sep + 'log'
+
 GAODE_KEY = '2be4c36d53e74e0c585326d62d6fe6e3'
-
-
+APP_NAME="全自动交通拥堵点识别和评价系统"
+TITLE_ROW = ['序号', "高峰", '起点', '起点经纬度', '终点', '终点经纬度', '长度', '拥堵情况', '拥堵时间']
+EXCEL_TITLE_ROW = ['序号', "高峰", '起点', '起点经纬度', '终点', '终点经纬度', '长度（米）', '拥堵情况', '拥堵时间（小时）']
 
 Svg_icon_loading = '''<svg width="100%" height="100%" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
     <defs>
