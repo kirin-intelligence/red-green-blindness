@@ -93,7 +93,7 @@
            </font>
           </property>
           <property name="text">
-           <string>    提示：该页面用于数据采集。1、点击地图选取，框出需要爬取数据的矩形区域。2、设置抓取时间段。其中勾选时间点后输入：7 12 21  空格分隔,代表每天7点，12点，晚上9点进行数据抓取。3、设置时间间隔，默认为120秒。4、点击开始，程序自动后台运行。运行日志存放在log文件夹中。</string>
+           <string>    提示：该页面用于数据采集。1、点击地图选点，框出需要爬取数据的矩形区域。2、设置抓取时间段。其中勾选时间点后输入：7 12 21  空格分隔,代表每天7点，12点，晚上9点进行数据抓取。3、设置时间间隔，默认为120秒。4、点击开始，程序自动后台运行。运行日志存放在log文件夹中。</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -425,6 +425,9 @@ QPushButton
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_2">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -734,6 +737,9 @@ QPushButton
           </item>
           <item>
            <widget class="QPushButton" name="pushButton_13">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="font">
              <font>
               <weight>75</weight>
@@ -797,7 +803,7 @@ QPushButton
            <number>0</number>
           </property>
           <property name="text">
-           <string>    提示：该页面用于数据处理，1、选择指定道路。2、设置拥堵等级阈值，红点比例0.8代表拥堵超过80%的点为红色拥堵点，橙黄点比例0.5代表拥堵超过50%且不超过80%的点为黄色拥堵点。3、选择采集后数据所在文件夹。5、点击生成，即可生成拥堵情况数据，可进入拥堵点识别或拥堵点评价标签查看分析。</string>
+           <string>    提示：该页面用于数据处理，1、选择指定道路。2、设置拥堵等级比例，红点比例0.8代表拥堵超过80%的点为红色拥堵点，橙黄点比例0.5代表拥堵超过50%且不超过80%的点为黄色拥堵点。3、选择采集后数据所在文件夹。5、点击生成，即可生成拥堵情况数据，可进入拥堵点识别或拥堵点评价标签查看分析。</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -855,7 +861,7 @@ QPushButton
            </size>
           </property>
           <property name="title">
-           <string>拥堵等级阈值(0-1)</string>
+           <string>拥堵等级比例(0-1)</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -1001,10 +1007,16 @@ p, li { white-space: pre-wrap; }
           <layout class="QGridLayout" name="gridLayout_6">
            <item row="0" column="1">
             <widget class="QTextEdit" name="textEdit_7">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>60</height>
+              </size>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>40</height>
+               <height>60</height>
               </size>
              </property>
             </widget>
@@ -1393,7 +1405,7 @@ QPushButton
            <number>0</number>
           </property>
           <property name="text">
-           <string>    提示：该页面用于数据处理，1、输入拥堵道路时间和拥堵道路时长的权重（为任意值）。2、点击生成，则显示table。3、点击导出，按照table中的顺序生成excel表格。</string>
+           <string>    提示：该页面用于数据处理，1、输入拥堵道路时间和拥堵道路时长的权重（为任意值）。2、点击生成，则显示table。3、点击导出，按照表中的顺序生成excel表格。</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>

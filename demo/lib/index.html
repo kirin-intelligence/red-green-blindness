@@ -22,6 +22,12 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
     <script src="static/js/jquery-labelauty.js"></script>
     <script src="static/js/goto.js"></script>
     <link rel="stylesheet" href="static/css/index.css"/>
+    <style>
+        .am-modal img{
+            max-width:500px !important;
+            max-height: 300px !important;
+        }
+    </style>
 </head>
 <body>
 <div id="main-contain">
@@ -67,7 +73,7 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
             </div>
             <div class="am-g am-fl">
                 <div class="up-pre-before up-frame-radius">
-                    <img alt="" src="" id="image">
+                    <img  alt ="" src=""  width="500" id="image">
                 </div>
                 <br>
                 <ul>
@@ -88,7 +94,7 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
     </div>
 </div>
 <div class="am-modal am-modal-no-btn up-frame-bj am-form-group am-form-file" tabindex="-1" id="doc-modal-2">
-    <div class="am-modal-dialog up-frame-parent up-frame-radius">
+    <div style="padding: 5%;" class="am-modal-dialog up-frame-parent up-frame-radius">
 
         <ul></ul>
     </div>
@@ -143,12 +149,12 @@ plugin=AMap.PolyEditor,AMap.Geolocation,Amap.Geocoder,AMap.Driving,Amap.DrivingP
 
             }, {
                 field: "distance",
-                title: "长度",
+                title: "长度(米)",
                 sortable: true,
                 searchable: false
             }, {
                 field: "type",
-                title: "拥堵",
+                title: "拥堵程度",
                 formatter: function (value, row, index) {
                     if (value == 'red')
                         return '深红';

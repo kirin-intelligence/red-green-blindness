@@ -17,7 +17,7 @@ $place=characet($place);
 if(!is_dir($dirname)){
     mkdir(iconv("UTF-8", "GBK", $dirname),0777,true);
 }
-$filename = $dirname.'/'.$lng."_".$lat.'_'.$time.'.jpg';
+$filename = $dirname.'/'.$lng."_".$lat.'_'.$place.'_'.$time.'.jpg';
 
 //将服务器上的临时文件移动到指定目录下
 //使用该方法move_uploaded_file($tmp_name , $destination)
