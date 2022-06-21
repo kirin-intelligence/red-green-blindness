@@ -24,7 +24,7 @@ logzero==1.5.0
 lxml==4.3.4
 mccabe==0.6.1
 moviepy==0.2.3.2
-numpy==1.12.0
+numpy==1.22.0
 opencv-python==3.4.5.20
 pefile==2019.4.18
 Pillow==6.0.0
